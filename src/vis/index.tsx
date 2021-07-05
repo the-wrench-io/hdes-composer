@@ -1,5 +1,5 @@
 import React from 'react';
-import { Vis as createVis } from './Vis';
+import Graph from 'vis-react';
 
 
 declare namespace Vis {
@@ -45,6 +45,7 @@ interface VisEvents {
 }
 
 namespace Vis {
+
   export const create = (init: InitProps): React.ReactElement => {
     const { model } = init;
     if (!model) {
@@ -73,11 +74,12 @@ namespace Vis {
       }
     };
 
-    return createVis({
+    const props = {
       events: events,
       value: model,
       options: init.options
-    });
+    };
+    return (<Graph graph={props.value} options={props.options} events={props.events} />);
   }
 }
 

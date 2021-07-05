@@ -68,7 +68,7 @@ class EditorData implements Session.EditorMutator {
     if (origin.type === "FLOW" || origin.type === "FLOW_TASK") {
       return this.next(id, (content) => {
         const previous = content.content ? content.content : [];
-        const newContent = CodeEditor.optimize(previous as any, session as any);
+        const newContent = CodeEditor.API.optimize(previous as any, session as any);
         return content.withSaved(false).withContent(newContent);
       });
     }

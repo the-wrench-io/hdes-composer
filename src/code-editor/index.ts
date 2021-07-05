@@ -1,18 +1,17 @@
 
 import {Provider as ProviderAs, ProviderProps} from './Provider';
-import API from './api';
+import {default as APIAs} from './api';
 
 
 declare namespace CodeEditor {
   export type {
      ProviderProps
   }
-  export {API};
 }
 
 namespace CodeEditor {
+  export const API = APIAs;
   export const Provider = ProviderAs;
-  export const optimize = API.optimize;
   
 }
 

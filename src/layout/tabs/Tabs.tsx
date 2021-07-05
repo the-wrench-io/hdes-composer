@@ -60,8 +60,8 @@ const Tabs: React.FC<{}> = () => {
           <MaterialTab key={index} value={index}
             label={tab.label}
             classes={{
-              wrapped: classes.tab, 
-              labelIcon: classes.tabLabel }}
+              wrapper: classes.tab, 
+              labelIcon: classes.tabLabel } as any}
             icon={(<>
               <CloseIcon color="disabled" className={classes.closeIcon} onClick={(e) => handleTabClose(e, index)} />
               <span className={classes.closeSpacing}></span></>)}
