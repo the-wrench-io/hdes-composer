@@ -71,7 +71,10 @@ const en = {
   "dt.toolbar.dt.add.row": "Add new row",
   "dt.toolbar.dt.add.input.column": "Add new input",
   "dt.toolbar.dt.add.output.column": "Add new output",
-
+  "dt.toolbar.dt.hitpolicy.description": "Hit policy",
+  "dt.toolbar.csv.download": "Download CSV",
+  "dt.toolbar.csv.upload": "Upload CSV",
+  "dt.toolbar.dt.organize.rows.columns": "Organize rows/columns",
 
   "dt.header.edit": "Decision table: {name}, column: {column}",
   "dt.header.edit.title": "Column: {name}",
