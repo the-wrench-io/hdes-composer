@@ -37,7 +37,7 @@ jobs:
         cache: 'yarn'
 
     - name: Run release script
-      run: ./main-release.sh
+      run: ./github/workflows/main-release.sh
       env:
         CI: false
         BOT_NAME: ${{ secrets.HDES_BOT_NAME }}
