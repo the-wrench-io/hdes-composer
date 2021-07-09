@@ -35,11 +35,13 @@ jobs:
       with:
         node-version: '14'
         cache: 'yarn'
+        registry-url: 'https://registry.npmjs.org'
 
     - name: Run release script
       run: ./build-scripts/main-release.sh
       env:
         CI: false
+        NODE_AUTH_TOKEN: ${{ secrets.HDES_BOT_TOKEN }}
         BOT_NAME: ${{ secrets.HDES_BOT_NAME }}
         BOT_EMAIL: ${{ secrets.HDES_BOT_EMAIL }}  
         BOT_TOKEN: ${{ secrets.HDES_BOT_TOKEN }}
