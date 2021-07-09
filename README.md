@@ -13,7 +13,7 @@ yarn add @the-wrench-io/hdes-ide
 "react-dom": "^17.0.1",
 "react-intl": "^5.17.2"
 ```
-
+  
 
 # react integration
 
