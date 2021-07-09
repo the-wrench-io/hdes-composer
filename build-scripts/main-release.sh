@@ -49,6 +49,6 @@ git commit -am "Release ${PROJECT_VERSION_NEXT}"
 # git tag -a ${PROJECT_VERSION_NEXT} -m "release ${PROJECT_VERSION_NEXT}"
 # git push origin ${PROJECT_VERSION_NEXT}
 
-echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_SHA}'"
-echo "Released version: '${PROJECT_VERSION_NEXT}'"
+# echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_SHA}'"
+# echo "Released version: '${PROJECT_VERSION_NEXT}'"
 
