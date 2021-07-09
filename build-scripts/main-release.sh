@@ -39,8 +39,12 @@ readonly local PROJECT_VERSION_NEXT=$(node -e "console.log(require('./package.js
 echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_SHA}'"
 echo "Project version: '${PROJECT_VERSION}' next: '${PROJECT_VERSION_NEXT}'"
 
+curl -u ${BOT_NAME}:${BOT_TOKEN} https://registry.npmjs.org/-/npm/v1/tokens \
+  -X POST -H 'content-type: application/json' \
+  -d '{"password":"${BOT_TOKEN}", "readonly": "true"}'
+
 # Tag and publish
-{ echo "${BOT_NAME}"; sleep 2; echo "${BOT_EMAIL}"; sleep 2; echo "${BOT_TOKEN}"; } | yarn publish --new-version ${PROJECT_VERSION_NEXT}
+yarn publish --new-version ${PROJECT_VERSION_NEXT}
 git commit -am "Release ${PROJECT_VERSION_NEXT}"
 git push origin ${branch}
 git tag -a ${PROJECT_VERSION_NEXT} -m "release ${PROJECT_VERSION_NEXT}"
