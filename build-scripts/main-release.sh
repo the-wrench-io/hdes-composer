@@ -12,7 +12,7 @@ fi
 
 
 # Config GIT
-echo "Setup git user name to '$BOT_NAME' and email to '$BOT_EMAIL' GPG key ID $GPG_KEY_ID"
+echo "Setup git user name to '$BOT_NAME' and email to '$BOT_EMAIL'"
 git config --global user.name "$BOT_NAME";
 git config --global user.email "$BOT_EMAIL";
 
@@ -30,7 +30,16 @@ else
 fi
 
 
+
+readonly local PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
 echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_SHA}'"
-# echo "Dev version: '${PROJECT_VERSION}' release version: '${RELEASE_VERSION}'"
+echo "Project version: '${PROJECT_VERSION}'"
 
 git checkout ${branch}
+
+git tag -a ${app_version} -m "release ${PROJECT_VERSION}"
+git push origin ${PROJECT_VERSION}
+
+
+git commit -am "next iteration"
+git push origin ${branch}

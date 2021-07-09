@@ -42,6 +42,5 @@ jobs:
         CI: false
         BOT_NAME: ${{ secrets.HDES_BOT_NAME }}
         BOT_EMAIL: ${{ secrets.HDES_BOT_EMAIL }}  
-        BOT_TOKEN: ${{ secrets.HDES_BOT_NPM_TOKEN }}
-        
+        BOT_TOKEN: ${{ secrets.HDES_BOT_TOKEN }}
         
