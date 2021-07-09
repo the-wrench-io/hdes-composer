@@ -45,7 +45,7 @@ echo "Project version: '${PROJECT_VERSION}' next: '${PROJECT_VERSION_NEXT}'"
 # yarn publish --new-version ${PROJECT_VERSION_NEXT}
 
 git commit -am "Release ${PROJECT_VERSION_NEXT}"
-git push origin ${branch}
+# git push origin ${branch}
 # git tag -a ${PROJECT_VERSION_NEXT} -m "release ${PROJECT_VERSION_NEXT}"
 # git push origin ${PROJECT_VERSION_NEXT}
 
