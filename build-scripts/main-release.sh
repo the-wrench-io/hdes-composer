@@ -29,16 +29,19 @@ else
      readonly local branch=${refname#refs/remotes/origin/}
 fi
 
-
-
-readonly local PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
-echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_SHA}'"
-echo "Project version: '${PROJECT_VERSION}'"
-
+# resolve versions
 git checkout ${branch}
-git tag -a ${PROJECT_VERSION} -m "release ${PROJECT_VERSION}"
-git push origin ${PROJECT_VERSION}
+readonly local PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
+yarn version --patch
+readonly local PROJECT_VERSION_NEXT=$(node -e "console.log(require('./package.json').version);")
 
+# Log
+echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_SHA}'"
+echo "Project version: '${PROJECT_VERSION}' next: '${PROJECT_VERSION_NEXT}'"
 
-# git commit -am "next iteration"
-# git push origin ${branch}
+# Tag and publish
+{ echo "${BOT_NAME}"; sleep 2; echo "${BOT_EMAIL}"; sleep 2; echo "${BOT_TOKEN}"; } | yarn publish --new-version ${PROJECT_VERSION_NEXT}
+git commit -am "Release ${PROJECT_VERSION_NEXT}"
+git push origin ${branch}
+git tag -a ${PROJECT_VERSION_NEXT} -m "release ${PROJECT_VERSION_NEXT}"
+git push origin ${PROJECT_VERSION_NEXT}
