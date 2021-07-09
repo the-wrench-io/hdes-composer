@@ -40,16 +40,11 @@ echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_S
 echo "Project version: '${PROJECT_VERSION}' next: '${PROJECT_VERSION_NEXT}'"
 
 # Tag and publish
-# yarn install
-# yarn build
-# yarn publish --new-version ${PROJECT_VERSION_NEXT}
+yarn install
+yarn build
+yarn publish --new-version ${PROJECT_VERSION_NEXT}
 
-# git commit -m "Release ${PROJECT_VERSION_NEXT}"
 git push origin ${branch}
 
-# git tag -a ${PROJECT_VERSION_NEXT} -m "release ${PROJECT_VERSION_NEXT}"
-# git push origin ${PROJECT_VERSION_NEXT}
-
-# echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_SHA}'"
-# echo "Released version: '${PROJECT_VERSION_NEXT}'"
-
+git tag -a ${PROJECT_VERSION_NEXT} -m "release ${PROJECT_VERSION_NEXT}"
+git push origin ${PROJECT_VERSION_NEXT}
