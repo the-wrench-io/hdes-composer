@@ -40,6 +40,7 @@ echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_S
 echo "Project version: '${PROJECT_VERSION}' next: '${PROJECT_VERSION_NEXT}'"
 
 # Tag and publish
+yarn build
 yarn publish --new-version ${PROJECT_VERSION_NEXT}
 git commit -am "Release ${PROJECT_VERSION_NEXT}"
 git push origin ${branch}
