@@ -36,10 +36,9 @@ echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_S
 echo "Project version: '${PROJECT_VERSION}'"
 
 git checkout ${branch}
-
-git tag -a ${app_version} -m "release ${PROJECT_VERSION}"
+git tag -a ${PROJECT_VERSION} -m "release ${PROJECT_VERSION}"
 git push origin ${PROJECT_VERSION}
 
 
-git commit -am "next iteration"
-git push origin ${branch}
+# git commit -am "next iteration"
+# git push origin ${branch}
