@@ -1,3 +1,9 @@
+# git config
+git update-index --assume-unchanged tsconfig.json
+git update-index --no-assume-unchanged tsconfig.json
+
+
+
 # installation
 yarn add @the-wrench-io/hdes-ide
 
