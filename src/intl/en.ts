@@ -62,8 +62,10 @@ const en = {
   'toolbar.extensions': 'list available extensions',
   'toolbar.info': 'display build info',
 
-
-
+  'debug.asset.select.label': "Asset to debug",
+  'debug.asset.select.clear': "Clear run data",
+  'debug.asset.select.execute': 'Execute asset',
+   
 
   'dt.cell.edit.button.cancel': "Cancel",
   'dt.cell.edit.button.confirm': "Apply",

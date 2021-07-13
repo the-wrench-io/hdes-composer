@@ -1,20 +1,11 @@
 import React from 'react';
-
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, TextField } from '@material-ui/core';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, TextField } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { FormattedMessage } from 'react-intl';
 
 import API from './DebugAPI';
 import { Hdes } from '../deps';
 import Resource from '../';
-
-
-const useStyles = makeStyles((_theme: Theme) =>
-  createStyles({
-    root: {
-    },
-  }),
-);
-
 
 
 function Grid<T = any>(props: { elements: T[], render: (element: T, index: number, style: Object) => React.ReactElement }): React.ReactElement[] {
@@ -22,7 +13,6 @@ function Grid<T = any>(props: { elements: T[], render: (element: T, index: numbe
   let index = 1;
   let row: React.ReactElement[] = [];
 
-  console.log(props);
   for (const input of props.elements) {
     const style = { width: "33.33%" };
     const field = props.render(input, index, style);
@@ -37,9 +27,14 @@ function Grid<T = any>(props: { elements: T[], render: (element: T, index: numbe
   return rows;
 }
 
-const Inputs: React.FC<{ data?: API.DebugData, onChange: (parameter: Hdes.ModelAPI.DataType, value: string) => void }> = ({ data, onChange }) => {
-  const classes = useStyles();
+const Inputs: React.FC<{ 
+  data?: API.DebugData, 
+  expanded: boolean,
+  setExpanded: (expanded: boolean) => void
+  onChange: (parameter: Hdes.ModelAPI.DataType, value: string) => void 
+}> = ({ data, onChange, expanded, setExpanded}) => {
   const resource = Resource.useContext();
+
   if (!data) {
     return null;
   }
@@ -47,24 +42,29 @@ const Inputs: React.FC<{ data?: API.DebugData, onChange: (parameter: Hdes.ModelA
   const inputs = model.params.filter(p => p.direction === "IN");
   const getValue = (parameter: Hdes.ModelAPI.DataType) => {
     const init = data?.entity[parameter.name];
-    if(init === undefined) {
+    if (init === undefined) {
       return parameter.values ? parameter.values : "";
     }
     return init;
   }
-  
-  
-  return (<div className={classes.root}>
-    {
-      Grid({
-        elements: inputs,
-        render: (p, index, style) => (<TextField key={index} style={style}
-          onChange={({ target }) => onChange(p, target.value)}
-          required={p.required} label={p.name}
-          value={getValue(p)} />)
-      })
-    }
-  </div>);
+
+
+  return (<Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
+    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Typography><FormattedMessage id={"debug.asset.execute.inputs"} /></Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      {
+        Grid({
+          elements: inputs,
+          render: (p, index, style) => (<TextField key={index} style={style}
+            onChange={({ target }) => onChange(p, target.value)}
+            required={p.required} label={p.name}
+            value={getValue(p)} />)
+        })
+      }
+    </AccordionDetails>
+  </Accordion>);
 }
 
 export { Inputs };

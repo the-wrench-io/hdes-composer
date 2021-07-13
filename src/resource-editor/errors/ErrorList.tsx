@@ -23,19 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const getErrorMsg = (error: any) => {
-  if(error.msg) {
-    return error.msg;    
-  }
-  if(error.value) {
-    return error.value
-  }
-  if(error.message) {
-    return error.message;
-  }
-}
-
-
 const ErrorList: React.FC<{children?: Hdes.StoreError}> = ({ children }) => {
   const classes = useStyles();
   if(!children || !children.errors) {
@@ -51,8 +38,8 @@ const ErrorList: React.FC<{children?: Hdes.StoreError}> = ({ children }) => {
           {children.errors.map((error) => (<>
             <ListItem>
               <ListItemText
-                primary={` — ${error.id ? error.id : error.code}`}
-                secondary={<Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.error">{getErrorMsg(error)}</Typography>}
+                primary={` — ${error.id}`}
+                secondary={<Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.error">{error.value}</Typography>}
               />
             </ListItem>
             <Divider variant="inset" component="li" />
