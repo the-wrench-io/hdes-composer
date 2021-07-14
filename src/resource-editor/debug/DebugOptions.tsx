@@ -4,19 +4,17 @@ import { FormattedMessage } from 'react-intl';
 
 import Resource from '../';
 import { Hdes } from '../deps';
-
+import { useContext } from './context';
 
 interface DebugOption {
   label: string,
   asset: Hdes.ModelAPI.Model
 }
 
-interface DebugOptionsProps {
-  onChange: (model: Hdes.ModelAPI.Model) => void;
-};
 
-const DebugOptions: React.FC<DebugOptionsProps> = ({onChange}) => {
+const DebugOptions: React.FC<{}> = () => {
   const resource = Resource.useContext();
+  const context = useContext();  
 
   const keys: string[] = [];
   const assets = [
@@ -42,7 +40,7 @@ const DebugOptions: React.FC<DebugOptionsProps> = ({onChange}) => {
   return (
     <Autocomplete fullWidth
       isOptionEqualToValue={(option: DebugOption, value: DebugOption) => option.asset.id === value.asset.id}
-      onChange={(_event, entity) => onChange((entity as any).asset)}
+      onChange={(_event, entity) => context.actions.handleSetModel((entity as any).asset)}
       options={options}
       groupBy={(option) => option.asset.type}
       getOptionLabel={(option) => option.label}
@@ -51,5 +49,4 @@ const DebugOptions: React.FC<DebugOptionsProps> = ({onChange}) => {
   );
 }
 
-export type { DebugOptionsProps };
 export { DebugOptions };

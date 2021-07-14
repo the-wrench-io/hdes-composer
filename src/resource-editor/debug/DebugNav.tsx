@@ -4,7 +4,7 @@ import { Theme, Breadcrumbs, Link, Typography } from '@material-ui/core';
 
 import Resource from '../';
 import { Hdes } from '../deps';
-import API from './DebugAPI';
+import { useContext, Session } from './context';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -17,19 +17,12 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-
-
-interface NavProps {
-  context: API.DebugContext;
-  active?: Hdes.ModelAPI.Model;
-  setActive: (model: Hdes.ModelAPI.Model) => void;
-};
-
-const Nav: React.FC<NavProps> = ({ context, active, setActive }) => {
+const DebugNav: React.FC<{}> = () => {
   const classes = useStyles();
   const resource = Resource.useContext();
+  const context = useContext();
 
-  const getModel = (debug: API.DebugData): Hdes.ModelAPI.Model | undefined => {
+  const getModel = (debug: Session.DebugModel): Hdes.ModelAPI.Model | undefined => {
     try {
       return resource.session.getModel(debug.model);
     } catch (e) {
@@ -39,12 +32,14 @@ const Nav: React.FC<NavProps> = ({ context, active, setActive }) => {
 
   return (<Breadcrumbs separator="-" className={classes.root}>
     {
-      context.models.map(m => getModel(m)).filter(m => m).map(m => m as Hdes.ModelAPI.Model)
+      context.session.models
+        .map(m => getModel(m)).filter(m => m)
+        .map(m => m as Hdes.ModelAPI.Model)
         .map((m, index) => {
-          if (m.id !== active?.id) {
+          if (m.id !== context.session.active) {
             return (<Link key={index} underline="hover" href="_blank" onClick={(event: any) => {
               event.preventDefault();
-              setActive(m);
+              context.actions.handleSetModel(m);
             }}>
               {m.name}
             </Link>);
@@ -53,10 +48,9 @@ const Nav: React.FC<NavProps> = ({ context, active, setActive }) => {
         })
     }
     {
-      context.models.length ? null : (<Typography>&nbsp;</Typography>)
+      context.session.models.length ? null : (<Typography>&nbsp;</Typography>)
     }
   </Breadcrumbs>);
 }
 
-export type { NavProps };
-export { Nav };
+export { DebugNav };

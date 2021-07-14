@@ -3,19 +3,25 @@ import { AccordionSummary, AccordionDetails, Typography, List, ListItem, ListIte
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FormattedMessage } from 'react-intl';
 
-import API from './DebugAPI';
+import { Session, useContext } from './context';
 
 
-
-const DebugErrors: React.FC<{ children?: API.DebugData }> = ({ children }) => {
-  const errors = children?.errors?.errors;
+const DebugErrors: React.FC<{}> = () => {
+  
+  const context = useContext();
+  const data = context.active;
+  if (!data) {
+    return null;
+  }
+  
+  const errors = data.debug?.errors?.errors;
   if (!errors) {
     return null;
   }
 
   return (<Accordion>
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-      <Typography><FormattedMessage id={"debug.asset.execute.errors"} /></Typography>
+      <Typography color="error"><FormattedMessage id={"debug.asset.execute.errors"} /></Typography>
     </AccordionSummary>
     <AccordionDetails >
       <List disablePadding dense>
