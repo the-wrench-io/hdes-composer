@@ -2,7 +2,7 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core';
 
-import { Vis, Hdes } from './deps';
+import { Vis, Hdes } from '../deps';
 import GraphAPI from './GraphAPI';
 
 

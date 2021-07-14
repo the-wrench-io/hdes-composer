@@ -1,4 +1,4 @@
-import { Hdes, Vis } from './deps';
+import { Hdes, Vis } from '../deps';
 
 
 type ModelType = 'switch' | 'decisionTable' | 'service' | undefined;

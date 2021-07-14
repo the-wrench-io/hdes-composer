@@ -4,8 +4,6 @@ import CodeEditor from '../../code-editor';
 import Flow from '../../flow';
 import FlowTask from '../../flow-task';
 import DecisionTable from '../../decision-table';
-import Debugger from '../../debugger';
 
-
-export { Hdes, Layout, CodeEditor, Flow, DecisionTable, FlowTask, Debugger };
+export { Hdes, Layout, CodeEditor, Flow, DecisionTable, FlowTask };
 

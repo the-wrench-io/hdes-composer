@@ -2,8 +2,9 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme, Grid } from '@material-ui/core';
 
-import { CodeEditor, FlowTree, Hdes } from './deps';
+import { CodeEditor, Hdes } from './deps';
 import { createHints, HelperContext, Autocomplete } from './autocomplete';
+import FlowTree from './graph';
 
 
 const useStyles = (size: { width: number, height: number }) => makeStyles((_theme: Theme) =>

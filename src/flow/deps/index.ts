@@ -1,6 +1,6 @@
 import Hdes from '../../hdes-service';
 import CodeEditor from '../../code-editor';
-import FlowTree from '../../flow-tree';
+import Vis from '../../vis';
 
-export { Hdes, FlowTree, CodeEditor };
+export { Hdes, Vis, CodeEditor };
 
