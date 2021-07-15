@@ -3,7 +3,7 @@ import { AccordionSummary, AccordionDetails, Typography, List, ListItem, ListIte
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FormattedMessage } from 'react-intl';
 
-import { Session, useContext } from './context';
+import { useContext } from './context';
 
 
 const DebugErrors: React.FC<{}> = () => {

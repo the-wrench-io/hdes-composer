@@ -30,6 +30,9 @@ class ImmutableDebugModel implements Session.DebugModel {
   get errors() {
     return this._errors;
   }
+  get output() {
+    return this._output;
+  }
   withEntity(props?: { entity: string, value: string }) {
     if (!props) {
       return new ImmutableDebugModel({ model: this._model, entity: {} });

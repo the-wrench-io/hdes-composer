@@ -16,7 +16,7 @@ interface Action {
   setModelEntityDefaults?: Hdes.ModelAPI.Model;
   setModelEntity?: { modelId: Session.ModelId, entity: string, value: string };
   setModelErrors?: { modelId: Session.ModelId, errors: Hdes.StoreError };
-  setModelOutput?: { modelId: Session.ModelId, output: any };
+  setModelOutput?: { modelId: Session.ModelId, output: any, errors?: Hdes.StoreError };
 }
 
 const ActionBuilder = {
@@ -24,7 +24,7 @@ const ActionBuilder = {
   setModelEntityDefaults: (setModelEntityDefaults: Hdes.ModelAPI.Model): Action => ({ type: ActionType.setModelEntityDefaults, setModelEntityDefaults }),
   setModelEntity: (setModelEntity: { modelId: Session.ModelId, entity: string, value: string }): Action => ({ type: ActionType.setModelEntity, setModelEntity }),
   setModelErrors: (setModelErrors: { modelId: Session.ModelId, errors: Hdes.StoreError }): Action => ({ type: ActionType.setModelErrors, setModelErrors }),
-  setModelOutput: (setModelOutput: { modelId: Session.ModelId, output: any }): Action => ({ type: ActionType.setModelOutput, setModelOutput }),
+  setModelOutput: (setModelOutput: { modelId: Session.ModelId, output: any, errors?: Hdes.StoreError }): Action => ({ type: ActionType.setModelOutput, setModelOutput }),
 }
 
 class ReducerDispatch implements Session.Actions {
@@ -52,7 +52,7 @@ class ReducerDispatch implements Session.Actions {
   handleExecute(props: { id: string, type: Hdes.ModelAPI.ServiceType, input: string }): Promise<void> {
     return this._service.debug.getDebug(props)
       .then(output => {
-        this._sessionDispatch(ActionBuilder.setModelOutput({modelId: props.id, output}))
+        this._sessionDispatch(ActionBuilder.setModelOutput({modelId: props.id, output, errors: undefined}))
       })
       .catch(errors => {
         this._sessionDispatch(ActionBuilder.setModelErrors({ modelId: props.id, errors }))
@@ -92,7 +92,11 @@ const Reducer = (state: Session.Instance, action: Action): Session.Instance => {
     }
     case ActionType.setModelOutput: {
       if (action.setModelOutput) {
-        return state.withModelOutput(action.setModelOutput);
+        const newState = state.withModelOutput(action.setModelOutput);
+        if(Object.keys(action.setModelOutput).includes("errors")) {
+          return newState.withModelErrors({modelId: action.setModelOutput.modelId, errors: action.setModelOutput.errors as any}); 
+        }
+        return newState;
       }
       console.error("Action data error", action);
       return state;

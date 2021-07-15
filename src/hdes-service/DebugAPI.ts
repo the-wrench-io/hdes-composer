@@ -48,6 +48,14 @@ declare namespace DebugAPI {
     match: boolean;
     context: DtContext[];
     expressions: Record<string, DtExpression>;
+    node: {
+      order: number,
+      inputs: [{
+          key: { name: string },
+          value: string
+        }
+      ]
+    }
   }
 
   interface DtContext {

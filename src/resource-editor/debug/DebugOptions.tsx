@@ -11,10 +11,13 @@ interface DebugOption {
   asset: Hdes.ModelAPI.Model
 }
 
-
-const DebugOptions: React.FC<{}> = () => {
+const DebugOptions: React.FC<{
+  events: {
+    setInputs: (enabled: boolean) => void;
+  }
+}> = ({events}) => {
   const resource = Resource.useContext();
-  const context = useContext();  
+  const context = useContext();
 
   const keys: string[] = [];
   const assets = [
@@ -40,7 +43,7 @@ const DebugOptions: React.FC<{}> = () => {
   return (
     <Autocomplete fullWidth
       isOptionEqualToValue={(option: DebugOption, value: DebugOption) => option.asset.id === value.asset.id}
-      onChange={(_event, entity) => context.actions.handleSetModel((entity as any).asset)}
+      onChange={(_event, entity) => context.actions.handleSetModel((entity as any).asset) && events.setInputs(true)}
       options={options}
       groupBy={(option) => option.asset.type}
       getOptionLabel={(option) => option.label}

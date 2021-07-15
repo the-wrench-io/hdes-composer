@@ -2,11 +2,9 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme, Box, Paper } from '@material-ui/core';
 
-import Resource from '../';
-import { Hdes } from '../deps';
-
 import { DebugOptions } from './DebugOptions';
 import { DebugInputs } from './DebugInputs';
+import { DebugOutputs } from './DebugOutputs';
 import { DebugNav } from './DebugNav';
 import { DebugErrors } from './DebugErrors';
 import { DebugToolbar } from './DebugToolbar';
@@ -36,19 +34,23 @@ interface DebugProps {
 
 const Debug: React.FC<DebugProps> = () => {
   const classes = useStyles();
-  const resource = Resource.useContext();
   const [inputs, setInputs] = React.useState<boolean>(false);
+  const [outputs, setOutputs] = React.useState<boolean>(true);
 
+  const events = {
+    setInputs: (value: boolean) => setInputs(value)
+  };
 
   return (
     <DebugProvider>
       <Paper className={classes.root}>
         <DebugNav />
         <Box display="flex" component="form" noValidate autoComplete="off">
-          <Box width="50%"><DebugOptions /></Box>
-          <Box className={classes.toolbar}><DebugToolbar events={{toggleInputs: () => setInputs(!inputs)}} /></Box>
+          <Box width="50%"><DebugOptions events={events} /></Box>
+          <Box className={classes.toolbar}><DebugToolbar events={events} /></Box>
         </Box>
         <DebugInputs expanded={inputs} setExpanded={setInputs} />
+        <DebugOutputs expanded={outputs} setExpanded={setOutputs} />
         <DebugErrors />
       </Paper>
     </DebugProvider>);

@@ -20,7 +20,6 @@ const DebugProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
   
   const resource = Resource.useContext();
   const service = resource.service;
-  const [loaded, setLoaded] = React.useState(false);
   const [session, dispatch] = React.useReducer(Reducer, sessionData);
   
   const actions = React.useMemo(() => {
