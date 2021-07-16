@@ -1,6 +1,6 @@
 {
   "name": "@the-wrench-io/hdes-ide",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "license": "Apache-2.0",
   "main": "build/core/index.js",
   "types": "build/core/index.d.ts",
@@ -51,7 +51,6 @@
   },
   "scripts": {
     "start": "cp ./.demo/index.tsx ./src/index.tsx && cp ./.demo/react-app-env.d.ts ./src/react-app-env.d.ts && cp -R ./.demo/public ./public && react-scripts start",
-    
     "build": "rm -rf ./build && tsc",
     "clean": "rm -rf ./build",
     "test": "react-scripts test",
