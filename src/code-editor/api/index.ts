@@ -1,11 +1,11 @@
-import { View, ViewCommand, ViewProps, LintMessage, LintRange, ViewEvents } from './EditorAPI';
+import { View, ViewCommand, ViewProps, LintMessage, LintRange, ViewEvents, ViewMode, ViewLang } from './EditorAPI';
 import ViewImpl from './ViewImpl';
 import OptimizeImpl from './ViewOptimize';
 import ViewParser from './ViewParser';
 import CodeMirror from 'codemirror';
 
 declare namespace API {
-  export type { View, ViewCommand, ViewProps, LintMessage, LintRange, ViewEvents };
+  export type { View, ViewCommand, ViewProps, LintMessage, LintRange, ViewEvents, ViewMode, ViewLang };
   export type { CodeMirror };
 }
 

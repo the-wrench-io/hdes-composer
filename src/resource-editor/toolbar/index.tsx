@@ -68,10 +68,7 @@ const createToolbar = (props: {
       id: 'toolbar.add',
       icon: <AddCircleIcon />,
       type: () => ({
-        dialog: (onClose: () => void) => (<AddType handleClose={onClose}
-          onSave={(asset) => {
-            props.layout.actions.handleTabAdd({ id: asset.id, label: <Explorer.Tab id={asset.id} /> });
-          }} />)
+        dialog: (onClose: () => void) => (<AddType handleClose={onClose} onSave={(asset) => Explorer.openTab(asset, props.layout.actions)} />)
       })
     },
 
@@ -79,9 +76,7 @@ const createToolbar = (props: {
       id: 'toolbar.copyas',
       icon: <FileCopyIcon />,
       type: () => ({
-        dialog: (onClose: () => void) => (<CopyAs handleClose={onClose} onSave={(asset) => {
-          props.layout.actions.handleTabAdd({ id: asset.id, label: <Explorer.Tab id={asset.id} /> });
-        }} />)
+        dialog: (onClose: () => void) => (<CopyAs handleClose={onClose} onSave={(asset) => Explorer.openTab(asset, props.layout.actions)} />)
       })
     },
 

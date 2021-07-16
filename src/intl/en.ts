@@ -62,6 +62,14 @@ const en = {
   'toolbar.extensions': 'list available extensions',
   'toolbar.info': 'display build info',
 
+  'debug.asset.select.label': "Asset to debug",
+  'debug.asset.select.clear': "Clear run data",
+  'debug.asset.select.execute': 'Execute asset',
+  'debug.asset.execute.inputs': "Debug inputs",
+
+  'debug.asset.execute.outputs.dt.json': "Matched row(s)",
+  'debug.asset.execute.outputs.dt.rejects': "Rejected row(s)",
+  'debug.asset.execute.outputs.dt.rejects.order': "Execution order",
 
 
 

@@ -3,13 +3,9 @@ import React from 'react';
 import { ThemeProvider } from '@material-ui/core';
 import { IntlProvider } from 'react-intl';
 import { StyledEngineProvider } from '@material-ui/core/styles';
-import reportWebVitals from './reportWebVitals';
+
 import { ReportHandler } from 'web-vitals';
-
-import { theme } from './themes';
-import messages from './intl';
-
-import { Resource, Hdes } from '../';
+import { Resource, Hdes, theme, messages } from './core';
 
 
 const reportWebVitals = (onPerfEntry?: ReportHandler) => {
@@ -25,38 +21,10 @@ const reportWebVitals = (onPerfEntry?: ReportHandler) => {
 };
 
 
-declare global {
-  interface Window {
-    _env_: {
-      url?: string,
-      csrf?: Csrf,
-    }
-  }
-}
-
-interface Csrf { 
-  key: string, value: string
-}
-
-
-const getUrl = () => {
-  if(window._env_.url) {
-    const url = window._env_.url;
-    if(url.endsWith("/")) {
-      return url.substring(0, url.length - 2)
-    }
-    return url;
-  }
-  
-  return "http://localhost:8081/assets";
-}
-
-console.log("WINDOW CONFIG", window._env_);
 
 const init = {
   locale: 'en',
-  url: getUrl(),
-  csrf: window._env_.csrf
+  url: "http://localhost:8081/assets",
 };
 
 console.log("INIT", init);
@@ -75,12 +43,7 @@ const store: Hdes.Store = {
         "Content-Type": "application/json;charset=UTF-8"
       }
     };
-    
-    if(init.csrf) {
-      const headers: Record<string, string> = defRef.headers as any;
-      headers[init.csrf.key] = init.csrf.value;
-    }
-
+  
     const url = init.url;
     const finalInit: RequestInit = Object.assign(defRef, req ? req : {});
 
@@ -120,7 +83,9 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+

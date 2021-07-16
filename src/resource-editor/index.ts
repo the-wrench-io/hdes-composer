@@ -8,7 +8,7 @@ import { EditType as EditTypeAs, EditTypeProps } from './edit-type';
 
 import { Search as SearchAs, createSearch as createSearchAs } from './search';
 import { Releases as ReleasesAs } from './releases';
-import { Debug as DebugAs } from './debug';
+import { default as DebugAs } from './debug';
 
 
 declare namespace Resource {

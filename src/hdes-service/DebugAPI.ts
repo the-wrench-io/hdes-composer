@@ -5,6 +5,14 @@ import AstAPI from './AstAPI';
 declare namespace DebugAPI {
 
   interface FlDebug {
+    result: {
+      // key - value
+      _errors?: { msg: string, stackTrace: string }
+    }
+    debug: FlExecution;
+  }
+
+  interface FlExecution {
     id: string;
     model: AstAPI.Fl;
     context: FlContext;
@@ -48,6 +56,14 @@ declare namespace DebugAPI {
     match: boolean;
     context: DtContext[];
     expressions: Record<string, DtExpression>;
+    node: {
+      order: number,
+      inputs: [{
+        key: { name: string },
+        value: string
+      }
+      ]
+    }
   }
 
   interface DtContext {

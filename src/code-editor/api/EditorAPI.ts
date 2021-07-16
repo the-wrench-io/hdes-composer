@@ -4,8 +4,11 @@ export interface ViewCommand {
   value: string;
 }
 
+export type ViewMode = "ft" | "fl" | "json";
+export type ViewLang = "yaml" | "groovy" | "json";
+
 export interface ViewProps {
-  mode: "yaml" | "groovy";
+  mode: ViewLang;
   src: string;
   theme: string;
 }

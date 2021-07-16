@@ -43,7 +43,7 @@ const Content: React.FC<ContentProps> = () => {
     return <Resource.Releases />; 
   }
   if(active.id === 'debug') {
-    return <Resource.Debug />; 
+    return <Resource.Debug.Explorer />; 
   }
 
   const editor = resource.session.editor.getContent(active.id);

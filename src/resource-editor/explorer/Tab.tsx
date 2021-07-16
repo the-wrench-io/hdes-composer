@@ -5,7 +5,7 @@ import { Theme } from '@material-ui/core';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 
 import Resource from '../';
-
+import { Hdes, Layout } from '../deps';
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -37,4 +37,5 @@ const Tab: React.FC<{id: string}> = ({id}) => {
   return (<>{name}</>);
 }
 
-export default Tab;
+const openTab = (model: Hdes.ModelAPI.Model | Hdes.ResourceAPI.Asset , actions: Layout.Session.Actions) => actions.handleTabAdd({ id: model.id, label: <Tab id={model.id} /> });
+export {Tab, openTab};

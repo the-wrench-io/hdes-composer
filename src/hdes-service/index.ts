@@ -9,8 +9,48 @@ import ResourceService from "./spi/ResourceService";
 import DebugService from "./spi/DebugService";
 import { Service, Store } from "./Service";
 
+const getErrorMsg = (error: any) => {
+  if (error.msg) {
+    return error.msg;
+  }
+  if (error.value) {
+    return error.value
+  }
+  if (error.message) {
+    return error.message;
+  }
+}
+
+const getErrorId = (error: any) => {
+  if (error.id) {
+    return error.id;
+  }
+  if (error.code) {
+    return error.code
+  }
+  return "";
+}
+
+
+const parseErrors = (props: any[]): Hdes.ErrorMsg[] => {
+  if (!props) {
+    return []
+  }
+
+  const result: Hdes.ErrorMsg[] = props.map(error => ({
+    id: getErrorId(error),
+    value: getErrorMsg(error)
+  }));
+
+  return result;
+}
 
 declare namespace Hdes {
+  export interface ErrorMsg {
+    id: string;
+    value: string;
+  }
+
   export interface ErrorProps {
     text: string;
     status: number;
@@ -26,7 +66,14 @@ namespace Hdes {
 
     constructor(props: ErrorProps) {
       super(props.text);
-      this._props = props;
+      this._props = {
+        text: props.text,
+        status: props.status,
+        errors: parseErrors(props.errors)
+      };
+
+
+      ///children.errors
     }
     get name() {
       return this._props.text;
