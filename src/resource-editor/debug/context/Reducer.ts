@@ -67,6 +67,7 @@ class ReducerDispatch implements Session.Actions {
         this._sessionDispatch(ActionBuilder.setModelOutput({ modelId: props.id, output, errors: undefined }))
       })
       .catch(errors => {
+        console.log(errors);
         this._sessionDispatch(ActionBuilder.setModelErrors({ modelId: props.id, errors }))
       });
   }
