@@ -7,16 +7,14 @@ import CloseIcon from '@material-ui/icons/Close';
 import TaskAltIcon from '@material-ui/icons/TaskAlt';
 import InputIcon from '@material-ui/icons/Input';
 
+import Explorer from '../explorer';
 import { useContext } from './context';
+import { Layout } from '../deps';
 
 
+const DebugToolbar: React.FC<{}> = () => {
 
-const DebugToolbar: React.FC<{
-  events: {
-    setInputs: (enabled: boolean) => void;
-  }
-}> = ({ events }) => {
-
+  const layout = Layout.useContext();
   const context = useContext();
   const model = context.active;
   
@@ -27,14 +25,15 @@ const DebugToolbar: React.FC<{
   });
 
   const handleDefault = () => model && context.actions.handleSetModelEntityDefaults(model.model);
+  const handleOpen = () => model && Explorer.openTab(model.model, layout.actions);
 
   return (
     <ButtonGroup size="large" variant="text">
       <Tooltip title={<FormattedMessage id='debug.asset.select.execute' />}>
         <Button disabled={!model} onClick={handleExecute}><TaskAltIcon /></Button>
       </Tooltip>
-      <Tooltip title={<FormattedMessage id='debug.asset.select.inputs' />}>
-        <Button disabled={!model} onClick={() => model && events.setInputs(true)}><InputIcon /></Button>
+      <Tooltip title={<FormattedMessage id='debug.asset.select.open' />}>
+        <Button disabled={!model} onClick={handleOpen}><InputIcon /></Button>
       </Tooltip>
       <Tooltip title={<FormattedMessage id='debug.asset.select.clear' />}>
         <Button disabled={!model} onClick={handleDefault}><CloseIcon /></Button>

@@ -52,13 +52,26 @@ class ImmutableDebugModel implements Session.DebugModel {
 class SessionData implements Session.Instance {
   private _models: Record<string, ImmutableDebugModel>;
   private _active?: Session.ModelId;
+  private _inputs: boolean;
+  private _outputs: boolean;
   
   constructor(props: {
     models: Record<string, ImmutableDebugModel>,
     active?: Session.ModelId
+    inputs: boolean;
+    outputs: boolean;
   }) {
+    
     this._models = props.models;
     this._active = props.active;
+    this._inputs = props.inputs;
+    this._outputs = props.outputs;
+  }
+  get inputs() {
+    return this._inputs;
+  }
+  get outputs() {
+    return this._outputs;
   }
   get active() {
     return this._active;
@@ -68,6 +81,13 @@ class SessionData implements Session.Instance {
   }
   getModel(modelId: string) {
     return this._models[modelId];
+  }
+  withModel(initModel: Hdes.ModelAPI.Model): Session.Instance {
+    const modelId = initModel.id;
+    if (this._models[modelId]) {
+      return this.withActive(modelId);
+    }
+    return this.withModelDefaults(initModel);
   }
   withModelDefaults(initModel: Hdes.ModelAPI.Model): Session.Instance {
     const modelId = initModel.id;
@@ -79,17 +99,16 @@ class SessionData implements Session.Instance {
 
     const newModels: Record<string, ImmutableDebugModel> = Object.assign({}, this._models);
     newModels[modelId] = new ImmutableDebugModel({ model: modelId, entity });
-    return new SessionData({ models: newModels, active: initModel.id });
+    return new SessionData({ models: newModels, active: initModel.id, inputs: this._inputs, outputs: this._outputs });
+  }
+  withInputs(inputs: boolean) {
+    return new SessionData({models: this._models, active: this._active, inputs, outputs: this._outputs});
+  }
+  withOutputs(outputs: boolean){
+    return new SessionData({models: this._models, active: this._active, inputs: this._inputs, outputs});
   }
   withActive(active: Session.ModelId): Session.Instance {
-    return new SessionData({models: this._models, active});
-  }
-  withModel(initModel: Hdes.ModelAPI.Model): Session.Instance {
-    const modelId = initModel.id;
-    if (this._models[modelId]) {
-      return this.withActive(modelId);
-    }
-    return this.withModelDefaults(initModel);
+    return new SessionData({models: this._models, active, inputs: this._inputs, outputs: this._outputs});
   }
   withModelEntity(props: { modelId: string, entity: string, value: string }): Session.Instance {
     if (!this._models[props.modelId]) {
@@ -99,7 +118,7 @@ class SessionData implements Session.Instance {
     const newModels: Record<string, ImmutableDebugModel> = Object.assign({}, this._models);
     const debugData = newModels[props.modelId];
     newModels[props.modelId] = debugData.withEntity({ entity: props.entity, value: props.value });
-    return new SessionData({ models: newModels, active: this._active })
+    return new SessionData({ models: newModels, active: this._active, inputs: this._inputs, outputs: this._outputs })
   }
   withModelOutput(props: { modelId: string, output: any }): Session.Instance {
     if (!this._models[props.modelId]) {
@@ -109,7 +128,7 @@ class SessionData implements Session.Instance {
     const newModels: Record<string, ImmutableDebugModel> = Object.assign({}, this._models);
     const debugData = newModels[props.modelId];
     newModels[props.modelId] = debugData.withOutput(props.output);
-    return new SessionData({ models: newModels, active: this._active })
+    return new SessionData({ models: newModels, active: this._active, inputs: this._inputs, outputs: this._outputs })
   }
   withModelErrors(props: { modelId: string, errors: Hdes.StoreError }): Session.Instance {
     if (!this._models[props.modelId]) {
@@ -119,7 +138,7 @@ class SessionData implements Session.Instance {
     const newModels: Record<string, ImmutableDebugModel> = Object.assign({}, this._models);
     const debugData = newModels[props.modelId];
     newModels[props.modelId] = debugData.withErrors(props.errors);
-    return new SessionData({ models: newModels, active: this._active })
+    return new SessionData({ models: newModels, active: this._active, inputs: this._inputs, outputs: this._outputs })
   }
   withoutModelEntity(modelId: string): Session.Instance {
     if (!this._models[modelId]) {
@@ -128,7 +147,7 @@ class SessionData implements Session.Instance {
     const newModels: Record<string, ImmutableDebugModel> = Object.assign({}, this._models);
     const debugData = newModels[modelId];
     newModels[modelId] = debugData.withEntity();
-    return new SessionData({ models: newModels, active: this._active })
+    return new SessionData({ models: newModels, active: this._active, inputs: this._inputs, outputs: this._outputs })
   }
 }
 

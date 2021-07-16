@@ -6,23 +6,21 @@ import { DebugOutputsFt } from './DebugOutputsFt'
 import { DebugOutputsFl } from './DebugOutputsFl'
 
 
-const DebugOutputs: React.FC<{
-  expanded: boolean,
-  setExpanded: (expanded: boolean) => void
-}> = ({ expanded, setExpanded }) => {
+const DebugOutputs: React.FC<{}> = () => {
 
   const context = useContext();
   const data = context.active;
+
   if (!data || !data.debug.output) {
     return null;
   }
   const model = data.model;
   let delegate = (<></>);
-  if(model.type === "DT") {
-    delegate = (<DebugOutputsDt expanded={expanded} setExpanded={setExpanded} />);
-  } else if(model.type === "FLOW_TASK") {
-    delegate = (<DebugOutputsFt expanded={expanded} setExpanded={setExpanded} />);
-  } else if(model.type === "FLOW") {
+  if (model.type === "DT") {
+    delegate = (<DebugOutputsDt />);
+  } else if (model.type === "FLOW_TASK") {
+    delegate = (<DebugOutputsFt />);
+  } else if (model.type === "FLOW") {
     delegate = (<DebugOutputsFl />);
   }
 

@@ -7,11 +7,15 @@ enum ActionType {
   setModelEntity = "setModelEntity",
   setModelErrors = "setModelErrors",
   setModelOutput = "setModelOutput",
+  setOutputs = "setOutputs",
+  setInputs = "setInputs",
 }
 
 interface Action {
   type: ActionType;
 
+  setOutputs?: boolean;
+  setInputs?: boolean;
   setModel?: Hdes.ModelAPI.Model;
   setModelEntityDefaults?: Hdes.ModelAPI.Model;
   setModelEntity?: { modelId: Session.ModelId, entity: string, value: string };
@@ -20,6 +24,8 @@ interface Action {
 }
 
 const ActionBuilder = {
+  setInputs: (setInputs: boolean): Action => ({ type: ActionType.setInputs, setInputs }),
+  setOutputs: (setOutputs: boolean): Action => ({ type: ActionType.setOutputs, setOutputs }),
   setModel: (setModel: Hdes.ModelAPI.Model): Action => ({ type: ActionType.setModel, setModel }),
   setModelEntityDefaults: (setModelEntityDefaults: Hdes.ModelAPI.Model): Action => ({ type: ActionType.setModelEntityDefaults, setModelEntityDefaults }),
   setModelEntity: (setModelEntity: { modelId: Session.ModelId, entity: string, value: string }): Action => ({ type: ActionType.setModelEntity, setModelEntity }),
@@ -36,7 +42,7 @@ class ReducerDispatch implements Session.Actions {
     this._sessionDispatch = session;
     this._service = service;
   }
-  
+
   async handleSetModel(model: Hdes.ModelAPI.Model) {
     this._sessionDispatch(ActionBuilder.setModel(model))
   }
@@ -49,10 +55,16 @@ class ReducerDispatch implements Session.Actions {
   async handleSetModelErrors(props: { modelId: Session.ModelId, errors: Hdes.StoreError }) {
     this._sessionDispatch(ActionBuilder.setModelErrors(props));
   }
+  async handleInputs(active: boolean) {
+    this._sessionDispatch(ActionBuilder.setInputs(active));
+  }
+  async handleOutputs(active: boolean) {
+    this._sessionDispatch(ActionBuilder.setOutputs(active));
+  }
   handleExecute(props: { id: string, type: Hdes.ModelAPI.ServiceType, input: string }): Promise<void> {
     return this._service.debug.getDebug(props)
       .then(output => {
-        this._sessionDispatch(ActionBuilder.setModelOutput({modelId: props.id, output, errors: undefined}))
+        this._sessionDispatch(ActionBuilder.setModelOutput({ modelId: props.id, output, errors: undefined }))
       })
       .catch(errors => {
         this._sessionDispatch(ActionBuilder.setModelErrors({ modelId: props.id, errors }))
@@ -90,11 +102,25 @@ const Reducer = (state: Session.Instance, action: Action): Session.Instance => {
       console.error("Action data error", action);
       return state;
     }
+    case ActionType.setInputs: {
+      if (action.setInputs !== undefined) {
+        return state.withInputs(action.setInputs);
+      }
+      console.error("Action data error", action);
+      return state;
+    }
+    case ActionType.setOutputs: {
+      if (action.setOutputs !== undefined) {
+        return state.withOutputs(action.setOutputs);
+      }
+      console.error("Action data error", action);
+      return state;
+    }
     case ActionType.setModelOutput: {
       if (action.setModelOutput) {
         const newState = state.withModelOutput(action.setModelOutput);
-        if(Object.keys(action.setModelOutput).includes("errors")) {
-          return newState.withModelErrors({modelId: action.setModelOutput.modelId, errors: action.setModelOutput.errors as any}); 
+        if (Object.keys(action.setModelOutput).includes("errors")) {
+          return newState.withModelErrors({ modelId: action.setModelOutput.modelId, errors: action.setModelOutput.errors as any });
         }
         return newState;
       }

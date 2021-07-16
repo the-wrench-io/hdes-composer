@@ -11,11 +11,8 @@ interface DebugOption {
   asset: Hdes.ModelAPI.Model
 }
 
-const DebugOptions: React.FC<{
-  events: {
-    setInputs: (enabled: boolean) => void;
-  }
-}> = ({events}) => {
+const DebugOptions: React.FC<{}> = () => {
+  
   const resource = Resource.useContext();
   const context = useContext();
 
@@ -39,14 +36,16 @@ const DebugOptions: React.FC<{
     return type;
   });
 
+  const active = context.session.active;
 
   return (
     <Autocomplete fullWidth
       isOptionEqualToValue={(option: DebugOption, value: DebugOption) => option.asset.id === value.asset.id}
-      onChange={(_event, entity) => context.actions.handleSetModel((entity as any).asset) && events.setInputs(true)}
+      onChange={(_event, entity) => context.actions.handleSetModel((entity as any).asset) && context.actions.handleInputs(true)}
       options={options}
       groupBy={(option) => option.asset.type}
       getOptionLabel={(option) => option.label}
+      value={active ? options.filter(o => o.asset.id === active).pop(): null}
       renderInput={(params) => <TextField {...params} label={<FormattedMessage id="debug.asset.select.label" />} variant="filled" />}
     />
   );

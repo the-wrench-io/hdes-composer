@@ -9,7 +9,7 @@ import moment from 'moment-timezone';
 
 import { Hdes, Layout } from '../deps';
 import ExplorerAPI from './ExplorerAPI';
-import Tab from './Tab';
+import {openTab} from './Tab';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,7 +56,7 @@ const Group: React.FC<GroupProps> = ({ id, models, modes, label, type }) => {
   const classes = useStyles();
   const { actions } = Layout.useContext();
   const [open, setOpen] = React.useState(false);
-  const openAsset = (model: Hdes.ModelAPI.Model) => actions.handleTabAdd({ id: model.id, label: <Tab id={model.id} /> });
+  const openAsset = (model: Hdes.ModelAPI.Model) => openTab(model, actions);
 
   let errors = false;
   const list: React.ReactElement[] = [];

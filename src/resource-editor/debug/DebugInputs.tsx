@@ -26,11 +26,7 @@ function Grid<T = any>(props: { elements: T[], render: (element: T, index: numbe
   return rows;
 }
 
-const DebugInputs: React.FC<{
-  expanded: boolean,
-  setExpanded: (expanded: boolean) => void
-}> = ({ expanded, setExpanded }) => {
-
+const DebugInputs: React.FC<{}> = () => {
   const context = useContext();
   const data = context.active;
 
@@ -49,7 +45,7 @@ const DebugInputs: React.FC<{
 
 
   return (
-    <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
+    <Accordion expanded={context.session.inputs} onChange={() => context.actions.handleInputs(!context.session.inputs)}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography color="primary"><FormattedMessage id={"debug.asset.execute.inputs"} /></Typography>
       </AccordionSummary>

@@ -36,7 +36,9 @@ const ResourceEditor: React.FC<ResourceEditorProps> = ({ store, theme }) => {
   return (
     <Layout.Context.Provider value={{ session, actions }}>
       <Resource.Provider service={backend} theme={theme}>
-        <Components />
+        <Resource.Debug.Provider>
+          <Components />
+        </Resource.Debug.Provider>
       </Resource.Provider>
     </Layout.Context.Provider>
 

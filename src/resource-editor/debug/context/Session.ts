@@ -18,6 +18,8 @@ declare namespace Session {
   }
   
   interface Actions {
+    handleInputs(active: boolean): Promise<void>;
+    handleOutputs(active: boolean): Promise<void>;
     handleSetModel(model: Hdes.ModelAPI.Model): Promise<void>;
     handleSetModelEntityDefaults(model: Hdes.ModelAPI.Model): Promise<void>
     handleSetModelEntity(props: { modelId: ModelId, entity: string, value: string }): Promise<void>
@@ -28,8 +30,13 @@ declare namespace Session {
   interface Instance {
     models: DebugModel[];
     active?: ModelId; //model id
+    inputs: boolean;
+    outputs: boolean;
+    
     getModel(modelId: ModelId): DebugModel | undefined;
     withActive(modelId: ModelId): Instance;
+    withInputs(active: boolean): Instance;
+    withOutputs(active: boolean): Instance;
     withModel(model: Hdes.ModelAPI.Model): Instance;
     withModelDefaults(initModel: Hdes.ModelAPI.Model): Instance;
     withModelErrors(props: { modelId: ModelId, errors: Hdes.StoreError }): Instance;

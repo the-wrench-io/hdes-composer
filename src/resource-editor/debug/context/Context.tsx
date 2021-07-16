@@ -14,7 +14,7 @@ const DebugContext = React.createContext<Session.ContextType>({
   active: {} as Session.Active
 });
 
-const sessionData = new SessionData({ models: {} });
+const sessionData = new SessionData({ models: {}, inputs: true, outputs: false });
 
 const DebugProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
   
