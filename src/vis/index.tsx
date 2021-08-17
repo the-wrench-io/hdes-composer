@@ -55,21 +55,21 @@ namespace Vis {
     const events: VisEvents = {
       select: (event) => {
         const { nodes, edges } = event
-        console.log("vis.events.select", nodes, edges);
+        //console.log("vis.events.select", nodes, edges);
         init.events.onClick(nodes[0].id);
       },
 
       doubleClick: (event) => {
         const { nodes, edges } = event;
-        console.log("vis.events.doubleClick", nodes, edges);
-
         const selected = nodes[0];
-        const values = model.nodes
-          .filter(n => n.id === selected.id)
-          .filter(n => n.id ? true : false)
-
-        if (values.length > 0) {
-          init.events.onDoubleClick(values[0].id)
+        if(!selected) {
+          return;
+        }
+        
+        const stepId: string = selected as any;
+        const values = model.nodes.filter(n => n.id === stepId)
+        if (values.length > 0 && values[0].externalId) {
+          init.events.onDoubleClick(values[0].externalId)
         }
       }
     };

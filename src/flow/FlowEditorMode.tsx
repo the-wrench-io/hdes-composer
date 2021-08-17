@@ -37,6 +37,7 @@ interface FlowEditorModeProps {
   ast: (commands: Hdes.AstAPI.FlCommand[], rev?: number) => Promise<Hdes.AstAPI.Fl>;
   onChanges: (changes: Hdes.AstAPI.FlCommand[]) => void;
   onCreate: (props: { name: string, type: Hdes.ModelAPI.ServiceType }) => Promise<void>;
+  onOpen: (assetId: string) => void;
 };
 
 
@@ -69,8 +70,8 @@ const FlowEditorMode: React.FC<FlowEditorModeProps> = (props) => {
       <Grid item xs={6} className={classes.graph}>
         <FlowTree.Provider
           models={props.models}
-          onClick={(data) => console.log(data)}
-          onDoubleClick={(data) => console.log(data)}>
+          onClick={(data) => {}}
+          onDoubleClick={(data) => props.onOpen(data)}>
           {parser}
         </FlowTree.Provider>
       </Grid>
