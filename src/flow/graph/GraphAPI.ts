@@ -97,11 +97,12 @@ class ModelVisitor {
     const ref = this.visitRef(step);
     const group = this.visitType(step);
     const { x, y } = this.visitCoords(step, props);
+
     const node: Vis.Node = {
       id: id,
       parents: parents,
       externalId: ref?.id,
-      label: step.id?.value,
+      label: step.keyword,
       group: group,
       color: this.visitColor(group),
       shape: this.visitShape(group),

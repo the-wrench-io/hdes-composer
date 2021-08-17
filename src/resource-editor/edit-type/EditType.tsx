@@ -5,6 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import { Layout, Hdes, DecisionTable, FlowTask, Flow } from '../deps';
 import { ErrorList } from '../errors';
+import {openTab} from '../explorer/Tab';
 import Resource from '../';
 
 
@@ -58,6 +59,18 @@ const EditType: React.FC<EditTypeProps> = ({ id }) => {
     return (<Flow.Provider key={id} theme={{ mode: theme.palette.mode === 'dark' ? 'dark' : 'light' }}
       size={layout.session.dimensions} models={resource.session.models}
       ast={ast} onChanges={onChange} children={children}
+      onOpen={(id) => {
+        for(const models of Object.values(resource.session.models)) {
+          for(const model of models) {
+            if(model.id === id) {
+              openTab(model, layout.actions);
+              break;  
+            }
+            
+          }
+        }
+        
+      }}
       onCreate={(props) => resource.actions.createAsset({ name: props.name, serviceType: props.type }).then()} />);
   } else if (serviceType === "FLOW_TASK") {
     edit = (<FlowTask.Provider key={id} theme={{ mode: theme.palette.mode === 'dark' ? 'dark' : 'light' }} 
