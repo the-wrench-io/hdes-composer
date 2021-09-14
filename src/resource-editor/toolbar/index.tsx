@@ -8,7 +8,9 @@ import ExtensionIcon from '@material-ui/icons/Extension';
 import InfoIcon from '@material-ui/icons/Info';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import ImportExportIcon from '@material-ui/icons/ImportExport';
 import { FormattedMessage } from 'react-intl';
+import fileDownload from 'js-file-download'
 
 import { Layout } from '../deps';
 import Explorer from '../explorer';
@@ -54,6 +56,16 @@ const createToolbar = (props: {
       enabled: saveEnabled(props),
       icon: <SaveButton />,
       type: () => ({ dialog: (onClose: () => void) => (<SaveDialog handleClose={onClose} />) })
+    },
+
+    {
+      id: 'toolbar.export',
+      icon: <ImportExportIcon />,
+      type: () => ({ button: () => 
+        props.resource.service.resources.export().then(data => {
+          fileDownload(data, 'migration.json')  
+        })
+      })
     },
 
     {

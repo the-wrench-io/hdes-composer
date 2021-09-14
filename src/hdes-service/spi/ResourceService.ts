@@ -11,6 +11,10 @@ class ResourceService implements ResourceAPI.Service {
     this._store = store;
   }
 
+  export(): Promise<string> {
+    return this._store.fetch(`/exports`).then(data => JSON.stringify(data));
+  }
+
   get(id: string): Promise<ResourceAPI.Asset> {
     return this._store.fetch(`/resources/${id}`);
   }

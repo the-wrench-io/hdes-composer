@@ -16,6 +16,7 @@ declare namespace ResourceAPI {
   }
   
   interface Service {
+    export(): Promise<string>;
     get(id: string): Promise<Asset>;
     delete(id: string): Promise<void>;
     update(asset: Asset, body: string): Promise<Asset>;
