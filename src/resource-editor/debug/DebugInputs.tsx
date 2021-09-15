@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, AccordionSummary, AccordionDetails, Typography, TextField } from '@material-ui/core';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FormattedMessage } from 'react-intl';
 
@@ -53,10 +53,27 @@ const DebugInputs: React.FC<{}> = () => {
         {
           Grid({
             elements: inputs,
-            render: (p, index, style) => (<TextField key={index} style={style}
-              onChange={({ target }) => context.actions.handleSetModelEntity({ modelId: data.model.id, entity: p.name, value: target.value })}
-              required={p.required} label={p.name}
-              value={getValue(p)} />)
+            render: (p, index, style) => p.valueType === 'BOOLEAN' ?
+              (<FormControl variant="outlined" key={index} style={Object.assign(style, {marginTop: "8px", paddingLeft: "8px" })} required={p.required} >
+                <InputLabel>{p.name}</InputLabel>
+                <Select
+                  value={getValue(p)}
+                  onChange={({ target }) => context.actions.handleSetModelEntity({ modelId: data.model.id, entity: p.name, value: target.value })}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={"true"}>true</MenuItem>
+                  <MenuItem value={"false"}>false</MenuItem>
+                </Select>
+              </FormControl>)
+              :
+              (<TextField key={index} style={style}
+                onChange={({ target }) => context.actions.handleSetModelEntity({ modelId: data.model.id, entity: p.name, value: target.value })}
+                required={p.required} label={p.name}
+                value={getValue(p)} />
+              )
+
           })
         }
       </AccordionDetails>
