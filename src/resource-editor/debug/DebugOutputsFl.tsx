@@ -56,12 +56,11 @@ const DebugOutputsFl: React.FC<{}> = () => {
   const active: Session.Active = context.active as Session.Active;
   const debug: Hdes.DebugAPI.FlDebug = active.debug.output.service;
   const errors = debug.result._errors;
-  const outputs = debug.result;
-  console.log(debug, errors);
 
   return (<>
     {debug.debug.context.tasks
       .filter(task => !task.modelId.endsWith("-MERGE"))
+      .filter(task => task.modelId !== "end")
       .map((task, index) => (<Task key={index} task={task} errors={errors}/>))}
   </>);
 }

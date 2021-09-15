@@ -38,8 +38,8 @@ const createRejections = (debug: Hdes.DebugAPI.DtDebug): RuleRow[] => {
       const rule: Rule = {
         name: name.key.name,
         type: name.key.valueType,
-        input: name.value as string | null | undefined,
-        rule: node.src as string | null | undefined,
+        input: name.value ? name.value as string : null,
+        rule: node ? node.src : null,
       }
       ruleRow.rules.push(rule);
     }
@@ -67,8 +67,8 @@ const createMatches = (debug: Hdes.DebugAPI.DtDebug): RuleRow[] => {
       const rule: Rule = {
         name: name.key.name,
         type: name.key.valueType,
-        input: name.value as string | null | undefined,
-        rule: node.src as string | null | undefined,
+        input: name.value ? name.value as string : null,
+        rule: node ? node.src : null,
       }
       ruleRow.rules.push(rule);
     }
