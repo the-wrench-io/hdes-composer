@@ -45,7 +45,7 @@ const FlowTaskEditor: React.FC<FlowTaskEditorProps> = (props) => {
 
   return (<div className={classes.root}>
     <Grid container spacing={0}>
-      <Grid item xs={6} className={classes.editor}>
+      <Grid item xs={12} className={classes.editor}>
         <CodeEditor.Provider mode="ft" theme={props.theme.mode} onCommands={props.onChanges}>
           {parser?.src}
         </CodeEditor.Provider>
