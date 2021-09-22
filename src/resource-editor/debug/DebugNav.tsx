@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, Breadcrumbs, Link, Typography } from '@material-ui/core';
+import { Theme, Breadcrumbs, Link, Typography } from '@mui/material';
 
 import Resource from '../';
 import { Hdes } from '../deps';

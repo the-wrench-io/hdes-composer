@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, Box, Paper } from '@material-ui/core';
+import { Theme, Box, Paper } from '@mui/material';
 
 import { DebugOptions } from './DebugOptions';
 import { DebugInputs } from './DebugInputs';

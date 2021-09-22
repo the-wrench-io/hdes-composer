@@ -2,8 +2,8 @@ import React from 'react'
 
 import moment from 'moment-timezone';
 import { FormattedMessage } from 'react-intl'
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, Button, Box, TextField, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Theme, Button, Box, TextField, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 
 import { Hdes } from '../deps';
 import { Dialog } from '../dialog';

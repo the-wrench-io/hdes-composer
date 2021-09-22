@@ -1,8 +1,8 @@
 import React from 'react'
-import { Select, InputLabel, List, ListItem, ListItemButton, ListItemText, ListItemIcon, MenuItem, TextField, Grid, FormControl, Box } from '@material-ui/core';
+import { Select, InputLabel, List, ListItem, ListItemButton, ListItemText, ListItemIcon, MenuItem, TextField, Grid, FormControl, Box } from '@mui/material';
 import { FormattedMessage } from 'react-intl'
 import { StringBuilder } from '../builders'
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export const EditString: React.FC<{ builder: StringBuilder, onChange: (value: string) => void }> = (props) => {
 

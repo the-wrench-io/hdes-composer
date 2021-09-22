@@ -1,5 +1,5 @@
 import React from 'react'
-import { InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
+import { InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import { FormattedMessage } from 'react-intl'
 import { BooleanBuilder } from '../builders'
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, List, Paper, ButtonGroup, Button } from '@material-ui/core';
+import { Theme, List, Paper, ButtonGroup, Button } from '@mui/material';
 
 import { Layout, Hdes } from '../deps';
 import Resource from '../'

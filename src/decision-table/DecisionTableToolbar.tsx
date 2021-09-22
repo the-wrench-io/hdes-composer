@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, Toolbar, Typography, Button, ButtonGroup, Tooltip } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import DoubleArrowRoundedIcon from '@material-ui/icons/DoubleArrowRounded';
-import CompareArrowsRoundedIcon from '@material-ui/icons/CompareArrowsRounded';
-import FileDownloadDoneIcon from '@material-ui/icons/FileDownloadDone';
-import UploadIcon from '@material-ui/icons/Upload';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Theme, Toolbar, Typography, Button, ButtonGroup, Tooltip } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DoubleArrowRoundedIcon from '@mui/icons-material/DoubleArrowRounded';
+import CompareArrowsRoundedIcon from '@mui/icons-material/CompareArrowsRounded';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import UploadIcon from '@mui/icons-material/Upload';
 
 import { FormattedMessage } from 'react-intl';
 import fileDownload from 'js-file-download'

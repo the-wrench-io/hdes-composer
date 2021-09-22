@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, TableContainer, Button, ButtonGroup } from '@material-ui/core';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Theme, TableContainer, Button, ButtonGroup } from '@mui/material';
 
 import { Hdes } from './deps';
 import { VirtTable, VirtTableProps } from './virt/VirtTable'

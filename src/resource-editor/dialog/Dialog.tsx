@@ -6,7 +6,7 @@ import {
   Dialog as MuiDialog,
   DialogContent as MuiDialogContent,
   DialogActions as MuiDialogActions,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import { DialogTitle } from './DialogTitle';
 

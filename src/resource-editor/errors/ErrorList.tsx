@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, List, ListItem, ListItemText, Typography, Divider } from '@material-ui/core';
+import { Theme, List, ListItem, ListItemText, Typography, Divider } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextareaAutosize } from '@material-ui/core';
+import { TextareaAutosize } from '@mui/material';
 import { StringBuilder } from '../builders'
 
 

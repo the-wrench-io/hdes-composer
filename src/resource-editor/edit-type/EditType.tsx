@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Button, useTheme } from '@material-ui/core';
+import { Alert, Button, useTheme } from '@mui/material';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { Layout, Hdes, DecisionTable, FlowTask, Flow } from '../deps';

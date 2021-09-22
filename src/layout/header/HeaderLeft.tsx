@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IconButton, Box, Theme } from '@material-ui/core';
+import { IconButton, Box, Theme } from '@mui/material';
 import { makeStyles } from '@material-ui/styles';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';

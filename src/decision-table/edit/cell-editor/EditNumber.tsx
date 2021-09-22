@@ -19,7 +19,7 @@
  */
 import React from 'react'
 
-import { InputLabel, Select, MenuItem, TextField, Checkbox, Button, Box, FormControl, FormControlLabel, Grid } from '@material-ui/core';
+import { InputLabel, Select, MenuItem, TextField, Checkbox, Button, Box, FormControl, FormControlLabel, Grid } from '@mui/material';
 import { FormattedMessage } from 'react-intl'
 import { NumberBuilder } from '../builders'
 

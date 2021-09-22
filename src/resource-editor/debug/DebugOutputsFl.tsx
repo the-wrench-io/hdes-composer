@@ -1,9 +1,8 @@
 import React from 'react';
 import {
-  Accordion, AccordionSummary, AccordionDetails, Typography, useTheme, Theme,
+  Accordion, AccordionSummary, AccordionDetails, Typography, useTheme,
   List, ListItem, ListItemText, Divider, Grid
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/styles';
+} from '@mui/material';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Hdes, CodeEditor } from '../deps';

@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { InputLabel, Select, MenuItem, TextField, FormControl, Grid } from '@material-ui/core';
+import { InputLabel, Select, MenuItem, TextField, FormControl, Grid } from '@mui/material';
 import { DateBuilder } from '../builders'
 
 

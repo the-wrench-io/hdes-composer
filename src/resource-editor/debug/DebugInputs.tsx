@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, AccordionSummary, AccordionDetails, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { FormattedMessage } from 'react-intl';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Accordion, AccordionSummary, AccordionDetails, Typography, useTheme, Theme,
   Table, TableCell, TableContainer, TableHead, TableRow, TableBody, Paper
-} from '@material-ui/core';
+} from '@mui/material';
 import { createStyles, makeStyles } from '@material-ui/styles';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';

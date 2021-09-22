@@ -1,5 +1,5 @@
 import React from 'react';
-import { Autocomplete, TextField } from '@material-ui/core';
+import { Autocomplete, TextField } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 
 import Resource from '../';

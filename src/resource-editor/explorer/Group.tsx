@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, List, ListItem, ListItemText, Collapse, Typography } from '@material-ui/core';
+import { Theme, List, ListItem, ListItemText, Collapse, Typography } from '@mui/material';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FormattedMessage } from 'react-intl';

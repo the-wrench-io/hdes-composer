@@ -2,8 +2,8 @@ import React from 'react'
 
 
 import { FormattedMessage } from 'react-intl'
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, Button, TextField, Autocomplete, Stack } from '@material-ui/core';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Theme, Button, TextField, Autocomplete, Stack } from '@mui/material';
 
 import { Hdes } from '../deps';
 import { Dialog } from '../dialog';

@@ -1,12 +1,12 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { TableCell, Paper, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { TableCell, Paper, Theme } from '@mui/material';
 
 import { Column, Table } from 'react-virtualized';
 
-declare module '@material-ui/styles/withStyles' {
+declare module '@mui/material/styles/withStyles' {
   // Augment the BaseCSSProperties so that we can control jss-rtl
   interface BaseCSSProperties {
     /*

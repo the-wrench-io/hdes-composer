@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/styles';
-import { Theme, ClickAwayListener, IconButton, Badge as MaterialBadge, Grow, Paper, Popper } from '@material-ui/core';
+import { makeStyles } from '@mui/material/styles';
+import { Theme, ClickAwayListener, IconButton, Badge as MaterialBadge, Grow, Paper, Popper } from '@mui/material';
 
 
 const useStyles = makeStyles((theme: Theme) => ({

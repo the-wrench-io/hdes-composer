@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { createStyles, makeStyles, withStyles } from '@material-ui/styles';
+import { createStyles, makeStyles, withStyles } from '@mui/material/styles';
 import {
   Theme,
   Dialog as MuiDialog,
   DialogContent as MuiDialogContent,
   DialogActions as MuiDialogActions,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import { DialogTitle } from './DialogTitle';
 

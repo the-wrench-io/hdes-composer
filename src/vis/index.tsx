@@ -54,13 +54,13 @@ namespace Vis {
 
     const events: VisEvents = {
       select: (event) => {
-        const { nodes, edges } = event
+        const { nodes } = event
         //console.log("vis.events.select", nodes, edges);
         init.events.onClick(nodes[0].id);
       },
 
       doubleClick: (event) => {
-        const { nodes, edges } = event;
+        const { nodes } = event;
         const selected = nodes[0];
         if(!selected) {
           return;

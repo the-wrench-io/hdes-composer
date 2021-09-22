@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Tooltip, ButtonGroup } from '@material-ui/core';
+import { Button, Tooltip, ButtonGroup } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 
 import CloseIcon from '@material-ui/icons/Close';
