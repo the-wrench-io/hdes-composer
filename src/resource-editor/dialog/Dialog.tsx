@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createStyles, makeStyles, withStyles } from '@material-ui/styles';
+import { createStyles, makeStyles, withStyles } from '@mui/material/styles';
 import {
   Theme,
   Dialog as MuiDialog,

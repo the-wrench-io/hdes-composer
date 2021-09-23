@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@mui/material/styles';
 import { Theme, List, ListItem, ListItemText, Collapse, Typography } from '@mui/material';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment-timezone';
 

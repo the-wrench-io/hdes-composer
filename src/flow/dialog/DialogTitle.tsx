@@ -2,7 +2,7 @@ import React from 'react';
 import { createStyles, makeStyles } from '@mui/material/styles';
 import { Theme, IconButton, Typography, DialogTitle as MuiDialogTitle } from '@mui/material';
 
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const useStyles = makeStyles((theme: Theme) =>

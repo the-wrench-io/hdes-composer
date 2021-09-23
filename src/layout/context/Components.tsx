@@ -2,7 +2,7 @@ import React from 'react';
 import ReactResizeDetector from 'react-resize-detector';
 import clsx from 'clsx';
 import { CssBaseline, Drawer, AppBar, Toolbar as MuiToolbar, Box, Theme } from '@mui/material';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/material/styles';
 
 import Badges from '../badges';
 import Tabs from '../tabs';

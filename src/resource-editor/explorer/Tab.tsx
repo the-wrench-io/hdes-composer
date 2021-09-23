@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme } from '@material-ui/core';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Theme } from '@mui/material';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 import Resource from '../';
 import { Hdes, Layout } from '../deps';

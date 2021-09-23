@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/styles';
+import { makeStyles, createStyles } from '@mui/material/styles';
 
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/hint/show-hint';

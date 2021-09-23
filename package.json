@@ -8,6 +8,7 @@
     "build"
   ],
   "dependencies": {
+    "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.0.0",
     "@types/codemirror": "^5.60.0",
     "@types/react-virtualized": "^9.21.11",

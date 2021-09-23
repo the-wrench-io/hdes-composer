@@ -3,9 +3,9 @@ import React from 'react';
 import { Button, Tooltip, ButtonGroup } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 
-import CloseIcon from '@material-ui/icons/Close';
-import TaskAltIcon from '@material-ui/icons/TaskAlt';
-import InputIcon from '@material-ui/icons/Input';
+import CloseIcon from '@mui/icons-material/Close';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import InputIcon from '@mui/icons-material/Input';
 
 import Explorer from '../explorer';
 import { useContext } from './context';

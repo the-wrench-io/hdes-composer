@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { InputBase, Theme, alpha } from '@mui/material';
-import SearchIcon from '@material-ui/icons/Search';
-import { makeStyles } from '@material-ui/styles';
+import SearchIcon from '@mui/icons-material/Search';
+import { makeStyles } from '@mui/material/styles';
 import { useIntl } from 'react-intl';
 
 

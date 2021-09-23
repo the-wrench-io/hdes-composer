@@ -1,14 +1,14 @@
 import React from 'react';
 
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import CachedIcon from '@material-ui/icons/Cached';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
-import ExtensionIcon from '@material-ui/icons/Extension';
-import InfoIcon from '@material-ui/icons/Info';
-import NewReleasesIcon from '@material-ui/icons/NewReleases';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import ImportExportIcon from '@material-ui/icons/ImportExport';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import CachedIcon from '@mui/icons-material/Cached';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import ExtensionIcon from '@mui/icons-material/Extension';
+import InfoIcon from '@mui/icons-material/Info';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { FormattedMessage } from 'react-intl';
 import fileDownload from 'js-file-download'
 

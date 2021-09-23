@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, Popover, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Theme, Popover, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 
 import { Layout, Hdes } from '../deps';

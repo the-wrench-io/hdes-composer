@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Theme } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
 
 import { Layout } from '../deps';
 import Resource from '../';

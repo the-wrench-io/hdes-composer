@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@mui/material/styles';
 import { Theme, Button, FormControl, InputLabel, Select, TextField, CircularProgress, Box } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 

@@ -3,9 +3,9 @@ import {
   Accordion, AccordionSummary, AccordionDetails, Typography, useTheme, Theme,
   Table, TableCell, TableContainer, TableHead, TableRow, TableBody, Paper
 } from '@mui/material';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@mui/material/styles';
 
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { FormattedMessage } from 'react-intl';
 import { CodeEditor } from '../deps';

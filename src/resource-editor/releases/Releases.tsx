@@ -1,14 +1,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@mui/material/styles';
 import {
   Theme,
   Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
   Accordion, AccordionDetails, AccordionSummary,
   Toolbar, Typography
-} from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+} from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import DateFormat from '../date-format';
 import Resource from '../';

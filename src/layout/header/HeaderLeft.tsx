@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { IconButton, Box, Theme } from '@mui/material';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/material/styles';
 
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 
 const useStyles = makeStyles((theme: Theme) => ({

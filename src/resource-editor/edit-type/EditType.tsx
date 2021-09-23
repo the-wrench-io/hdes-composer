@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button, useTheme } from '@mui/material';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { Layout, Hdes, DecisionTable, FlowTask, Flow } from '../deps';
 import { ErrorList } from '../errors';

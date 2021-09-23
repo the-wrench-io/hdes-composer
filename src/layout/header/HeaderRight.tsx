@@ -1,9 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import { IconButton, Theme } from '@mui/material';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/material/styles';
 
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 
 
 const useStyles = makeStyles((theme: Theme) => ({

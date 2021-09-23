@@ -1,6 +1,6 @@
 import React from 'react';
 import { Accordion, AccordionSummary, AccordionDetails, Typography, useTheme } from '@mui/material';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { FormattedMessage } from 'react-intl';
 
 import { CodeEditor } from '../deps';

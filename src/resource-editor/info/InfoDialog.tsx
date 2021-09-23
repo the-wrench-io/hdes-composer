@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme, Button } from '@material-ui/core';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Theme, Button } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 
 

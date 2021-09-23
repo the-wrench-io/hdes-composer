@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Typography, IconButton, TableCell, TableRow, Theme } from '@material-ui/core';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import TabUnselectedOutlinedIcon from '@material-ui/icons/TabUnselectedOutlined';
+import { createStyles, makeStyles } from '@mui/material/styles';
+import { Typography, IconButton, TableCell, TableRow, Theme } from '@mui/material';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import TabUnselectedOutlinedIcon from '@mui/icons-material/TabUnselectedOutlined';
 
 import { Hdes } from '../deps';
 import DateFormat from '../date-format';

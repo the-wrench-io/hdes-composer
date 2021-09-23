@@ -4,7 +4,7 @@ import {
   List, ListItem, ListItemText, Divider, Grid
 } from '@mui/material';
 
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Hdes, CodeEditor } from '../deps';
 import { useContext, Session } from './context';
 
