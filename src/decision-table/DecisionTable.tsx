@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { Theme, TableContainer, Button, ButtonGroup } from '@mui/material';
 
 import { Hdes } from './deps';

@@ -9,7 +9,8 @@
   ],
   "dependencies": {
     "@mui/icons-material": "^5.0.1",
-    "@mui/material": "^5.0.0",
+    "@mui/material": "^5.0.1",
+    "@mui/styles": "^5.0.1",
     "@types/codemirror": "^5.60.0",
     "@types/react-virtualized": "^9.21.11",
     "codemirror": "^5.40.0",

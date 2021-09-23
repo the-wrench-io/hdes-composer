@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { Theme, Toolbar, Typography, Button, ButtonGroup, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DoubleArrowRoundedIcon from '@mui/icons-material/DoubleArrowRounded';
