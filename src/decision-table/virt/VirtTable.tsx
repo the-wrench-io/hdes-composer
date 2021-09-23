@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { createStyles, makeStyles } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { TableCell, Paper, Theme } from '@mui/material';
 
 import { Column, Table } from 'react-virtualized';

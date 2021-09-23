@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import { Theme, Tabs as MaterialTabs, Tab as MaterialTab, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 

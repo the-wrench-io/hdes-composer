@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createStyles, makeStyles } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { Typography, IconButton, TableCell, TableRow, Theme } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import TabUnselectedOutlinedIcon from '@mui/icons-material/TabUnselectedOutlined';

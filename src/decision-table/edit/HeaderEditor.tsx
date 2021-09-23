@@ -49,7 +49,7 @@ const HeaderEditor: React.FC<HeaderEditorProps> = ({ dt, onChange, header, onClo
       <FormControl variant="filled" fullWidth sx={{ pb: 1 }}>
         <InputLabel><FormattedMessage id='dt.header.dataType' /></InputLabel>
         <Select fullWidth
-          onChange={({ target }) => setDataType(target.value)}
+          onChange={({ target }) => setDataType(target.value as any)}
           value={dataType}
           label={<FormattedMessage id='dt.header.dataType' />}>
           {dt.headerTypes.map(v => (<MenuItem key={v} value={v}>{v}</MenuItem>))}

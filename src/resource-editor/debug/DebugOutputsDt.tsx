@@ -3,7 +3,7 @@ import {
   Accordion, AccordionSummary, AccordionDetails, Typography, useTheme, Theme,
   Table, TableCell, TableContainer, TableHead, TableRow, TableBody, Paper
 } from '@mui/material';
-import { createStyles, makeStyles } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 

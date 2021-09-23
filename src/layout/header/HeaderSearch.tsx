@@ -2,7 +2,7 @@ import React from 'react';
 
 import { InputBase, Theme, alpha } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { makeStyles } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import { useIntl } from 'react-intl';
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { IconButton, Box, Theme } from '@mui/material';
-import { makeStyles } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 

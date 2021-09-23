@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { FormattedMessage } from 'react-intl'
-import { createStyles, makeStyles } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { Theme, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 import { Hdes } from '../deps';
@@ -224,7 +224,7 @@ const RowsColumns: React.FC<RowsColumnsProps> = (props) => {
       <InputLabel><FormattedMessage id='dt.edit.row.columns.operation' /></InputLabel>
       <Select autoWidth
         value={operation}
-        onChange={({ target }) => setOperation(target.value)}
+        onChange={({ target }) => setOperation(target.value as any)}
         label={<FormattedMessage id='dt.edit.row.columns.operation' />}>
         {Object.keys(operations).map(v => (<MenuItem key={v} value={v}>{v}</MenuItem>))}
       </Select>

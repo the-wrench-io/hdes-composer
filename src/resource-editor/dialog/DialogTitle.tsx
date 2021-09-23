@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { Theme, IconButton, Typography, DialogTitle as MuiDialogTitle } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';

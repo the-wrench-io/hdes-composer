@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { IconButton, Theme } from '@mui/material';
-import { makeStyles } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 
 import MenuIcon from '@mui/icons-material/Menu';
 

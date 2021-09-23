@@ -2,7 +2,7 @@ import React from 'react'
 
 import moment from 'moment-timezone';
 import { FormattedMessage } from 'react-intl'
-import { createStyles, makeStyles } from '@mui/material/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { Theme, Button, Box, TextField, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 
 import { Hdes } from '../deps';
@@ -63,7 +63,7 @@ const MetaEditor: React.FC<MetaEditorProps> = ({ children, onChange, model, onCl
       <FormControl variant="filled" fullWidth sx={{ pb: 1 }}>
         <InputLabel><FormattedMessage id='dt.menu.hitpolicy' /></InputLabel>
         <Select fullWidth
-          onChange={({ target }) => setHitpolicy(target.value)}
+          onChange={({ target }) => setHitpolicy(target.value as any)}
           value={hitpolicy}
           label={<FormattedMessage id='dt.menu.hitpolicy' />}>
           {hitPolicyOptions.map(v => (<MenuItem key={v.value} value={v.value}>{v.text}</MenuItem>))}
