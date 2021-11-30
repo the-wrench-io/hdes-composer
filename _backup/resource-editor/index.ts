@@ -11,7 +11,7 @@ import { Releases as ReleasesAs } from './releases';
 import { default as DebugAs } from './debug';
 
 
-declare namespace Resource {
+declare namespace Hdes {
   export {
     Session,
     ContentProps,
@@ -20,9 +20,10 @@ declare namespace Resource {
   };
 }
 
-namespace Resource {
-  export const Editor = ResourceEditor;
+namespace Hdes {
+  export const Composer = ResourceEditor;
   
+  /*
   export const Search = SearchAs;
   export const Releases = ReleasesAs;
   export const Debug = DebugAs;
@@ -37,8 +38,10 @@ namespace Resource {
   export const createContent = createContentAs;
   export const createSearch = createSearchAs;
   export const createToolbar = createToolbarAs;
+  */
+  
 }
 
-export default Resource;
+export default Hdes;
 
 

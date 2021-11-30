@@ -38,11 +38,10 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Run release script
-      run: ./build-scripts/main-release.sh
+      run: ./.build-scripts/build-hdes-composer-release.sh
       env:
         CI: false
         NODE_AUTH_TOKEN: ${{ secrets.HDES_BOT_TOKEN }}
-        BOT_NAME: ${{ secrets.HDES_BOT_NAME }}
-        BOT_EMAIL: ${{ secrets.HDES_BOT_EMAIL }}  
-        BOT_TOKEN: ${{ secrets.HDES_BOT_TOKEN }}
+        GIT_EMAIL: olev.mutso@gmail.com 
+        GIT_USER: olev.mutso
         

@@ -1,8 +1,17 @@
-import Resource from '../resource-editor';
-import Hdes from '../hdes-service';
-import Vis from '../vis';
-import { theme } from '../themes';
-import messages from '../intl';
+import messages from './intl';
+
+import { Main } from './Main';
+import { Secondary } from './Secondary';
+import Toolbar from './Toolbar';
+import Client from './client';
+
+import {Composer} from './context'; 
+
+;
+
+const ComposerProvider = Composer.Provider;
+const useComposer = Composer.useComposer;
 
 
-export { Resource, Hdes, Vis, theme, messages };
+export { messages, Main, Secondary, Toolbar, ComposerProvider, useComposer, Composer };
+export default Client;

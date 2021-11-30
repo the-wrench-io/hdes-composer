@@ -8,17 +8,11 @@
     "build"
   ],
   "dependencies": {
-    "@types/codemirror": "^5.60.0",
-    "@types/react-virtualized": "^9.21.11",
+    "@the-wrench-io/react-burger": "file:.yalc/@the-wrench-io/react-burger",
     "codemirror": "^5.40.0",
     "js-file-download": "^0.4.4",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-intl": "^5.17.2",
-    "react-resize-detector": "^6.7.3",
-    "react-virtualized": "9.22.3",
     "vis-react": "^0.5.1"
   },
   "peerDependencies": {
@@ -26,31 +20,40 @@
     "@emotion/styled": "^11.0.0",
     "@material-ui/core": "^5.0.0-alpha.37",
     "@material-ui/icons": "^5.0.0-alpha.37",
-    "@material-ui/styles": "^5.0.0-alpha.35"
+    "@material-ui/styles": "^5.0.0-alpha.35",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-intl": "^5.17.2",
+    "react-resize-detector": "^6.7.3",
+    "react-virtualized": "9.22.3"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
-    "@emotion/react": "^11.0.0",
-    "@emotion/styled": "^11.0.0",
-    "@material-ui/core": "^5.0.0-alpha.37",
-    "@material-ui/icons": "^5.0.0-alpha.37",
-    "@material-ui/styles": "^5.0.0-alpha.35",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.1",
+    "@mui/lab": "^5.0.0-alpha.53",
+    "@mui/material": "^5.0.1",
+    "@mui/styles": "^5.0.1",
+    "@types/codemirror": "^5.60.0",
     "@types/jest": "^26.0.19",
     "@types/node": "^12.19.9",
     "@types/react": "^17.0.1",
     "@types/react-dom": "^17.0.1",
-    "@types/webpack-env": "^1.16.0",
+    "@types/react-virtualized": "9.21.15",
     "css-loader": "^5.2.6",
-    "deasync": "^0.1.21",
     "post-loader": "^2.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-intl": "^5.17.2",
+    "react-resize-detector": "^6.7.3",
     "react-scripts": "4.0.1",
-    "ts-loader": "^7.0.5",
+    "react-virtualized": "9.22.3",
     "ts-node": "^9.1.1",
-    "typescript": "^4.1.3",
-    "web-vitals": "^0.2.4"
+    "typescript": "^4.1.3"
   },
   "scripts": {
-    "start": "cp ./.demo/index.tsx ./src/index.tsx && cp ./.demo/react-app-env.d.ts ./src/react-app-env.d.ts && cp -R ./.demo/public ./public && react-scripts start",
+    "start": "./.build-scripts/start-dev.sh && react-scripts start",
     "build": "rm -rf ./build && tsc",
     "clean": "rm -rf ./build",
     "test": "react-scripts test",
@@ -61,7 +64,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/the-wrench-io/hdes-ide.git"
+    "url": "git+https://github.com/the-wrench-io/hdes-composer.git"
   },
   "eslintConfig": {
     "extends": [
