@@ -33,6 +33,8 @@ declare namespace Composer {
     site: HdesClient.Site,
     pages: Record<HdesClient.EntityId, PageUpdate>;
 
+    getEntity(id: HdesClient.EntityId): undefined | HdesClient.Entity<any>;
+
     withPage(page: HdesClient.EntityId): Session;
     withPageValue(page: HdesClient.EntityId, value: HdesClient.AstCommand[]): Session;
     withoutPages(pages: HdesClient.EntityId[]): Session;

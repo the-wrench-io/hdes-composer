@@ -3,9 +3,9 @@ import { Tabs, Tab, Box, TabProps, TabsProps, TextField, TextFieldProps, alpha }
 import { styled } from "@mui/material/styles";
 import { useIntl } from 'react-intl';
 
-import Burger from '@the-wrench-io/react-burger';
-//import { ArticleExplorer, WorkflowExplorer, LinkExplorer, SearchExplorer } from './explorer';
-//import { Composer } from './context';
+
+import { FlowExplorer, ServiceExplorer, DecisionExplorer } from './explorer';
+
 
 const TextFieldRoot = styled(TextField)<TextFieldProps>(({ theme }) => ({
 
@@ -51,50 +51,37 @@ const StyledTabs = styled(Tabs)<TabsProps>(() => ({
 }));
 
 
-
-const SecondaryArticles: React.FC<{}> = () => {
+const Secondary: React.FC<{}> = () => {
   const intl = useIntl();
   const getLabel = (id: string) => intl.formatMessage({ id });
-  const getPlaceholder = (id: string) => intl.formatMessage({ id });
-  const [tab, setTab] = React.useState("toolbar.flows")
+
+  const [tab, setTab] = React.useState("tabs.flows")
   const [searchString, setSearchString] = React.useState("");
 
   let component = <></>;
-
-  if (tab === 'toolbar.services') {
-    //component = (<WorkflowExplorer />)
-  } else if (tab === 'toolbar.links') {
-    //component = (<LinkExplorer />)
-  } else {
-    //component = <ArticleExplorer />;
+  if (tab === 'tabs.flows') {
+    component = (<FlowExplorer />)
+  } else if (tab === 'tabs.services') {
+    component = (<ServiceExplorer />)
+  } else if (tab === 'tabs.decisions') {
+    component = <DecisionExplorer />;
   }
 
-  return (<>
+  return (<Box sx={{ backgroundColor: "explorer.main", height: '100%' }}>
     <Box display="flex" >
       <StyledTabs value={tab} onChange={(_event, value) => setTab(value)}>
-        <StyledTab label={getLabel("explorer.tabs.flows")} value='toolbar.flows' />
-        <StyledTab label={getLabel("explorer.tabs.services")} value='toolbar.services' />
-        <StyledTab label={getLabel("explorer.tabs.decisions")} value='toolbar.decisions' />
+        <StyledTab label={getLabel("explorer.tabs.flows")} value='tabs.flows' />
+        <StyledTab label={getLabel("explorer.tabs.services")} value='tabs.services' />
+        <StyledTab label={getLabel("explorer.tabs.decisions")} value='tabs.decisions' />
       </StyledTabs>
       <Box alignSelf="center" sx={{ m: 1 }}>
-        <TextFieldRoot placeholder={getPlaceholder("explorer.tabs.search")} value={searchString} onChange={({ target }) => setSearchString(target.value)} focused />
+        <TextFieldRoot focused placeholder={getLabel("explorer.tabs.search")}
+          value={searchString}
+          onChange={({ target }) => setSearchString(target.value)} />
       </Box>
     </Box>
     {component}
-  </>);
-}
-
-
-const Secondary: React.FC<{}> = () => {
-  const layout = Burger.useSecondary();
-
-  let component = <></>;
-  if (layout.session.secondary === 'toolbar.search') {
-    //component = (<SearchExplorer />)
-  } else {
-    component = <SecondaryArticles />;
-  }
-  return (<Box sx={{ backgroundColor: "explorer.main", height: '100%' }}>{component}</Box>)
+  </Box>)
 }
 export { Secondary }
 

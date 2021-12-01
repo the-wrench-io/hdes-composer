@@ -5,15 +5,17 @@ import Burger from '@the-wrench-io/react-burger';
 
 import Activities from './activities';
 import { Composer } from './context';
+import { FlowEdit } from './flow';
 
 
 const root = { height: `100%`, padding: 1, backgroundColor: "mainContent.main" };
 
 const Main: React.FC<{}> = () => {
   const layout = Burger.useTabs();
-  const site = Composer.useSite();
+  const { site, session } = Composer.useComposer();
   const tabs = layout.session.tabs;
   const active = tabs.length ? tabs[layout.session.history.open] : undefined;
+  const entity = active ? session.getEntity(active.id) : undefined;
 
   //composers which are NOT linked directly with an article
 
@@ -28,21 +30,24 @@ const Main: React.FC<{}> = () => {
       return (<Box sx={root}><Activities /></Box>);
     } else if (active.id === 'releases') {
       return (<Box sx={root}>releases</Box>);
-    } else if (active.id === 'decision') {
-      return (<Box sx={root}>decision</Box>);
-    } else if (active.id === 'flow') {
-      return (<Box sx={root}>flow</Box>);
-    } else if (active.id === 'service') {
-      return (<Box sx={root}>service</Box>);
     } else if (active.id === 'graph') {
       return (<Box sx={root}>graph</Box>);
     } else if (active.id === 'templates') {
       return (<Box sx={root}>templates</Box>);
     }
-  
+
+    if (entity) {
+      if (entity.source.bodyType === 'DT') {
+        return (<Box sx={root}>decision</Box>);
+      } else if (entity.source.bodyType === 'FLOW') {
+        return (<Box sx={root}><FlowEdit flow={entity}/></Box>);
+      } else if (entity.source.bodyType === 'FLOW_TASK') {
+        return (<Box sx={root}>service</Box>);
+      }
+    }
     throw new Error("unknown view: " + JSON.stringify(active, null, 2));
 
-  }, [active, site]);
+  }, [active, site, entity]);
 }
 export { Main }
 

@@ -1,4 +1,4 @@
-import Composer from './ide';
+rimport Composer from './ide';
 import Client from '../client';
 
 class SiteCache {
@@ -18,6 +18,9 @@ class SiteCache {
     }
     if(!entity) {
       entity = this._site.tags[entityId];
+    }
+    if(!entity) {
+      throw new Error("Can't find entity with id: '" + entityId + "'")
     }
     return entity;
   }
@@ -66,12 +69,6 @@ class SessionData implements Composer.Session {
     }
     const pages = Object.assign({}, this._pages);
     const origin = this._cache.getEntity(page);
-    
-    
-    if(!origin) {
-      throw new Error("Can't find entity with id: '" + page + "'")
-    }
-    
     pages[page] = new ImmutablePageUpdate({ origin, saved: true, value: [] });
     return new SessionData({ site: this._site, pages, cache: this._cache });
   }

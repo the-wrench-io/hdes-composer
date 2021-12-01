@@ -34,10 +34,12 @@ const en = {
   'activities.templates.desc': 'FEATURE IS NOT IMPLEMENTED YET, BUT IT IS COMING SOON!  Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. ',
   'activities.templates.view': 'View all templates',
   
+  'flows': "Flows",
+  'options': "Options",
+  'flows.edit.title': "Edit flow",
   
-  
-  
-  
+  'decisions': "Decisions",
+  'services': "Services",
   
   
   'package.explorer.flows': 'flows',

@@ -1,3 +1,5 @@
 import { FlowComposer } from './FlowComposer';
+import { FlowEdit } from './FlowEdit';
 
-export default FlowComposer;
+
+export {FlowComposer, FlowEdit};
