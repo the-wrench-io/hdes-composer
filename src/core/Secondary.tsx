@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 
 import Burger from '@the-wrench-io/react-burger';
 //import { ArticleExplorer, WorkflowExplorer, LinkExplorer, SearchExplorer } from './explorer';
-import { Composer } from './context';
+//import { Composer } from './context';
 
 const TextFieldRoot = styled(TextField)<TextFieldProps>(({ theme }) => ({
 
@@ -44,7 +44,7 @@ const StyledTab = styled(Tab)<TabProps>(({ theme }) => ({
   },
 }));
 
-const StyledTabs = styled(Tabs)<TabsProps>(({ }) => ({
+const StyledTabs = styled(Tabs)<TabsProps>(() => ({
   "& .MuiTabs-indicator": {
     backgroundColor: "unset",
   }
@@ -56,7 +56,7 @@ const SecondaryArticles: React.FC<{}> = () => {
   const intl = useIntl();
   const getLabel = (id: string) => intl.formatMessage({ id });
   const getPlaceholder = (id: string) => intl.formatMessage({ id });
-  const [tab, setTab] = React.useState("toolbar.articles")
+  const [tab, setTab] = React.useState("toolbar.flows")
   const [searchString, setSearchString] = React.useState("");
 
   let component = <></>;
@@ -72,9 +72,9 @@ const SecondaryArticles: React.FC<{}> = () => {
   return (<>
     <Box display="flex" >
       <StyledTabs value={tab} onChange={(_event, value) => setTab(value)}>
-        <StyledTab label={getLabel("explorer.tabs.articles")} value='toolbar.articles' />
+        <StyledTab label={getLabel("explorer.tabs.flows")} value='toolbar.flows' />
         <StyledTab label={getLabel("explorer.tabs.services")} value='toolbar.services' />
-        <StyledTab label={getLabel("explorer.tabs.links")} value='toolbar.links' />
+        <StyledTab label={getLabel("explorer.tabs.decisions")} value='toolbar.decisions' />
       </StyledTabs>
       <Box alignSelf="center" sx={{ m: 1 }}>
         <TextFieldRoot placeholder={getPlaceholder("explorer.tabs.search")} value={searchString} onChange={({ target }) => setSearchString(target.value)} focused />

@@ -1,4 +1,45 @@
 const en = {
+  'buttons.create': "Create",
+  
+  'explorer.tabs.flows': 'flows',
+  'explorer.tabs.services': 'services',
+  'explorer.tabs.decisions': 'decisions',
+  'explorer.tabs.search': 'search',
+  
+  'activities.title': 'Activities',
+  'activities.desc': 'Create, view, and navigate site resources',
+  
+  'activities.flows.title': 'Flows',
+  'activities.flows.desc': 'TODO:: ',
+  
+  'activities.decisions.title': 'Decisions',
+  'activities.decisions.desc': 'TODO:: ',  
+
+  'activities.services.title': 'Decisions',
+  'activities.services.desc': 'TODO:: ',
+  
+  'activities.migration.title': 'Migration',
+  'activities.migration.desc': 'TODO:: ',
+  
+  'activities.types.title': 'Types',
+  'activities.types.desc': 'TODO:: ',    
+  'activities.types.view': 'View all types',
+  
+  'activities.releases.title': 'Release',
+  'activities.releases.desc': 'A Release is a snapshot of all site content at one certain point of time. Use this for testing, prouduction, or backup purposes.',
+  'activities.releases.view': 'View all releases',
+  'activities.releases.graph': 'Graph',
+  
+  'activities.templates.title': 'Templates',
+  'activities.templates.desc': 'FEATURE IS NOT IMPLEMENTED YET, BUT IT IS COMING SOON!  Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. ',
+  'activities.templates.view': 'View all templates',
+  
+  
+  
+  
+  
+  
+  
   'package.explorer.flows': 'flows',
   'package.explorer.servicetasks': 'services',
   'package.explorer.decisiontables': 'decisions',

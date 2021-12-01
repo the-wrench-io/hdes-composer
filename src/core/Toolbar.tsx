@@ -39,15 +39,17 @@ const Toolbar: React.FC<{}> = () => {
   const composer = Composer.useComposer();
   const drawer = Burger.useDrawer();
   const tabs = Burger.useTabs();
+  const tabActions = tabs.actions;
   const secondary = Burger.useSecondary();
-  
   const drawerOpen = drawer.session.drawer;
+  
+  React.useEffect(() => tabActions.handleTabAdd({ id: 'activities', label: "Activities" }), [tabActions]);
 
-
-  const active = tabs.session.tabs.length ? tabs.session.tabs[tabs.session.history.open] : undefined;
+  //const active = tabs.session.tabs.length ? tabs.session.tabs[tabs.session.history.open] : undefined;
   //const article = active ? composer.site.articles[active.id] : undefined;
   //const articlePagesView = active?.data?.nav?.type === "ARTICLE_PAGES";
   const unsavedPages = Object.values(composer.session.pages).filter(p => !p.saved);
+  const saveSx = unsavedPages.length ? { color: "explorerItem.contrastText" } : undefined;
   //const unsavedArticlePages: Composer.PageUpdate[] = (article ? unsavedPages.filter(p => !p.saved).filter(p => p.origin.body.article === article.id) : []);
 
 
@@ -70,8 +72,8 @@ const Toolbar: React.FC<{}> = () => {
     } else if (newValue === 'toolbar.activities') {
       tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });
 
-    } else if (newValue === 'toolbar.articles') {
-      secondary.actions.handleSecondary("toolbar.articles")
+    } else if (newValue === 'toolbar.assets') {
+      secondary.actions.handleSecondary("toolbar.assets")
 
     } else if (newValue === 'toolbar.search') {
       secondary.actions.handleSecondary("toolbar.search")
@@ -84,16 +86,6 @@ const Toolbar: React.FC<{}> = () => {
     }
   };
 
-  // open dashboard
-  React.useLayoutEffect(() => {
-    console.log("init hdes toolbar");
-    if(!secondary.session.secondary) {
-      secondary.actions.handleSecondary("toolbar.articles")
-    }
-    //tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });
-  }, [tabs, secondary]);
-
-  const saveSx = unsavedPages.length ? { color: "explorerItem.contrastText" } : undefined;
 
   return (
     <>
@@ -109,7 +101,7 @@ const Toolbar: React.FC<{}> = () => {
             disabled={unsavedPages.length === 0}
             label={unsavedPages.length ? (<Box sx={saveSx}>{unsavedPages.length}</Box>) : undefined} />
           <StyledTab value='toolbar.search' icon={<SearchOutlinedIcon />} />
-          <StyledTab value='toolbar.articles' icon={<ArticleOutlinedIcon />} />
+          <StyledTab value='toolbar.assets' icon={<ArticleOutlinedIcon />} />
           <StyledTab value='toolbar.help' icon={<HelpOutlineOutlinedIcon />} />
           <StyledTab value='toolbar.expand' icon={<FlipToFrontOutlinedIcon />} />
           <StyledTab value='feedback' icon={<FeedbackOutlinedIcon />} />

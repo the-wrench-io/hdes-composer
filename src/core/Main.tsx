@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 
 import Burger from '@the-wrench-io/react-burger';
 
+import Activities from './activities';
 import { Composer } from './context';
 
 
@@ -23,9 +24,8 @@ const Main: React.FC<{}> = () => {
     if (!active) {
       return null;
     }
-    console.log("init main");
     if (active.id === 'activities') {
-      return (<Box sx={root}>activities</Box>);
+      return (<Box sx={root}><Activities /></Box>);
     } else if (active.id === 'releases') {
       return (<Box sx={root}>releases</Box>);
     } else if (active.id === 'decision') {

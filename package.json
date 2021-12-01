@@ -54,6 +54,7 @@
   },
   "scripts": {
     "start": "./.build-scripts/start-dev.sh && react-scripts start",
+    "yalc": "(yalc add @the-wrench-io/react-burger) && ./.build-scripts/start-dev.sh && react-scripts start",
     "build": "rm -rf ./build && tsc",
     "clean": "rm -rf ./build",
     "test": "react-scripts test",
