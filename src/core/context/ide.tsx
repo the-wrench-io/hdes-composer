@@ -33,6 +33,9 @@ declare namespace Composer {
     site: HdesClient.Site,
     pages: Record<HdesClient.EntityId, PageUpdate>;
 
+    getDecision(decisionName: string): undefined | HdesClient.Entity<HdesClient.AstDecision>;
+    getFlow(flowName: string): undefined | HdesClient.Entity<HdesClient.AstFlow>;
+    getService(serviceName: string): undefined | HdesClient.Entity<HdesClient.AstService>;
     getEntity(id: HdesClient.EntityId): undefined | HdesClient.Entity<any>;
 
     withPage(page: HdesClient.EntityId): Session;

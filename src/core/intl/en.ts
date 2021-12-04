@@ -1,5 +1,6 @@
 const en = {
   'buttons.create': "Create",
+  'button.cancel': "Cancel",
   
   'explorer.tabs.flows': 'flows',
   'explorer.tabs.services': 'services',
@@ -15,7 +16,7 @@ const en = {
   'activities.decisions.title': 'Decisions',
   'activities.decisions.desc': 'TODO:: ',  
 
-  'activities.services.title': 'Decisions',
+  'activities.services.title': 'Services',
   'activities.services.desc': 'TODO:: ',
   
   'activities.migration.title': 'Migration',
@@ -25,7 +26,7 @@ const en = {
   'activities.types.desc': 'TODO:: ',    
   'activities.types.view': 'View all types',
   
-  'activities.releases.title': 'Release',
+  'activities.releases.title': 'Releases',
   'activities.releases.desc': 'A Release is a snapshot of all site content at one certain point of time. Use this for testing, prouduction, or backup purposes.',
   'activities.releases.view': 'View all releases',
   'activities.releases.graph': 'Graph',
@@ -34,12 +35,37 @@ const en = {
   'activities.templates.desc': 'FEATURE IS NOT IMPLEMENTED YET, BUT IT IS COMING SOON!  Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. ',
   'activities.templates.view': 'View all templates',
   
+  'programs.error.title': 'Program error',
+  'programs.warning.title': 'Program warning',
+  
+  
+  
   'flows': "Flows",
   'options': "Options",
+  
   'flows.edit.title': "Edit flow",
+  'flows.copyas.title': "Copy flow as",
+  'flows.delete.title': "Delete flow",
+
+  'services.edit.title': "Edit service",
+  'services.copyas.title': "Copy service as",
+  'services.delete.title': "Delete service",
+  
+  'decisions.edit.title': "Edit decision",
+  'decisions.copyas.title': "Copy decision as",
+  'decisions.delete.title': "Delete decision",
+  'decisions.table.inputs.title': "Matching rules",
+  'decisions.table.outputs.title': "Results",
   
   'decisions': "Decisions",
   'services': "Services",
+  'program.status.DEPENDENCY_ERROR': "Dependency Errors",
+  'program.status.UP': "Program is UP",
+  'program.status.AST_ERROR': "Syntax errors",
+  'program.status.PROGRAM_ERROR': "Compiler errors",
+  
+  
+  
   
   
   'package.explorer.flows': 'flows',

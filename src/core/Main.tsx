@@ -1,14 +1,16 @@
 import React from 'react';
 import { Box } from '@mui/material';
+import { SxProps } from '@mui/system';
 
 import Burger from '@the-wrench-io/react-burger';
 
 import Activities from './activities';
 import { Composer } from './context';
 import { FlowEdit } from './flow';
+import { DecisionEdit } from './decision';
+import { ServiceEdit } from './service';
 
-
-const root = { height: `100%`, padding: 1, backgroundColor: "mainContent.main" };
+const root: SxProps = { height: `100%`, padding: 1, backgroundColor: "mainContent.main" };
 
 const Main: React.FC<{}> = () => {
   const layout = Burger.useTabs();
@@ -38,11 +40,11 @@ const Main: React.FC<{}> = () => {
 
     if (entity) {
       if (entity.source.bodyType === 'DT') {
-        return (<Box sx={root}>decision</Box>);
+        return (<Box sx={root}><DecisionEdit decision={entity} /></Box>);
       } else if (entity.source.bodyType === 'FLOW') {
         return (<Box sx={root}><FlowEdit flow={entity}/></Box>);
       } else if (entity.source.bodyType === 'FLOW_TASK') {
-        return (<Box sx={root}>service</Box>);
+        return (<Box sx={root}><ServiceEdit service={entity}/></Box>);
       }
     }
     throw new Error("unknown view: " + JSON.stringify(active, null, 2));

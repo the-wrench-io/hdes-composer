@@ -3,10 +3,9 @@ import React from 'react';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/scroll/simplescrollbars';
-import 'codemirror/mode/groovy/groovy';
-import 'codemirror/mode/yaml/yaml';
+import 'codemirror/mode/groovy/groovy'; // eslint-disable-line
+import 'codemirror/mode/yaml/yaml'; // eslint-disable-line
 
-import 'codemirror/theme/monokai.css';
 import 'codemirror/theme/eclipse.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
@@ -15,8 +14,8 @@ import 'codemirror/addon/scroll/simplescrollbars.css';
 
 import { styled } from "@mui/material/styles";
 import { Box, BoxProps } from '@mui/material';
-import Editor from './context/Context';
 
+import { View, ViewProps, createView } from './ViewImpl';
 
 
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -30,22 +29,16 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   }
 }));
 
-
-
-const Integration: React.FC<{}> = () => {
+const CodeEditor: React.FC<ViewProps> = (props) => {
   const ref = React.createRef<HTMLTextAreaElement>();
-  const context = Editor.useContext();
-
-  React.useEffect(() => {
-    if (!ref.current) {
-      return;
+  const [view, setView] = React.useState<View>();
+  
+  React.useLayoutEffect(() => {
+    if(ref.current && !view) {
+      setView(createView(ref, props));  
     }
-    if (context.session.view) {
-      return;
-    }
-    context.actions.setEditor(ref);
-  }, [ref, context])
+  }, [ref, props, setView, view])
 
   return (<StyledBox><textarea ref={ref} /></StyledBox>);
 }
-export default Integration;
+export { CodeEditor };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Box } from '@mui/material';
+import { Box } from '@mui/material';
 
 import CodeEditor from '../../code-editor';
 import { Client } from '../context';
@@ -8,15 +8,10 @@ import { Client } from '../context';
 const FlowEdit: React.FC<{flow: Client.Entity<Client.AstFlow>}> = ({flow}) => {
 
   console.log(flow);
+  const src = flow.ast?.src.value;
 
-  return (<Box>
-    <Grid container spacing={0}>
-      <Grid item xs={6}>
-        <CodeEditor mode="fl" onCommands={() => {}} />
-      </Grid>
-      <Grid item xs={6}>
-      </Grid>
-    </Grid>
+  return (<Box height="100%">
+    <CodeEditor mode="yaml" src={src ? src : "#--failed-to-parse"}/>
   </Box>);
 }
 

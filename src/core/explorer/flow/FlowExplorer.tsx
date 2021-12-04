@@ -7,22 +7,12 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 import { Composer } from '../../context';
 import FlowItem from './FlowItem';
-
-
-const findMainId = (values: string[]) => {
-  const result = values.filter(id => !id.endsWith("-nested"));
-  if (result.length) {
-    return result[0];
-  }
-  return undefined;
-}
+import TreeViewToggle from '../TreeViewToggle';
 
 
 const FlowExplorer: React.FC<{}> = () => {
   const { session } = Composer.useComposer();
-  const [expanded, setExpanded] = React.useState<string[]>([]);
-
-
+  const [toggle, setToggle] = React.useState(new TreeViewToggle());
   return (
     <Box>
       <Typography align="left"
@@ -35,18 +25,12 @@ const FlowExplorer: React.FC<{}> = () => {
         }}>
       </Typography>
 
-      <TreeView expanded={expanded}
+      <TreeView expanded={toggle.expanded}
         defaultCollapseIcon={<ArrowDropDownIcon />}
         defaultExpandIcon={<ArrowRightIcon />}
         defaultEndIcon={<div style={{ width: 24 }} />}
-        onNodeToggle={(_event: React.SyntheticEvent, nodeIds: string[]) => {
-          const active = findMainId(expanded);
-          const newId = findMainId(nodeIds.filter(n => n !== active));
-          if (active !== newId && active && newId) {
-            nodeIds.splice(nodeIds.indexOf(active), 1);
-          }
-          setExpanded(nodeIds);
-        }}>
+        onNodeToggle={(_event: React.SyntheticEvent, nodeIds: string[]) => setToggle(toggle.onNodeToggle(nodeIds))}>
+        
         { Object.values(session.site.flows)
           .map(flow => (<FlowItem key={flow.id} flowId={flow.id} />))
         }

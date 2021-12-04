@@ -197,6 +197,7 @@ export interface AstFlowNode {
 // Service
 export interface AstService extends AstBody {
   executorType: "TYPE_0" | "TYPE_1" | "TYPE_2";
+  value: string
 }
 // Tag
 export interface AstTag extends AstBody {

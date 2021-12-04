@@ -64,7 +64,7 @@ const Secondary: React.FC<{}> = () => {
   } else if (tab === 'tabs.services') {
     component = (<ServiceExplorer />)
   } else if (tab === 'tabs.decisions') {
-    component = <DecisionExplorer />;
+    component = (<DecisionExplorer />);
   }
 
   return (<Box sx={{ backgroundColor: "explorer.main", height: '100%' }}>

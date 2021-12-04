@@ -3,23 +3,63 @@ import Client from '../client';
 
 class SiteCache {
   private _site: Client.Site;
+  private _decisions: Record<string, Client.Entity<Client.AstDecision>> = {};
+  private _flows: Record<string, Client.Entity<Client.AstFlow>> = {};
+  private _services: Record<string, Client.Entity<Client.AstService>> = {}
 
   constructor(site: Client.Site) {
     this._site = site;
+    
+    Object.values(site.decisions).forEach(d => this.visitDecision(d))
+    Object.values(site.services).forEach(d => this.visitService(d))
+    Object.values(site.flows).forEach(d => this.visitFlow(d))
   }
-  
+
+  private visitFlow(flow: Client.Entity<Client.AstFlow>) {
+    const { ast } = flow;
+    if (!ast) {
+      return;
+    }
+    this._flows[ast.name] = flow;
+  }
+
+  private visitDecision(decision: Client.Entity<Client.AstDecision>) {
+    const { ast } = decision;
+    if (!ast) {
+      return;
+    }
+    this._decisions[ast.name] = decision;
+  }
+
+  private visitService(service: Client.Entity<Client.AstService>) {
+    const { ast } = service;
+    if (!ast) {
+      return;
+    }
+    this._services[ast.name] = service;
+  }
+
   getEntity(entityId: Client.EntityId): Client.Entity<any> {
     let entity: Client.Entity<any> = this._site.decisions[entityId];
-    if(!entity) {
+    if (!entity) {
       entity = this._site.flows[entityId];
     }
-    if(!entity) {
+    if (!entity) {
       entity = this._site.services[entityId];
     }
-    if(!entity) {
+    if (!entity) {
       entity = this._site.tags[entityId];
     }
     return entity;
+  }
+  getDecision(decisionName: string): undefined | Client.Entity<Client.AstDecision> {
+    return this._decisions[decisionName];
+  }
+  getFlow(flowName: string): undefined | Client.Entity<Client.AstFlow> {
+    return this._flows[flowName];
+  }
+  getService(serviceName: string): undefined | Client.Entity<Client.AstService> {
+    return this._services[serviceName];
   }
 }
 
@@ -43,7 +83,15 @@ class SessionData implements Composer.Session {
   get pages() {
     return this._pages;
   }
-  
+  getDecision(decisionName: string): undefined | Client.Entity<Client.AstDecision> {
+    return this._cache.getDecision(decisionName);
+  }
+  getFlow(flowName: string): undefined | Client.Entity<Client.AstFlow> {
+    return this._cache.getFlow(flowName);
+  }
+  getService(serviceName: string): undefined | Client.Entity<Client.AstService> {
+    return this._cache.getService(serviceName);
+  }
   getEntity(entityId: Client.EntityId): Client.Entity<any> | undefined {
     return this._cache.getEntity(entityId);
   }
@@ -66,12 +114,12 @@ class SessionData implements Composer.Session {
     }
     const pages = Object.assign({}, this._pages);
     const origin = this._cache.getEntity(page);
-    
-    
-    if(!origin) {
+
+
+    if (!origin) {
       throw new Error("Can't find entity with id: '" + page + "'")
     }
-    
+
     pages[page] = new ImmutablePageUpdate({ origin, saved: true, value: [] });
     return new SessionData({ site: this._site, pages, cache: this._cache });
   }

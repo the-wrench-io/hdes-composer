@@ -5,9 +5,7 @@ import { Secondary } from './Secondary';
 import Toolbar from './Toolbar';
 import Client from './client';
 
-import {Composer} from './context'; 
-
-;
+import { Composer } from './context'; 
 
 const ComposerProvider = Composer.Provider;
 const useComposer = Composer.useComposer;

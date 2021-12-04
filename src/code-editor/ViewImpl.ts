@@ -1,9 +1,5 @@
 import CodeMirror from 'codemirror';
 
-import * as EditorAPI from './EditorAPI';
-import ViewParser from './ViewParser';
-
-
 interface Annotation {
   from: CodeMirror.Position;
   message?: string;
@@ -11,11 +7,35 @@ interface Annotation {
   to?: CodeMirror.Position;
 }
 
-class ViewImpl implements EditorAPI.View {
-  private _editor: CodeMirror.Editor;
-  private _events: EditorAPI.ViewEvents = {};
+interface ViewCommand {
+  id: number;
+  type: 'SET' | 'DELETE' | 'ADD';
+  value: string;
+}
 
-  constructor(area: React.RefObject<HTMLTextAreaElement>, props: EditorAPI.ViewProps) {
+interface ViewEvents {
+  onChanges?: (commands: ViewCommand[], content: string) => void;  
+  lint?: () => LintMessage[];
+  hint?: (pos: CodeMirror.Position, content: string) => CodeMirror.Hints;
+}
+type ViewLang = "yaml" | "groovy" | "json";
+interface ViewProps {
+  mode: ViewLang;
+  src: string;
+}
+interface LintMessage { line: number; value: string; type: "ERROR" | "WARNING"; range?: LintRange; }
+interface LintRange { start: number; end: number; column?: number; insert?: boolean; }
+
+interface View {
+  withValue(value: string): View;
+  withEvents(events: ViewEvents): View
+}
+
+class ViewImpl implements View {
+  private _editor: CodeMirror.Editor;
+  private _events: ViewEvents = {};
+
+  constructor(area: React.RefObject<HTMLTextAreaElement>, props: ViewProps) {
     if (!area.current) {
       throw new Error("codemirror ref is not initiated");
     }
@@ -24,7 +44,7 @@ class ViewImpl implements EditorAPI.View {
       lineNumbers: true,
       tabSize: 2,
       firstLineNumber: 0,
-      theme: props.theme,
+      theme: 'eclipse',
       extraKeys: {
         'Ctrl-Space': 'autocomplete'
       },
@@ -92,16 +112,12 @@ class ViewImpl implements EditorAPI.View {
       return;
     }
 
-    const commands = new ViewParser(editor, changes).visit();
-    if (commands) {
-      this._events.onChanges(commands, editor.getValue());
-    }
   }
-  withValue(value: string): EditorAPI.View {
+  withValue(value: string): View {
     this._editor.setValue(value);
     return this;
   }
-  withEvents(events: EditorAPI.ViewEvents): EditorAPI.View {
+  withEvents(events: ViewEvents): View {
     this._events = {
       hint: events.hint ? events.hint : this._events?.hint,
       lint: events.lint ? events.lint : this._events?.lint,
@@ -111,7 +127,8 @@ class ViewImpl implements EditorAPI.View {
   }
 }
 
+const createView = (area: React.RefObject<HTMLTextAreaElement>, props: ViewProps): View => new ViewImpl(area, props);
 
-export default ViewImpl;
-
+export { createView }
+export type {View, ViewProps};
 

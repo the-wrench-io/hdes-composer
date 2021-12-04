@@ -5,8 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import Burger from '@the-wrench-io/react-burger';
 
 import {FlowComposer} from '../flow';
-import DecisionComposer from '../decision';
-import ServiceComposer from '../service';
+import {DecisionComposer} from '../decision';
+import {ServiceComposer} from '../service';
 import TypeComposer from '../type';
 import ReleaseComposer from '../release';
 import MigrationComposer from '../migration';

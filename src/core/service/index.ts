@@ -1,3 +1,4 @@
 import { ServiceComposer } from './ServiceComposer';
+import { ServiceEdit } from './ServiceEdit';
 
-export default ServiceComposer;
+export {ServiceComposer, ServiceEdit};

@@ -1,3 +1,3 @@
 import { DecisionComposer } from './DecisionComposer';
-
-export default DecisionComposer;
+import { DecisionEdit } from './DecisionEdit';
+export { DecisionEdit, DecisionComposer };
