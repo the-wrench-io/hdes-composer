@@ -7,14 +7,8 @@ interface Annotation {
   to?: CodeMirror.Position;
 }
 
-interface ViewCommand {
-  id: number;
-  type: 'SET' | 'DELETE' | 'ADD';
-  value: string;
-}
-
 interface ViewEvents {
-  onChanges?: (commands: ViewCommand[], content: string) => void;  
+  onChanges?: (content: string) => void;  
   lint?: () => LintMessage[];
   hint?: (pos: CodeMirror.Position, content: string) => CodeMirror.Hints;
 }
@@ -22,6 +16,7 @@ type ViewLang = "yaml" | "groovy" | "json";
 interface ViewProps {
   mode: ViewLang;
   src: string;
+  onChange?: (newValue: string) => void;
 }
 interface LintMessage { line: number; value: string; type: "ERROR" | "WARNING"; range?: LintRange; }
 interface LintRange { start: number; end: number; column?: number; insert?: boolean; }
@@ -39,7 +34,14 @@ class ViewImpl implements View {
     if (!area.current) {
       throw new Error("codemirror ref is not initiated");
     }
-
+    
+    const onChangeCallback = props.onChange;
+    if(onChangeCallback) {
+      this._events.onChanges = (content) => {
+        onChangeCallback(content);
+      };
+    }
+    
     const editor = CodeMirror.fromTextArea(area.current, {
       lineNumbers: true,
       tabSize: 2,
@@ -68,8 +70,8 @@ class ViewImpl implements View {
       }
     });
 
-    editor.on("changes", (editor: CodeMirror.Editor, changes: CodeMirror.EditorChange[]) => this.onChanges(editor, changes))
     editor.setValue(props.src);
+    editor.on("changes", (editor: CodeMirror.Editor, changes: CodeMirror.EditorChange[]) => this.onChanges(editor, changes))
     this._editor = editor;
   }
 
@@ -108,10 +110,11 @@ class ViewImpl implements View {
     return this._events.hint(pos, content);
   }
   onChanges(editor: CodeMirror.Editor, changes: CodeMirror.EditorChange[]) {
-    if (!this._events.onChanges) {
+    const callback = this._events.onChanges;
+    if (!callback) {
       return;
     }
-
+    callback(editor.getValue());
   }
   withValue(value: string): View {
     this._editor.setValue(value);

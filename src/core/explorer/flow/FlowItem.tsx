@@ -33,7 +33,7 @@ function DecisionItem(props: {
       onClick={props.onClick}
       label={
         <Box sx={{ display: "flex", alignItems: "center", p: 0.5, pr: 0 }}>
-          <Box component={AccountTreeOutlinedIcon} color="workflow.main" sx={{ pl: 1, mr: 1 }} />
+          <Box component={AccountTreeOutlinedIcon} color="page.main" sx={{ pl: 1, mr: 1 }} />
           <Typography noWrap={true} maxWidth="300px" variant="body2"
             sx={{ fontWeight: "inherit", flexGrow: 1 }}
           >
@@ -124,13 +124,12 @@ const FlowItem: React.FC<{ flowId: Client.FlowId }> = ({ flowId }) => {
 
   const saved = isArticleSaved(flow);
   const flowName = flow.ast ? flow.ast.name : flow.id;
-
-
+  
   const decisions: RefDecision[] = flow.associations
     .filter(a => a.refType === "DT")
-    .map(a => ({ entity: session.getDecision(a.ref), ref: a }));;
+    .map(a => ({ entity: session.getDecision(a.ref), ref: a }));
   const services: RefService[] = flow.associations
-    .filter(a => a.refType === "FLOW_TASK")
+    .filter(a => a.owner && a.refType === "FLOW_TASK")
     .map(a => ({ entity: session.getService(a.ref), ref: a }));
 
   return (

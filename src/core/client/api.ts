@@ -185,7 +185,7 @@ export interface AstFlowInputNode extends AstFlowNode {
 }
 export interface AstFlowNode {
   parent: AstFlowNode;
-  keyword: AstFlowNode;
+  keyword: string;
   children: Record<string, AstFlowNode>;
   value: string;
   source: AstChangeset;

@@ -10,7 +10,7 @@ import { FlowEdit } from './flow';
 import { DecisionEdit } from './decision';
 import { ServiceEdit } from './service';
 
-const root: SxProps = { height: `100%`, padding: 1, backgroundColor: "mainContent.main" };
+const root: SxProps = { height: `100%`, backgroundColor: "mainContent.main" };
 
 const Main: React.FC<{}> = () => {
   const layout = Burger.useTabs();
