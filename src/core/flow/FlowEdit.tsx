@@ -25,7 +25,7 @@ const FlowEdit: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }) =
 
   return (<Box height="100%">
     {flow.ast ? <SticyGraph flow={flow} site={site} /> : undefined}
-    <CodeEditor mode="yaml" src={src ? src : "#--failed-to-parse"} onChange={handleChange} />
+    <CodeEditor id={flow.id} mode="yaml" src={src ? src : "#--failed-to-parse"} onChange={handleChange} />
   </Box>);
 }
 

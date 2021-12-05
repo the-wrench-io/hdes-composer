@@ -10,7 +10,21 @@ import { FlowEdit } from './flow';
 import { DecisionEdit } from './decision';
 import { ServiceEdit } from './service';
 
+import { Client } from './context';
+
 const root: SxProps = { height: `100%`, backgroundColor: "mainContent.main" };
+
+
+const EntityEditor: React.FC<{ entity: Client.Entity<any> }> = ({ entity }) => {
+  if (entity.source.bodyType === 'DT') {
+    return (<DecisionEdit decision={entity} />);
+  } else if (entity.source.bodyType === 'FLOW') {
+    return (<FlowEdit flow={entity} />);
+  } else if (entity.source.bodyType === 'FLOW_TASK') {
+    return (<ServiceEdit service={entity} />);
+  }
+  return null;
+}
 
 const Main: React.FC<{}> = () => {
   const layout = Burger.useTabs();
@@ -37,15 +51,8 @@ const Main: React.FC<{}> = () => {
     } else if (active.id === 'templates') {
       return (<Box sx={root}>templates</Box>);
     }
-
     if (entity) {
-      if (entity.source.bodyType === 'DT') {
-        return (<Box sx={root}><DecisionEdit decision={entity} /></Box>);
-      } else if (entity.source.bodyType === 'FLOW') {
-        return (<Box sx={root}><FlowEdit flow={entity}/></Box>);
-      } else if (entity.source.bodyType === 'FLOW_TASK') {
-        return (<Box sx={root}><ServiceEdit service={entity}/></Box>);
-      }
+      return <Box sx={root}><EntityEditor entity={entity} /></Box>
     }
     throw new Error("unknown view: " + JSON.stringify(active, null, 2));
 

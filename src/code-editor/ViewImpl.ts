@@ -14,6 +14,7 @@ interface ViewEvents {
 }
 type ViewLang = "yaml" | "groovy" | "json";
 interface ViewProps {
+  id: string;
   mode: ViewLang;
   src: string;
   onChange?: (newValue: string) => void;
@@ -22,6 +23,7 @@ interface LintMessage { line: number; value: string; type: "ERROR" | "WARNING"; 
 interface LintRange { start: number; end: number; column?: number; insert?: boolean; }
 
 interface View {
+  id: string;
   withValue(value: string): View;
   withEvents(events: ViewEvents): View
 }
@@ -29,6 +31,7 @@ interface View {
 class ViewImpl implements View {
   private _editor: CodeMirror.Editor;
   private _events: ViewEvents = {};
+  private _id: string;
 
   constructor(area: React.RefObject<HTMLTextAreaElement>, props: ViewProps) {
     if (!area.current) {
@@ -41,6 +44,8 @@ class ViewImpl implements View {
         onChangeCallback(content);
       };
     }
+    
+    this._id = props.id;
     
     const editor = CodeMirror.fromTextArea(area.current, {
       lineNumbers: true,
@@ -73,6 +78,10 @@ class ViewImpl implements View {
     editor.setValue(props.src);
     editor.on("changes", (editor: CodeMirror.Editor, changes: CodeMirror.EditorChange[]) => this.onChanges(editor, changes))
     this._editor = editor;
+  }
+
+  get id() {
+    return this._id;
   }
 
   getAnnotations(

@@ -15,7 +15,7 @@ const ServiceEdit: React.FC<{service: Client.Entity<Client.AstService>}> = ({ser
   const src = service.ast?.value;
 
   return (<Box height="calc(100vh - 64px)">
-    <CodeEditor mode="groovy" src={src ? src : "#--failed-to-parse"} onChange={handleChange} />
+    <CodeEditor id={service.id} mode="groovy" src={src ? src : "#--failed-to-parse"} onChange={handleChange} />
   </Box>);
 }
 

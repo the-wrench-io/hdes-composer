@@ -29,16 +29,21 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   }
 }));
 
-const CodeEditor: React.FC<ViewProps> = (props) => {
+const CodeEditorState: React.FC<ViewProps> = (props) => {
   const ref = React.createRef<HTMLTextAreaElement>();
   const [view, setView] = React.useState<View>();
   
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if(ref.current && !view) {
       setView(createView(ref, props));  
     }
   }, [ref, props, setView, view])
 
-  return (<StyledBox><textarea ref={ref} /></StyledBox>);
+  return (<textarea key={props.id} id={props.id} ref={ref} />);
+}
+
+const CodeEditor: React.FC<ViewProps> = (props) => {
+  const {id} = props;
+  return (<StyledBox key={id} id={id}><CodeEditorState {...props} /></StyledBox>);
 }
 export { CodeEditor };
