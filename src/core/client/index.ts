@@ -86,6 +86,9 @@ namespace HdesClient {
     create() {
       return {} as any;
     }
+    ast(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Entity<any>> {
+      return this._store.fetch("/commands", { method: "POST", body: JSON.stringify({id, body}) });
+    }
     getSite(): Promise<HdesClient.Site> {
       return this._store.fetch("/dataModels", { method: "GET", body: undefined });
     }

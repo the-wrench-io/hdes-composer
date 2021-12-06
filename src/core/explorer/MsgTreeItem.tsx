@@ -2,7 +2,7 @@ import React from 'react';
 import { DialogContentText } from '@mui/material';
 
 import Burger from '@the-wrench-io/react-burger';
-import { Composer, Client } from '../context';
+import { Client } from '../context';
 
 
 

@@ -7,7 +7,7 @@ export type DecisionId = string;
 export type AstBodyType = "FLOW" | "FLOW_TASK" | "DT" | "TAG";
 export type Direction = "IN" | "OUT";
 export type ValueType = "TIME" | "DATE" | "DATE_TIME" | "INSTANT" | "PERIOD" | "DURATION" |
-  "STRING" | "INTEGER" | "LONG" | "BOOLEAN" | "PERCENT" | "OBJECT" | "ARRAY" |
+  "STRING" | "INTEGER" | "LONG" | "BOOLEAN" | "PERCENT" | "OBJECT" | "ARRAY" | "DECIMAL" | 
   "MAP" | "FLOW_CONTEXT";
 export type ProgramStatus = "UP" | "AST_ERROR" | "PROGRAM_ERROR" | "DEPENDENCY_ERROR";
 
@@ -220,6 +220,7 @@ export interface CreateBuilder {
 
 export interface Service {
   create(): CreateBuilder;
+  ast(id: string, body: AstCommand[]): Promise<Entity<any>>;
   getSite(): Promise<Site>
 }
 
