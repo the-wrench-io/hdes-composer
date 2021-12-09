@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Burger from '@the-wrench-io/react-burger';
-import { StringBuilder } from './builders'
+import { StringBuilder } from './'
 
 
 export const EditString: React.FC<{ builder: StringBuilder, onChange: (value: string) => void }> = (props) => {

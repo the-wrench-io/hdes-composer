@@ -2,48 +2,48 @@ const en = {
   'buttons.create': "Create",
   'buttons.apply': "Apply",
   'button.cancel': "Cancel",
-  
+
   'explorer.tabs.flows': 'flows',
   'explorer.tabs.services': 'services',
   'explorer.tabs.decisions': 'decisions',
   'explorer.tabs.search': 'search',
-  
+
   'activities.title': 'Activities',
   'activities.desc': 'Create, view, and navigate site resources',
-  
+
   'activities.flows.title': 'Flows',
   'activities.flows.desc': 'TODO:: ',
-  
+
   'activities.decisions.title': 'Decisions',
-  'activities.decisions.desc': 'TODO:: ',  
+  'activities.decisions.desc': 'TODO:: ',
 
   'activities.services.title': 'Services',
   'activities.services.desc': 'TODO:: ',
-  
+
   'activities.migration.title': 'Migration',
   'activities.migration.desc': 'TODO:: ',
-  
+
   'activities.types.title': 'Types',
-  'activities.types.desc': 'TODO:: ',    
+  'activities.types.desc': 'TODO:: ',
   'activities.types.view': 'View all types',
-  
+
   'activities.releases.title': 'Releases',
   'activities.releases.desc': 'A Release is a snapshot of all site content at one certain point of time. Use this for testing, prouduction, or backup purposes.',
   'activities.releases.view': 'View all releases',
   'activities.releases.graph': 'Graph',
-  
+
   'activities.templates.title': 'Templates',
   'activities.templates.desc': 'FEATURE IS NOT IMPLEMENTED YET, BUT IT IS COMING SOON!  Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. ',
   'activities.templates.view': 'View all templates',
-  
+
   'programs.error.title': 'Program error',
   'programs.warning.title': 'Program warning',
-  
-  
-  
+
+
+
   'flows': "Flows",
   'options': "Options",
-  
+
   'flows.edit.title': "Edit flow",
   'flows.copyas.title': "Copy flow as",
   'flows.delete.title': "Delete flow",
@@ -51,16 +51,27 @@ const en = {
   'services.edit.title': "Edit service",
   'services.copyas.title': "Copy service as",
   'services.delete.title': "Delete service",
-  
+
   'decisions.edit.title': "Edit decision",
   'decisions.copyas.title': "Copy decision as",
   'decisions.delete.title': "Delete decision",
+  'decisions.table.hitpolicy': "Matches",
+  'decisions.table.options': "Options",
+
+  'decisions.toolbar.add.input.column': "",
+  'decisions.toolbar.dd.output.column': "",
+  'decisions.toolbar.add.row': "",
+  'decisions.toolbar.csv.download': "",
+  'decisions.toolbar.csv.upload': "",
+  'decisions.toolbar.hitpolicy.description': "",
+  'decisions.toolbar.organize.rows.columns': "",
+
   'decisions.table.inputs.title': "Matching rules",
   'decisions.table.outputs.title': "Results",
   'decisions.cells.dialog.title': "Decision table: {name}, column: {column}, value: {value}",
   'decisions.cells.newvalue.boolean': "Enter new value",
   'decisions.cells.newvalue.boolean.helper': "Select boolean value",
-  'decisions.cells.newvalue.boolean.empty': "No value selected",  
+  'decisions.cells.newvalue.boolean.empty': "No value selected",
   'decisions.cells.newvalue.date.operator': "Operator",
   'decisions.cells.newvalue.date.start': "Start date",
   'decisions.cells.newvalue.date.end': "End date",
@@ -77,19 +88,21 @@ const en = {
   "decisions.cells.newvalue.string.comparisonType": "Comparison",
   "decisions.cells.newvalue.string.addValue": "Add new value",
   'decisions.cells.newvalue.string.empty': "Comparison not selected",
-  'decisions.cells.newvalue.clear': "Clear current value", 
-  
+  'decisions.cells.newvalue.clear': "Clear current value",
+
+
+
   'decisions': "Decisions",
   'services': "Services",
   'program.status.DEPENDENCY_ERROR': "Dependency Errors",
   'program.status.UP': "Program is UP",
   'program.status.AST_ERROR': "Syntax errors",
   'program.status.PROGRAM_ERROR': "Compiler errors",
-  
-  
-  
-  
-  
+
+
+
+
+
   'package.explorer.flows': 'flows',
   'package.explorer.servicetasks': 'services',
   'package.explorer.decisiontables': 'decisions',
@@ -115,7 +128,7 @@ const en = {
   'dialog.save.errors': "Failed to save asset",
   'dialog.save.button.cancel': 'Cancel',
   'dialog.save.button.confirm': 'Save',
-  
+
   'dialog.info.title': 'Build info',
   'dialog.info.button.ok': 'OK',
 
@@ -183,7 +196,7 @@ const en = {
   "dt.header.dataType": "Data type",
   "dt.header.direction": "Direction",
   "dt.header.expression": "Expression",
-  
+
   "dt.menu.created": "Created",
   "dt.menu.modified": "Modified",
   "dt.menu.header": "Decision table: {name}",
@@ -191,7 +204,7 @@ const en = {
   "dt.menu.name": "Name",
   "dt.menu.description": "Description",
   "dt.menu.hitpolicy": "Hit policy",
-  
+
   "dt.edit.row.columns.title": "Modify rows and columns",
   "dt.edit.row.columns.operation": "Select operation",
   "dt.edit.row.columns.operation.delete.column": "Select column to delete",

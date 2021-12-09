@@ -1,25 +1,14 @@
 import React from 'react';
 
-import { Box } from '@mui/material';
-
 import Burger from '@the-wrench-io/react-burger';
 import { Client } from '../../context';
 
-import Builder from './builders';
-
-import { EditBoolean } from './';
-
-import { EditString } from './';
-import { EditStringSimple } from './';
-
-import { EditNumber } from './';
-import { EditNumberSimple } from './';
-
-import { EditDateTime } from './';
-import { EditDateTimeSimple } from './';
-
-import { EditDate } from './';
-import { EditDateSimple } from './';
+import Builder, { 
+  EditBoolean,
+  EditString, EditStringSimple,
+  EditNumber, EditNumberSimple,
+  EditDateTime, EditDateTimeSimple,
+  EditDate, EditDateSimple } from './builders';
 
 
 interface CellEditProps {

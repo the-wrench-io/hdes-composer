@@ -3,7 +3,7 @@ import React from 'react'
 import { ListItemText } from '@mui/material';
 
 import Burger from '@the-wrench-io/react-burger';
-import { BooleanBuilder } from './builders'
+import { BooleanBuilder } from './'
 
 
 export const EditBoolean: React.FC<{ builder: BooleanBuilder, onChange: (value: string) => void }> = ({ builder, onChange }) => {

@@ -2,7 +2,7 @@ import React from 'react'
 
 import Burger from '@the-wrench-io/react-burger';
 
-import { DateBuilder } from './builders'
+import { DateBuilder } from './'
 
 
 export const EditDateSimple: React.FC<{ builder: DateBuilder, onChange: (value: string) => void }> = ({ builder, onChange }) => {

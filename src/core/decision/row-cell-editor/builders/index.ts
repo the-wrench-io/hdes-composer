@@ -19,10 +19,10 @@
  */
 import Client from '../../../client';
 
-import NumberBuilder from './NumberBuilder';
-import StringBuilder from './StringBuilder';
-import DateBuilder from './DateBuilder';
-import BooleanBuilder from './BooleanBuilder';
+import NumberBuilder from './TypeNumberBuilder';
+import StringBuilder from './TypeStringBuilder';
+import DateBuilder from './TypeDateBuilder';
+import BooleanBuilder from './TypeBooleanBuilder';
 
 const Builder = (props: {header: Client.TypeDef, value?: string}) => {
   const value = props.value ? props.value : '';
@@ -42,5 +42,14 @@ const Builder = (props: {header: Client.TypeDef, value?: string}) => {
   return {};
 }
 
+export { EditBoolean } from './EditBoolean';
+export { EditString } from './EditString';
+export { EditStringSimple } from './EditStringSimple';
+export { EditNumber } from './EditNumber';
+export { EditNumberSimple } from './EditNumberSimple';
+export { EditDateTime } from './EditDateTime';
+export { EditDateTimeSimple } from './EditDateTimeSimple';
+export { EditDate } from './EditDate';
+export { EditDateSimple } from './EditDateSimple';
 export {NumberBuilder, StringBuilder, DateBuilder, BooleanBuilder}
 export default Builder;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import TreeView from "@mui/lab/TreeView";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -16,16 +16,6 @@ const DecisionExplorer: React.FC<{}> = () => {
 
   return (
     <Box>
-      <Typography align="left"
-        sx={{
-          fontVariant: 'all-petite-caps',
-          fontWeight: 'bold',
-          color: 'explorerItem.main',
-          ml: 1, mr: 1, mb: 1,
-          borderBottom: '1px solid',
-        }}>
-      </Typography>
-
       <TreeView expanded={toggle.expanded}
         defaultCollapseIcon={<ArrowDropDownIcon />}
         defaultExpandIcon={<ArrowRightIcon />}

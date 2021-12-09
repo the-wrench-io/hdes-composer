@@ -1,53 +1,46 @@
 import React from 'react';
 
-import { Box, TableCell, TableRow, useTheme, Typography } from '@mui/material';
+import { Box, TableCell, TableRow, Typography } from '@mui/material';
 
 import { Client } from '../../context';
 
-import { alpha } from "@mui/material/styles";
-import { CellEdit } from './CellEdit';
-
-
-interface EditMode {
+interface RowEditMode {
   rule?: { cell: Client.AstDecisionCell },
   header?: { header: Client.TypeDef },
 }
 
 const RowEdit: React.FC<{
-  decision: Client.AstDecision,
   row: Client.AstDecisionRow,
   headers: Client.TypeDef[],
-  onChange: (commands: Client.AstCommand[]) => void
-}> = ({ decision, row, headers, onChange }) => {
-
-  const [edit, setEdit] = React.useState<EditMode | undefined>();
-  
-  const theme = useTheme();
-  const bgColor = alpha(theme.palette.warning.main, 0.1);
+  onChange: (edit: RowEditMode) => void
+}> = ({ row, headers, onChange }) => {
 
   const cells: Record<string, Client.AstDecisionCell> = {};
   row.cells.forEach(e => cells[e.header] = e);
 
-
   return (<TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+  
     <TableCell align="left" sx={{
-      fontWeight: "bold",
-      fontStyle: "italic"
-    }}>{row.order}
-      {edit?.rule ? <CellEdit dt={decision} cell={edit?.rule.cell} onClose={() => setEdit(undefined)} onChange={(command) => onChange([command])} /> : null}
+      position: "sticky",
+      left: 0,
+      backgroundColor: "page.main",
+      color: "primary.contrastText",
+      borderBottom: "unset"
+    }}>
+      {row.order}
     </TableCell>
 
     {headers.map(header => {
       const cell = cells[header.id];
       if (header.direction === "IN") {
-        return (<TableCell key={cell.header} sx={{ backgroundColor: cell?.value ? undefined : bgColor }} onClick={() => setEdit({ rule: { cell } })}>
+        return (<TableCell key={cell.header} onClick={() => onChange({ rule: { cell } })} sx={{cursor: "pointer"}}>
           <Typography noWrap>
             {cell?.value ? cell.value : <Box sx={{ fontWeight: "bold" }} component="span">*</Box>}
           </Typography>
         </TableCell>);
       }
 
-      return (<TableCell key={cell.header} sx={{ backgroundColor: cell?.value ? undefined : bgColor }} onClick={() => setEdit({ rule: { cell } })}>
+      return (<TableCell key={cell.header} onClick={() => onChange({ rule: { cell } })} sx={{cursor: "pointer"}}>
         <Typography noWrap>
           {cell?.value}
         </Typography>
@@ -55,5 +48,5 @@ const RowEdit: React.FC<{
     })}
   </TableRow>);
 }
-export type { };
+export type { RowEditMode };
 export { RowEdit };

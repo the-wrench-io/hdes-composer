@@ -20,7 +20,7 @@
 import React from 'react'
 import Burger from '@the-wrench-io/react-burger';
 
-import { NumberBuilder } from './builders'
+import { NumberBuilder } from './'
 
 
 export const EditNumberSimple: React.FC<{ builder: NumberBuilder, onChange: (value: string) => void }> = ({ builder, onChange }) => {

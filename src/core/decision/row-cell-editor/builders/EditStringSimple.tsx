@@ -1,6 +1,6 @@
 import React from 'react'
 import { TextareaAutosize } from '@mui/material';
-import { StringBuilder } from './builders'
+import { StringBuilder } from './'
 
 
 export const EditStringSimple: React.FC<{ builder: StringBuilder, onChange: (value: string) => void }> = ({ builder, onChange }) => {
