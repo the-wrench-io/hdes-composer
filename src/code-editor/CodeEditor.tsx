@@ -36,6 +36,12 @@ const CodeEditorState: React.FC<ViewProps> = (props) => {
   React.useEffect(() => {
     if(ref.current && !view) {
       setView(createView(ref, props));  
+    } else if(view) {
+      setView(view.withEvents({
+        onChanges: props.onChange,  
+        lint: props.lint,
+        hint: props.hint
+      }));
     }
   }, [ref, props, setView, view])
 

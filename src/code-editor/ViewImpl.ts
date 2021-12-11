@@ -18,6 +18,8 @@ interface ViewProps {
   mode: ViewLang;
   src: string;
   onChange?: (newValue: string) => void;
+  lint?: () => LintMessage[];
+  hint?: (pos: CodeMirror.Position, content: string) => CodeMirror.Hints;
 }
 interface LintMessage { line: number; value: string; type: "ERROR" | "WARNING"; range?: LintRange; }
 interface LintRange { start: number; end: number; column?: number; insert?: boolean; }
@@ -40,10 +42,21 @@ class ViewImpl implements View {
     
     const onChangeCallback = props.onChange;
     if(onChangeCallback) {
-      this._events.onChanges = (content) => {
-        onChangeCallback(content);
+      this._events.onChanges = (content) => onChangeCallback(content)
+    }
+    const onLintCallback = props.lint;
+    if(onLintCallback) {
+      this._events.lint = () => onLintCallback();
+    }
+    if(props.hint) {
+      this._events.hint = (pos: CodeMirror.Position, content: string) => {
+        if(props.hint) {
+          return props.hint(pos, content);
+        }
+        return { from: pos, to: pos, list: [] };
       };
     }
+    
     
     this._id = props.id;
     
