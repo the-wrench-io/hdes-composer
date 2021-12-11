@@ -1,26 +1,90 @@
 import React from 'react';
-import { Box, Drawer } from '@mui/material';
+
+import { Box, List, Drawer, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
+import { SxProps } from '@mui/system';
+
+import EditIcon from '@mui/icons-material/Edit';
+import DoubleArrowRoundedIcon from '@mui/icons-material/DoubleArrowRounded';
+import CompareArrowsRoundedIcon from '@mui/icons-material/CompareArrowsRounded';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import UploadIcon from '@mui/icons-material/Upload';
+
+import { FormattedMessage } from 'react-intl';
 
 import Burger from '@the-wrench-io/react-burger';
 import { Client, Composer } from '../context';
-import RowsEdit, { RowOptions, CellEdit, EditMode } from './row-cell-editor';
+import { CellEdit, NameDescHitPolicyEdit, UploadCSV, OrderEdit } from './editors';
+import fileDownload from 'js-file-download'
 
 
+import Decision from './table';
+
+
+interface EditMode {
+  cell?: Client.AstDecisionCell,
+  header?: Client.TypeDef,
+  meta?: boolean,
+  upload?: boolean,
+  rowsColumns?: boolean,
+  options?: boolean
+}
+
+const saveCsv = (decision: Client.AstDecision) => {
+  const accepts: Client.TypeDef[] = [...decision.headers.acceptDefs].sort((a, b) => a.order - b.order);
+  const returns: Client.TypeDef[] = [...decision.headers.returnDefs].sort((a, b) => a.order - b.order);
+  const rows = decision.rows.sort((a, b) => a.order - b.order);
+  const headers: Client.TypeDef[] = [...accepts, ...returns];
+
+  const line0 = headers.map(h => h.name).join(";");
+  const lines = rows.map(row => {
+    const cells: Record<string, Client.AstDecisionCell> = {};
+    row.cells.forEach(e => cells[e.header] = e);
+    return headers
+      .map(header => cells[header.id])
+      .map(c => `${c.value ? c.value : ''}`)
+      .join(";")
+
+  }).join("\r\n");
+  fileDownload(line0 + "\r\n" + lines, decision.name + '.csv')
+}
+
+const DrawerOption: React.FC<{
+  onClick: () => void;
+  label: string;
+  icon: React.ReactElement;
+}> = ({ icon, onClick, label }) => {
+  const itemSx: SxProps = { color: "explorerItem.main" }
+  return (<ListItem button onClick={onClick}>
+    <ListItemIcon sx={itemSx}>{icon}</ListItemIcon>
+    <ListItemText sx={itemSx}>
+      <Box component="span" sx={itemSx}>
+        <FormattedMessage id={label} />
+      </Box>
+    </ListItemText>
+  </ListItem>);
+}
+
+
+const DrawerSection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <>
+    <Box sx={{ width: "350px" }}><List>{children}</List></Box>
+    <Divider orientation="vertical" flexItem color="explorerItem.contrastColor" />
+  </>
+}
 
 const DecisionEdit: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = ({ decision }) => {
   const { service, actions, session } = Composer.useComposer();
   const update = session.pages[decision.id];
-  
+
   const commands = React.useMemo(() => update ? update.value : decision.source.commands, [decision, update]);
   const [ast, setAst] = React.useState<Client.AstDecision | undefined>();
-  const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState<EditMode | undefined>();
-    
+
   const onChange = (newCommands: Client.AstCommand[]) => {
     actions.handlePageUpdate(decision.id, [...commands, ...newCommands])
   }
-  
-  
+
+
   React.useEffect(() => {
     service.ast(decision.id, commands).then(data => {
       console.log("new commands applied");
@@ -32,16 +96,41 @@ const DecisionEdit: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = 
   if (!ast) {
     return <span>loading ...</span>
   }
-  
-  const header = (<Burger.PrimaryButton label="decisions.table.options" onClick={() => setOpen(true)} />);
+
 
   return (<Box sx={{ width: '100%', overflow: 'hidden', padding: 1 }}>
-    <Drawer anchor="top" open={open} onClose={() => setOpen(false)} sx={{ zIndex: "10000" }}>
-      <RowOptions decision={ast} onChange={onChange} />
+    {edit?.meta ? <NameDescHitPolicyEdit decision={ast} onChange={onChange} onClose={() => setEdit(undefined)} /> : null}
+    {edit?.rowsColumns ? <OrderEdit decision={ast} onChange={onChange} onClose={() => setEdit(undefined)} /> : null}
+    {edit?.upload ? <UploadCSV onChange={onChange} onClose={() => setEdit(undefined)} /> : null}
+    {edit?.cell ? <CellEdit dt={ast} cell={edit?.cell} onClose={() => setEdit(undefined)} onChange={(command) => onChange([command])} /> : null}
+
+    <Drawer anchor="top" open={edit?.options} onClose={() => setEdit(undefined)} sx={{ zIndex: "10000" }}>
+      <Box sx={{ display: "flex", backgroundColor: "explorer.main", color: "primary.contrastText" }}>
+        <DrawerSection>
+          <DrawerOption label='decisions.toolbar.addInputColumn' icon={<DoubleArrowRoundedIcon sx={{ transform: "rotate(-180deg)" }} />} onClick={() => onChange([{ type: 'ADD_HEADER_IN', id: "in-" + ast.headers.acceptDefs.length + 1 }])}/>
+          <DrawerOption label='decisions.toolbar.addOutputColumn' icon={<DoubleArrowRoundedIcon />}  onClick={() => onChange([{ type: 'ADD_HEADER_OUT', id: "out-" + ast.headers.returnDefs.length + 1 }])} />
+          <DrawerOption label='decisions.toolbar.addRow' icon={<DoubleArrowRoundedIcon sx={{ transform: "rotate(90deg)" }} />}  onClick={() => onChange([{ type: 'ADD_ROW', id: "" }])} />
+        </DrawerSection>
+        <DrawerSection>
+          <DrawerOption label='decisions.toolbar.csvDownload' icon={<FileDownloadDoneIcon />} onClick={() => saveCsv(ast)}/>
+          <DrawerOption label='decisions.toolbar.csvUpload' icon={<UploadIcon />} onClick={() => setEdit({upload: true})} />
+        </DrawerSection>
+        <DrawerSection>
+          <DrawerOption label="decisions.toolbar.nameAndHitpolicy" icon={<EditIcon />} onClick={() => setEdit({meta: true})} />
+          <DrawerOption label="decisions.toolbar.organize.rows.columns" icon={<CompareArrowsRoundedIcon />} onClick={() => setEdit({ rowsColumns: true })} />
+        </DrawerSection>
+      </Box>
     </Drawer>
-    {edit?.rule ? <CellEdit cell={edit?.rule.cell} onClose={() => setEdit(undefined)} onChange={(command) => onChange([command])} /> : null}
-    <RowsEdit key={decision.id} ast={ast} onChange={setEdit} header={header} />
-  </Box>);
+
+    <Decision.Table ast={ast}
+      renderHeader={headerProps => (<Decision.Header {...headerProps}>
+        <Burger.PrimaryButton label="decisions.table.options" onClick={() => setEdit({ options: true })} />
+      </Decision.Header>
+      )}
+      renderRow={rowProps => <Decision.Row {...rowProps} />}
+      renderCell={cellProps => <Decision.Cell {...cellProps} onClick={() => setEdit({ cell: cellProps.cell })} />}
+    />
+  </Box >);
 }
 
 export type { };
