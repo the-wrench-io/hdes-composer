@@ -10,7 +10,7 @@ interface Annotation {
 interface ViewEvents {
   onChanges?: (content: string) => void;  
   lint?: () => LintMessage[];
-  hint?: (pos: CodeMirror.Position, content: string) => CodeMirror.Hints;
+  hint?: (pos: CodeMirror.Position, content: string, emptyLine: boolean) => CodeMirror.Hints;
 }
 type ViewLang = "yaml" | "groovy" | "json";
 interface ViewProps {
@@ -19,7 +19,7 @@ interface ViewProps {
   src: string;
   onChange?: (newValue: string) => void;
   lint?: () => LintMessage[];
-  hint?: (pos: CodeMirror.Position, content: string) => CodeMirror.Hints;
+  hint?: (pos: CodeMirror.Position, content: string, emptyLine: boolean) => CodeMirror.Hints;
 }
 interface LintMessage { line: number; value: string; type: "ERROR" | "WARNING"; range?: LintRange; }
 interface LintRange { start: number; end: number; column?: number; insert?: boolean; }
@@ -49,9 +49,9 @@ class ViewImpl implements View {
       this._events.lint = () => onLintCallback();
     }
     if(props.hint) {
-      this._events.hint = (pos: CodeMirror.Position, content: string) => {
+      this._events.hint = (pos: CodeMirror.Position, content: string, emptyLine: boolean) => {
         if(props.hint) {
-          return props.hint(pos, content);
+          return props.hint(pos, content, emptyLine);
         }
         return { from: pos, to: pos, list: [] };
       };
@@ -129,7 +129,7 @@ class ViewImpl implements View {
     if (!this._events.hint) {
       return { from: pos, to: pos, list: [] };
     }
-    return this._events.hint(pos, content);
+    return this._events.hint(pos, content, this._editor.getLine(pos.line).trim().length === 0);
   }
   onChanges(editor: CodeMirror.Editor, changes: CodeMirror.EditorChange[]) {
     const callback = this._events.onChanges;

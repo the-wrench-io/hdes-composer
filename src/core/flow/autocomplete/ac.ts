@@ -11,6 +11,7 @@ interface FlowAstAutocomplete {
   id: string
   range: AstCommandRange[];
   value: string[];
+  append: boolean;
 }
 
 
@@ -19,6 +20,7 @@ class AcBuilder {
   private _id?: string;
   private range: AstCommandRange[] = [];
   private value: string[] = [];
+  private _append = false;
 
   id(id: string): AcBuilder {
     this._id = id;
@@ -31,7 +33,10 @@ class AcBuilder {
     }
     return result;
   }
-
+  append(append: boolean) {
+    this._append = append;
+    return this;
+  }
   addRange(props: AstCommandRange | AstCommandRange[]) {
     if(Array.isArray(props)) {
       this.range.push(...(props as AstCommandRange[]));  
@@ -45,11 +50,10 @@ class AcBuilder {
     value?: any
   }) {
     const prefix = props?.indent ? this.getIndent(props.indent): '';
-    const sufix = props?.value ? ' ' + this.getIndent(props.value): '';
+    const sufix = props?.value ? ' ' + props.value: '';
     this.value.push(prefix + fieldName + FIELD + sufix);
     return this;
   }
-  
   addValue(value: string | string[]) {
     const toArray: string[] = Array.isArray(value) ? value as string[] : [value as string];
     this.value.push(...toArray);
@@ -59,7 +63,7 @@ class AcBuilder {
     if(!this._id) {
       throw new Error("id must be defined!");
     }
-    return { id: this._id, range: this.range, value: this.value }
+    return { id: this._id, range: this.range, value: this.value, append: this._append }
   }
 }
 const ac = () => new AcBuilder();

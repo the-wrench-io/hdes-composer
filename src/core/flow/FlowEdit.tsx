@@ -22,23 +22,18 @@ const FlowEdit: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }) =
   const [ast, setAst] = React.useState<Client.AstFlow | undefined>(flow.ast);
   const commands = React.useMemo(() => update ? update.value : flow.source.commands, [flow, update]);
   
-  const hints = (pos: CodeMirror.Position, content: string) => {
-    console.log(ast?.src.value.substring(0, 200));
-    const ac = ast ? new AutocompleteVisitor(ast, site).visit() : [];
-    const result: CodeMirror.Hints = { from: pos, to: pos, list: [] };
+  const hints = (pos: CodeMirror.Position, content: string, empty: boolean) => {
+    const ac = ast ? new AutocompleteVisitor(ast, site, pos).visit() : [];
+    const result: CodeMirror.Hints = { from: { line: pos.line, ch: 0 }, to: pos, list: [] };
     for (const src of ac) {
-      result.list.push({ text: src.value[0], displayText: src.value[0] })
+      result.list.push({ text: src.value.join("\r\n"), displayText: src.id, from: src.append && !empty ? { line: pos.line, ch: pos.ch } : undefined })
     }
     return result;
   };
 
 
   React.useEffect(() => {
-    service.ast(flow.id, commands).then(data => {
-      console.log("new commands applied");
-      setAst(data.ast);
-    });
-
+    service.ast(flow.id, commands).then(data => setAst(data.ast));
   }, [commands])
   
 
