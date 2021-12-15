@@ -13,6 +13,7 @@
     "js-file-download": "^0.4.4",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
+    "notistack": "^2.0.3",
     "vis-react": "^0.5.1"
   },
   "peerDependencies": {

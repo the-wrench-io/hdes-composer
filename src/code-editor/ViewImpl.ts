@@ -10,7 +10,7 @@ interface Annotation {
 interface ViewEvents {
   onChanges?: (content: string) => void;  
   lint?: () => LintMessage[];
-  hint?: (pos: CodeMirror.Position, content: string, emptyLine: boolean) => CodeMirror.Hints;
+  hint?: (props: HintProps) => CodeMirror.Hints;
 }
 type ViewLang = "yaml" | "groovy" | "json";
 interface ViewProps {
@@ -19,8 +19,9 @@ interface ViewProps {
   src: string;
   onChange?: (newValue: string) => void;
   lint?: () => LintMessage[];
-  hint?: (pos: CodeMirror.Position, content: string, emptyLine: boolean) => CodeMirror.Hints;
+  hint?: (props: HintProps) => CodeMirror.Hints;
 }
+interface HintProps {pos: CodeMirror.Position, content: string, emptyLine: boolean, cm: CodeMirror.Editor};
 interface LintMessage { line: number; value: string; type: "ERROR" | "WARNING"; range?: LintRange; }
 interface LintRange { start: number; end: number; column?: number; insert?: boolean; }
 
@@ -49,11 +50,11 @@ class ViewImpl implements View {
       this._events.lint = () => onLintCallback();
     }
     if(props.hint) {
-      this._events.hint = (pos: CodeMirror.Position, content: string, emptyLine: boolean) => {
+      this._events.hint = (hintProps: HintProps) => {
         if(props.hint) {
-          return props.hint(pos, content, emptyLine);
+          return props.hint(hintProps);
         }
-        return { from: pos, to: pos, list: [] };
+        return { from: hintProps.pos, to: hintProps.pos, list: [] };
       };
     }
     
@@ -87,6 +88,7 @@ class ViewImpl implements View {
         },
       }
     });
+
 
     editor.setValue(props.src);
     editor.on("changes", (editor: CodeMirror.Editor, changes: CodeMirror.EditorChange[]) => this.onChanges(editor, changes))
@@ -129,9 +131,12 @@ class ViewImpl implements View {
     if (!this._events.hint) {
       return { from: pos, to: pos, list: [] };
     }
-    return this._events.hint(pos, content, this._editor.getLine(pos.line).trim().length === 0);
+    
+    const emptyLine: boolean = this._editor.getLine(pos.line).trim().length === 0;
+    const cm: CodeMirror.Editor = this._editor;
+    return this._events.hint({pos, content, emptyLine, cm});
   }
-  onChanges(editor: CodeMirror.Editor, changes: CodeMirror.EditorChange[]) {
+  onChanges(editor: CodeMirror.Editor, _changes: CodeMirror.EditorChange[]) {
     const callback = this._events.onChanges;
     if (!callback) {
       return;
@@ -155,5 +160,5 @@ class ViewImpl implements View {
 const createView = (area: React.RefObject<HTMLTextAreaElement>, props: ViewProps): View => new ViewImpl(area, props);
 
 export { createView }
-export type {View, ViewProps};
+export type {View, ViewProps, HintProps};
 

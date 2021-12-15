@@ -47,7 +47,7 @@ declare namespace Composer {
 
   interface Actions {
     handleLoad(): Promise<void>;
-    handleLoadSite(): Promise<void>;
+    handleLoadSite(site?: HdesClient.Site): Promise<void>;
     handlePageUpdate(page: HdesClient.EntityId, value: HdesClient.AstCommand[]): void;
     handlePageUpdateRemove(pages: HdesClient.EntityId[]): void;
   }

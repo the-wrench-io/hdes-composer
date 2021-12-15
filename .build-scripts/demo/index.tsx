@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
-
+import { SnackbarProvider } from 'notistack';
 import Burger, { siteTheme } from '@the-wrench-io/react-burger';
 import Client, { messages, Main, Secondary, Toolbar, Composer } from './core';
 
@@ -56,13 +56,15 @@ const CreateApps: React.FC<{}> = () => {
     id: "wrench-composer",
     components: { primary: Main, secondary: Secondary, toolbar: Toolbar },
     state: [
-      (children: React.ReactNode, restorePoint?: Burger.AppState<Composer.ContextType>) => <Composer.Provider service={backend}>{children}</Composer.Provider>,
+      (children: React.ReactNode, restorePoint?: Burger.AppState<Composer.ContextType>) => (<>{children}</>),
       () => ({})
     ]
   };
-  
+
   return (
-    <Burger.Provider children={[wrenchComposer]} />
+    <Composer.Provider service={backend}>
+      <Burger.Provider children={[wrenchComposer]} secondary="toolbar.assets" drawerOpen/>
+    </Composer.Provider>
   )
 }
 
@@ -70,7 +72,9 @@ const NewApp = (
   <IntlProvider locale={init.locale} messages={messages[init.locale]}>
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={siteTheme}>
-        <CreateApps />
+        <SnackbarProvider>
+          <CreateApps />
+        </SnackbarProvider>
       </ThemeProvider>
     </StyledEngineProvider>
   </IntlProvider>);

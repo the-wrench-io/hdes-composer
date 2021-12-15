@@ -40,8 +40,12 @@ class ReducerDispatch implements Ide.Actions {
         }
       });
   }
-  async handleLoadSite(): Promise<void> {
-    return this._service.getSite().then(site => this._sessionDispatch(ActionBuilder.setSite({site})));
+  async handleLoadSite(site?: Client.Site): Promise<void> {
+    if(site) {
+      return this._sessionDispatch(ActionBuilder.setSite({site}));  
+    } else {
+      return this._service.getSite().then(site => this._sessionDispatch(ActionBuilder.setSite({site})));  
+    }
   }
   handlePageUpdate(page: Client.EntityId, value: Client.AstCommand[]): void {
     this._sessionDispatch(ActionBuilder.setPageUpdate({page, value}));

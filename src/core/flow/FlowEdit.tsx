@@ -1,11 +1,13 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
-import CodeEditor from '../../code-editor';
+import CodeEditor, { HintProps } from '../../code-editor';
 import { Client, Composer } from '../context';
 import Graph from './graph';
-import { AutocompleteVisitor } from './autocomplete/api';
+import { AutocompleteVisitor, FlowAstAutocomplete, AutocompleteTask } from './autocomplete';
 
+
+type GuidedHint = (cm: CodeMirror.Editor, data: CodeMirror.Hints, cur: CodeMirror.Hint) => void;
 
 const SticyGraph: React.FC<{ flow: Client.Entity<Client.AstFlow>, site: Client.Site }> = ({ flow, site }) => {
   return (<Box sx={{ top: "64px", right: "30px", position: "absolute", zIndex: "100000000000" }}>
@@ -15,39 +17,45 @@ const SticyGraph: React.FC<{ flow: Client.Entity<Client.AstFlow>, site: Client.S
   </Box>);
 }
 
+
 const FlowEdit: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }) => {
   const { session, actions, service } = Composer.useComposer();
   const { site } = session;
   const update = session.pages[flow.id];
+  const src = flow.ast?.src.value;  
+  
   const [ast, setAst] = React.useState<Client.AstFlow | undefined>(flow.ast);
+  const [guided, setGuided] = React.useState<{ cm: CodeMirror.Editor, data: CodeMirror.Hints, cur: CodeMirror.Hint, guided: FlowAstAutocomplete }>();
   const commands = React.useMemo(() => update ? update.value : flow.source.commands, [flow, update]);
   
-  const hints = (pos: CodeMirror.Position, content: string, empty: boolean) => {
-    const ac = ast ? new AutocompleteVisitor(ast, site, pos).visit() : [];
-    const result: CodeMirror.Hints = { from: { line: pos.line, ch: 0 }, to: pos, list: [] };
-    for (const src of ac) {
-      result.list.push({ text: src.value.join("\r\n"), displayText: src.id, from: src.append && !empty ? { line: pos.line, ch: pos.ch } : undefined })
-    }
-    return result;
-  };
-
-
   React.useEffect(() => {
     service.ast(flow.id, commands).then(data => setAst(data.ast));
   }, [commands])
-  
-
-  const handleChange = (value: string | undefined) => {
-    actions.handlePageUpdate(flow.id, [{ type: "SET_BODY", value: value }])
-  }
-  const src = flow.ast?.src.value;
 
 
   return (<Box height="100%">
+    {guided ? <AutocompleteTask onClose={() => setGuided(undefined)} flow={flow} {...guided} /> : undefined}
     {flow.ast ? <SticyGraph flow={flow} site={site} /> : undefined}
+        
     <CodeEditor id={flow.id} mode="yaml" src={src ? src : "#--failed-to-parse"}
-      onChange={handleChange}
-      hint={hints} />
+      onChange={(value) => actions.handlePageUpdate(flow.id, [{ type: "SET_BODY", value }])}
+      hint={(hintProps: HintProps) => {
+        const { pos, emptyLine } = hintProps;
+        const ac = ast ? new AutocompleteVisitor(ast, site, pos).visit() : [];
+        const result: CodeMirror.Hints = { from: { line: pos.line, ch: 0 }, to: pos, list: [] };
+        for (const src of ac) {
+          const hint: GuidedHint | undefined = src.guided ? (cm, data, cur) => setGuided({ cm, data, cur, guided: src }) : undefined;
+          const from = src.append && !emptyLine ? { line: pos.line, ch: pos.ch } : undefined;
+          result.list.push({ text: src.value.join("\r\n"), displayText: src.id, from, hint })
+        }
+        return result;
+      }}
+      lint={() => {
+        if (!ast || ast.messages.length === 0) {
+          return [];
+        }
+        return ast?.messages.map(m => ({ type: m.type, line: m.line, value: m.value }));
+      }} />
   </Box>);
 }
 

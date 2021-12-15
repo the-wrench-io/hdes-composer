@@ -4,7 +4,7 @@ import {
   Site, Entity, EntityId, 
   CreateBuilder,
   AstDecision, AstDecisionRow, AstDecisionCell,
-  AstFlow, FlowAstAutocomplete, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
+  AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
   AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, AstTag,
   ServiceErrorMsg, ServiceErrorProps, Service, Store
 } from "./api";
@@ -50,7 +50,7 @@ declare namespace HdesClient {
     Site, Entity, EntityId, 
     CreateBuilder,
     AstDecision, AstDecisionRow, AstDecisionCell,
-    AstFlow, FlowAstAutocomplete, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
+    AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
     AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, AstTag,
     ServiceErrorMsg, ServiceErrorProps, Service, Store
   };
@@ -83,9 +83,16 @@ namespace HdesClient {
     constructor(store: HdesClient.Store) {
       this._store = store;
     }
-    create() {
-      return {} as any;
+    create(): HdesClient.CreateBuilder {
+      const flow = (name: string) => this.createAsset(name, "FLOW");
+      const service = (name: string) => this.createAsset(name, "FLOW_TASK");
+      const decision = (name: string) => this.createAsset(name, "DT");
+      const site = () => this.createAsset("repo", "SITE");
+      return {flow, service, decision, site};
     }
+    createAsset(name: string, type: HdesClient.AstBodyType | "SITE"): Promise<HdesClient.Site> {
+      return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({name, type}) });
+    }    
     ast(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Entity<any>> {
       return this._store.fetch("/commands", { method: "POST", body: JSON.stringify({id, body}) });
     }
@@ -94,6 +101,8 @@ namespace HdesClient {
     }
   }
 }
+
+
 
 export default HdesClient;
 

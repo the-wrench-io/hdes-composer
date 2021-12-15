@@ -1,5 +1,4 @@
 import HdesClient from '../../client';
-import ac, {FlowAstAutocomplete, AstCommandRange} from './ac';
 
 const KEY_ID = "id";
 const KEY_THEN = "then";
@@ -18,6 +17,7 @@ const KEY_SERVICE = "service";
 const VALUE_NEXT = "next";
 const VALUE_END = "end";
 const KEY_DEBUG_VALUE = "debugValue";
+const FIELD = ":";
 
 const TYPES: HdesClient.ValueType[] = [
   'ARRAY',
@@ -27,8 +27,14 @@ const TYPES: HdesClient.ValueType[] = [
   'BOOLEAN'
 ];
 
+export interface FlowAstAutocomplete {
+  id: string
+  value: string[];
+  append: boolean;
+  guided?: GuidedType;
+}
 
-
+export type GuidedType = 'service-task' | 'decision-task';
 export class AutocompleteVisitor {
   
   private _flow: HdesClient.AstFlow;
@@ -38,7 +44,7 @@ export class AutocompleteVisitor {
   constructor(flow: HdesClient.AstFlow, site: HdesClient.Site, pos: CodeMirror.Position) {
     this._flow = flow;
     this._pos = { line: pos.line, ch: pos.ch, sticky: pos.sticky };
-    console.log(flow);
+    //console.log(flow);
   }
   private hasNonNull(name: string, node: HdesClient.AstFlowNode): boolean {
     return this.get(name, node) ? true : false;
@@ -60,8 +66,71 @@ export class AutocompleteVisitor {
     this.visitTasks(flow);
     this.visitNewInput(flow);
     this.visitInput(flow);
+    this.visitNewTask(flow);
   }
   
+  visitNewTask(flow: HdesClient.AstFlowRoot) {
+    const tasks = this.get(KEY_TASKS, flow);
+    if(tasks == null) {
+      return;
+    }
+    let isAround = tasks.start < this._pos.line;
+    let isEndOfLine = false;
+    const allTasks: HdesClient.AstFlowNode[] = Object.values(tasks.children);
+    for(const task of allTasks) {
+      if(this.isEndOfLine(task)) {
+        isEndOfLine = true;
+        break;
+      }
+      if(this.in(task)) {
+        isAround = false;
+      }
+    }
+    
+    if(isAround || isEndOfLine) {
+      this._result.push(ac()
+        .id("new switch task")
+        .append(isEndOfLine)
+        .addValue(isEndOfLine ? ["", ""] : "")
+        .addField("- {name}", { indent: 2 })
+        .addField("id",     { indent: 6, value: "{task-id}" })
+        .addField("switch", { indent: 6 })
+        .addField("- {caseName}",     { indent: 8 })
+        .addField("when",   { indent: 12, value: "{when-boolean-expression}" })
+        .addField("then",   { indent: 12, value: "{then-next-task-id}" })
+        .build());
+        
+      this._result.push(ac()
+        .id("new service task")
+        .append(isEndOfLine)
+        .addValue(isEndOfLine ? ["", ""] : "")
+        .addField("- {name}",   { indent: 2 })
+        .addField("id",         { indent: 6, value: "{id}" })
+        .addField("then",       { indent: 6, value: "{next}" })
+        .addField("{serviceType}", { indent: 6 })
+        .addField("ref",        { indent: 8, value: "{ref}" })
+        .addField("collection", { indent: 8, value: "false" })
+        .addField("inputs",     { indent: 8 })
+        .guided("service-task")
+        .build());
+
+      this._result.push(ac()
+        .id("new decision task")
+        .append(isEndOfLine)
+        .addValue(isEndOfLine ? ["", ""] : "")
+        .addField("- {name}",   { indent: 2 })
+        .addField("id",         { indent: 6, value: "{id}" })
+        .addField("then",       { indent: 6, value: "{next}" })
+        .addField("{serviceType}", { indent: 6 })
+        .addField("ref",        { indent: 8, value: "{ref}" })
+        .addField("collection", { indent: 8, value: "false" })
+        .addField("inputs",     { indent: 8 })
+        .guided("decision-task")
+        .build());
+    }
+  }
+    
+    
   visitNewInput(flow: HdesClient.AstFlowRoot) {
     const inputs = this.get(KEY_INPUTS, flow);
     if(!inputs) {
@@ -243,3 +312,108 @@ export class AutocompleteVisitor {
   }
 }
 
+
+
+class AcBuilder {
+  private _id?: string;
+  private value: string[] = [];
+  private _append = false;
+  private _guided: GuidedType | undefined;
+
+  id(id: string): AcBuilder {
+    this._id = id;
+    return this;
+  }
+  private getIndent(indent: number): string {
+    var result = "";
+    for (var index = 0; index < indent; index++) {
+      result += " ";
+    }
+    return result;
+  }
+  append(append: boolean) {
+    this._append = append;
+    return this;
+  }
+  guided(guided: GuidedType) {
+    this._guided = guided;
+    return this;
+  }
+  addField(fieldName: string, props?: {
+    indent?: number
+    value?: any
+  }) {
+    const prefix = props?.indent ? this.getIndent(props.indent): '';
+    const sufix = props?.value ? ' ' + props.value: '';
+    this.value.push(prefix + fieldName + FIELD + sufix);
+    return this;
+  }
+  addValue(value: string | string[]) {
+    const toArray: string[] = Array.isArray(value) ? value as string[] : [value as string];
+    this.value.push(...toArray);
+    return this;
+  }
+  build(): FlowAstAutocomplete {
+    if(!this._id) {
+      throw new Error("id must be defined!");
+    }
+    return { id: this._id, value: this.value, append: this._append, guided: this._guided }
+  }
+}
+const ac = () => new AcBuilder();
+
+
+
+
+const parseTemplate = (toBeReplaced: any, template: string[]) => {
+  const result: string[] = [];
+  for(let v of template) {
+    let line: string = v;
+    
+    for(let key of Object.keys(toBeReplaced)) {
+      const replacable = '{' + key + '}';
+      if(line.indexOf(replacable) < 0) {
+        continue;
+      }
+      if(toBeReplaced[key] === undefined) {
+        return result;
+      }
+      line = line.replace(replacable, toBeReplaced[key])
+    }
+    result.push(line)
+  }
+  return result
+}
+
+const toLowerCamelCase = (value: string) => {
+  if(value) {
+    return value.replace(/^([A-Z])|\s(\w)/g, function(_match, p1, p2, _offset) {
+      if (p2) return p2.toUpperCase();
+      return p1.toLowerCase();        
+    });    
+  }
+}
+
+
+const executeTemplate = (cm: CodeMirror.Editor, value: any, guided: FlowAstAutocomplete, asset?: HdesClient.AstBody) => {
+  const doc = cm.getDoc()
+  const cursor = doc.getCursor()
+  const content = cm.getLine(cursor.line)
+  
+  const lines: string[] = [];
+  if(guided.append) {
+    lines.push(content); 
+  }
+  lines.push(...parseTemplate(value, guided.value));
+  if (asset) {
+    console.log("Template asset", asset);
+    const params = asset.headers.acceptDefs.map(p => '          ' + p.name + ':');
+    lines.push(...params)
+  }
+
+  doc.replaceRange([...lines],
+    { line: cursor.line, ch: 0 },
+    { line: cursor.line, ch: content.length }, '+input')
+}
+
+export {parseTemplate, toLowerCamelCase, executeTemplate};

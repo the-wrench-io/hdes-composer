@@ -126,12 +126,6 @@ export interface AstDecisionCell {
 export interface AstFlow extends AstBody {
   src: AstFlowRoot;
   messages: FlowAstCommandMessage[];
-  autocomplete: FlowAstAutocomplete[];
-}
-export interface FlowAstAutocomplete {
-  id: string;
-  range: FlowAstCommandRange[];
-  value: string[];
 }
 export interface FlowAstCommandMessage {
   line: number;
@@ -142,8 +136,6 @@ export interface FlowAstCommandMessage {
 export interface FlowAstCommandRange {
   start: number;
   end: number;
-  column?: number;
-  insert?: boolean;
 }
 export interface AstFlowInputType {
   name: string;
@@ -216,6 +208,9 @@ export interface ServiceErrorProps {
 
 export interface CreateBuilder {
   site(): Promise<Site>;
+  flow(name: string): Promise<Site>;
+  service(name: string): Promise<Site>;
+  decision(name: string): Promise<Site>;
 }
 
 export interface Service {
