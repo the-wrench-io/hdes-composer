@@ -46,7 +46,12 @@ const FlowEdit: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }) =
         for (const src of ac) {
           const hint: GuidedHint | undefined = src.guided ? (cm, data, cur) => setGuided({ cm, data, cur, guided: src }) : undefined;
           const from = src.append && !emptyLine ? { line: pos.line, ch: pos.ch } : undefined;
-          result.list.push({ text: src.value.join("\r\n"), displayText: src.id, from, hint })
+          const newText: string[] = [];
+          if(src.append && !emptyLine) {
+            newText.push("");
+          } 
+          newText.push(...src.value);
+          result.list.push({ text: newText.join("\r\n"), displayText: src.id, from, hint })
         }
         return result;
       }}
