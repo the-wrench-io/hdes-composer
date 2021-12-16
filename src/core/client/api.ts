@@ -203,17 +203,26 @@ export interface ServiceErrorMsg {
 export interface ServiceErrorProps {
   text: string;
   status: number;
-  errors: any[];
+  errors: ServiceErrorMsg[];
 }
 
 export interface CreateBuilder {
   site(): Promise<Site>;
+  tag(name: string): Promise<Site>;
   flow(name: string): Promise<Site>;
   service(name: string): Promise<Site>;
   decision(name: string): Promise<Site>;
 }
 
+export interface DeleteBuilder {
+  tag(tagId: TagId): Promise<Site>;
+  flow(flowId: FlowId): Promise<Site>;
+  service(serviceId: ServiceId): Promise<Site>;
+  decision(decisionId: DecisionId): Promise<Site>;
+}
+
 export interface Service {
+  delete(): DeleteBuilder;
   create(): CreateBuilder;
   ast(id: string, body: AstCommand[]): Promise<Entity<any>>;
   getSite(): Promise<Site>

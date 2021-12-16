@@ -6,7 +6,7 @@ import {
   AstDecision, AstDecisionRow, AstDecisionCell,
   AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
   AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, AstTag,
-  ServiceErrorMsg, ServiceErrorProps, Service, Store
+  ServiceErrorMsg, ServiceErrorProps, Service, Store, DeleteBuilder
 } from "./api";
 
 const getErrorMsg = (error: any) => {
@@ -48,7 +48,7 @@ declare namespace HdesClient {
     TagId, FlowId, ServiceId, DecisionId, AstBodyType, Direction, ValueType, ProgramStatus, HitPolicy, AssociationType, ColumnExpressionType, FlowCommandMessageType, AstCommandValue,
     CommandsAndChanges, AstChangeset, ProgramMessage, AstCommand, TypeDef, AstBody, Headers, AstSource, ProgramAssociation,
     Site, Entity, EntityId, 
-    CreateBuilder,
+    CreateBuilder, DeleteBuilder,
     AstDecision, AstDecisionRow, AstDecisionCell,
     AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
     AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, AstTag,
@@ -87,8 +87,17 @@ namespace HdesClient {
       const flow = (name: string) => this.createAsset(name, "FLOW");
       const service = (name: string) => this.createAsset(name, "FLOW_TASK");
       const decision = (name: string) => this.createAsset(name, "DT");
+      const tag = (name: string) => this.createAsset(name, "TAG");
       const site = () => this.createAsset("repo", "SITE");
-      return {flow, service, decision, site};
+      return {flow, service, decision, site, tag};
+    }
+    delete(): HdesClient.DeleteBuilder {
+      const deleteMethod = (id: string): Promise<HdesClient.Site> => this._store.fetch(`/resources/${id}`, { method: "DELETE" });
+      const flow = (id: FlowId) => deleteMethod(id);
+      const service = (id: ServiceId) => deleteMethod(id);
+      const decision = (id: DecisionId) => deleteMethod(id);
+      const tag = (id: TagId) => deleteMethod(id);
+      return {flow, service, decision, tag};
     }
     createAsset(name: string, type: HdesClient.AstBodyType | "SITE"): Promise<HdesClient.Site> {
       return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({name, type}) });

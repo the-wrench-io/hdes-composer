@@ -1,6 +1,7 @@
 const en = {
   'buttons.create': "Create",
   'buttons.apply': "Apply",
+  'buttons.delete': "Delete",
   'button.cancel': "Cancel",
 
   'explorer.tabs.flows': 'flows',
@@ -47,6 +48,10 @@ const en = {
   'flows.edit.title': "Edit flow",
   'flows.copyas.title': "Copy flow as",
   'flows.delete.title': "Delete flow",
+  'flows.delete.error.title': 'Failed to delete flow',
+  'flows.delete.content': "Are you sure you want to delete FLOW: {name}?",
+  'flows.deleted.message': "Deleted FLOW: {name}",
+    
   'flows.autocomplete.task.create': 'Create new asset',
   'flows.autocomplete.task.link': 'Link selected asset',
   'flows.autocomplete.task.searchField': 'Search for asset...',
@@ -58,16 +63,25 @@ const en = {
   'flows.autocomplete.task.snackbar.created': "Created new {type}: {name}",
   'flows.autocomplete.task.snackbar.creating': "Creating new {type}: {name}",
 
+
+
   'services.edit.title': "Edit service",
   'services.copyas.title': "Copy service as",
   'services.delete.title': "Delete service",
+  'services.delete.error.title': 'Failed to delete SERVICE',
+  'services.delete.content': "Are you sure you want to delete SERVICE: {name}?",
+  'services.deleted.message': "Deleted SERVICE: {name}",
+    
 
   'decisions.name': "Name",
   'decisions.desc': "Description",
   'decisions.hitpolicy': "Hit-policy",
   'decisions.edit.title': "Edit decision",
   'decisions.copyas.title': "Copy decision as",
+  'decisions.delete.error.title': 'Failed to delete decision',
   'decisions.delete.title': "Delete decision",
+  'decisions.delete.content': "Are you sure you want to delete DECISION: {name}?",
+  'decisions.deleted.message': "Deleted DECISION: {name}",
   'decisions.table.hitpolicy': "Matches",
   'decisions.table.options': "Options",
 
@@ -153,10 +167,7 @@ const en = {
   'dialog.save.button.cancel': 'Cancel',
   'dialog.save.button.confirm': 'Save',
 
-  'dialog.info.title': 'Build info',
-  'dialog.info.button.ok': 'OK',
 
-  'error.list.title': 'Failed to complete the operation because of errors:',
 
   'content.loading': 'loading',
 
@@ -170,25 +181,9 @@ const en = {
   'releases.add.input.msg': 'Comment',
   'releases.add.button.create': 'Create Release',
 
-  'search.input.name': 'Search...',
-  'search.groups.found.fl': 'Flows',
-  'search.groups.found.ft': 'Flow tasks',
-  'search.groups.found.dt': 'Decision tables',
-  'search.groups.found.tg': 'Releases',
-  'search.header.name': 'Asset name',
-  'search.header.created.modified': 'Created/Modified',
 
   'debug.tab.name': 'Debug asset',
 
-  'toolbar.save': "Save asset",
-  'toolbar.copyas': 'copy assets',
-  'toolbar.explorer': 'explorer assets',
-  'toolbar.reload': 'refresh assets',
-  'toolbar.add': 'create new assets',
-  'toolbar.debug': 'debug assets',
-  'toolbar.releases': 'releases',
-  'toolbar.extensions': 'list available extensions',
-  'toolbar.info': 'display build info',
 
   'debug.asset.select.label': "Asset to debug",
   'debug.asset.select.clear': "Clear run data",
@@ -200,60 +195,6 @@ const en = {
   'debug.asset.execute.outputs.dt.rejects.order': "Execution order",
 
 
-
-  'dt.cell.edit.button.cancel': "Cancel",
-  'dt.cell.edit.button.confirm': "Apply",
-
-  "dt.toolbar.dt.add.row": "Add new row",
-  "dt.toolbar.dt.add.input.column": "Add new input",
-  "dt.toolbar.dt.add.output.column": "Add new output",
-  "dt.toolbar.dt.hitpolicy.description": "Hit policy",
-  "dt.toolbar.csv.download": "Download CSV",
-  "dt.toolbar.csv.upload": "Upload CSV",
-  "dt.toolbar.dt.organize.rows.columns": "Organize rows/columns",
-
-  "dt.header.edit": "Decision table: {name}, column: {column}",
-  "dt.header.edit.title": "Column: {name}",
-  "dt.header.delete": "Delete the column",
-  "dt.header.script": "Script",
-  "dt.header.name": "Name",
-  "dt.header.dataType": "Data type",
-  "dt.header.direction": "Direction",
-  "dt.header.expression": "Expression",
-
-  "dt.menu.created": "Created",
-  "dt.menu.modified": "Modified",
-  "dt.menu.header": "Decision table: {name}",
-  "dt.menu.divider": "Decision table meta",
-  "dt.menu.name": "Name",
-  "dt.menu.description": "Description",
-  "dt.menu.hitpolicy": "Hit policy",
-
-  "dt.edit.row.columns.title": "Modify rows and columns",
-  "dt.edit.row.columns.operation": "Select operation",
-  "dt.edit.row.columns.operation.delete.column": "Select column to delete",
-  "dt.edit.row.columns.operation.delete.row": "Select row to delete",
-  "dt.edit.row.columns.operation.delete.row.preview": "Row to delete",
-
-  'dt.cell.newvalue.boolean': "Select boolean value",
-  'dt.cell.edit.title': "Decision table: {name}, column: {column}, value: {value}",
-  "dt.cell.edit": "Decision table: {name}, column: {column}, value: {value}",
-  "dt.cell.comparison": "Comparison",
-  "dt.cell.newvalue.add": "Add new value + ENTER",
-  "dt.cell.selected": "Selected values",
-  "dt.cell.newvalue": "New value",
-  "dt.cell.range": "Range",
-  "dt.cell.change.comparison": "Change to comparison",
-  "dt.cell.change.range": "Change to range",
-  "dt.cell.range.include": "Include",
-  "dt.cell.range.start": "Start of the range",
-  "dt.cell.range.end": "End of the range",
-  "dt.cell.date": "Date",
-  "dt.cell.boolean": "Boolean",
-  "dt.cell.datetime": "Date and time",
-  "dt.cell.date.operator": "Operator",
-  "dt.cell.novalue.input": "No value entered, so condition is always true",
-  "dt.cell.novalue.output": "No value",
 
 };
 
