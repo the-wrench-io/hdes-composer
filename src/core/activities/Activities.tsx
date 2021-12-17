@@ -7,7 +7,7 @@ import Burger from '@the-wrench-io/react-burger';
 import {FlowComposer} from '../flow';
 import {DecisionComposer} from '../decision';
 import {ServiceComposer} from '../service';
-import TypeComposer from '../type';
+
 import ReleaseComposer from '../release';
 import MigrationComposer from '../migration';
 import TemplateComposer from '../template';
@@ -41,15 +41,6 @@ const createCards: (tabs: Burger.TabsActions) => ActivityData[] = (tabs) => ([
     type: "services",
     buttonCreate: "buttons.create",
     buttonViewAll: undefined
-  },
-  {
-    composer: (handleClose) => (<TypeComposer onClose={handleClose} />),
-    onView: () => tabs.handleTabAdd({ id: 'types', label: "Types" }),
-    title: "activities.types.title",
-    desc: "activities.types.desc",
-    type: "types",
-    buttonCreate: "buttons.create",
-    buttonViewAll: "activities.types.view",
   },
   {
     composer: (handleClose) => (<ReleaseComposer onClose={handleClose} />),

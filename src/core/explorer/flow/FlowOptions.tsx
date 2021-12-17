@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import Burger from '@the-wrench-io/react-burger';
 
 import { Composer, Client } from '../../context';
-import ErrorView from '../ErrorView'
+import {ErrorView} from '../../styles';
 
 
 const FlowDelete: React.FC<{ flowId: Client.FlowId, onClose: () => void }> = ({ flowId, onClose }) => {

@@ -24,8 +24,9 @@ class TreeViewToggle {
       nodeIds.splice(nodeIds.indexOf(this._main), 1);
     }
 
-    // expand options 
-    if (this._main !== newId && (this._main && newId || this._expanded.length === 0)) {
+    // expand options
+    const mainAndNew: boolean = (this._main && newId) ? true : false;  
+    if (this._main !== newId && (mainAndNew || this._expanded.length === 0)) {
       const options = newId + 'options-nested';
       if (!nodeIds.includes(options)) {
         nodeIds.push(options);

@@ -10,7 +10,7 @@ import { useSnackbar } from 'notistack';
 import Burger from '@the-wrench-io/react-burger';
 
 import { Composer, Client } from '../../context';
-import ErrorView from '../ErrorView'
+import {ErrorView} from '../../styles';
 
 
 const DecisionDelete: React.FC<{ decisionId: Client.DecisionId, onClose: () => void }> = ({ decisionId, onClose }) => {

@@ -1,12 +1,15 @@
 import HdesClient from '../../client';
 
 const KEY_ID = "id";
-const KEY_THEN = "then";
-const KEY_WHEN = "when";
-const KEY_SWITCH = "switch";
+const FIELD = ":";
 const KEY_DESC = "description";
 const KEY_INPUTS = "inputs";
 const KEY_TASKS = "tasks";
+
+/*
+const KEY_THEN = "then";
+const KEY_WHEN = "when";
+const KEY_SWITCH = "switch";
 const KEY_REQ = "required";
 const KEY_TYPE = "type";
 const KEY_DT = "decisionTable";
@@ -17,7 +20,7 @@ const KEY_SERVICE = "service";
 const VALUE_NEXT = "next";
 const VALUE_END = "end";
 const KEY_DEBUG_VALUE = "debugValue";
-const FIELD = ":";
+*/
 
 const TYPES: HdesClient.ValueType[] = [
   'ARRAY',

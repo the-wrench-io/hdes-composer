@@ -51,6 +51,7 @@ const store: Client.Store = {
 };
 
 const CreateApps: React.FC<{}> = () => {
+  // eslint-disable-next-line 
   const backend = React.useMemo(() => new Client.ServiceImpl(store), [store]);
   const wrenchComposer: Burger.App<Composer.ContextType> = {
     id: "wrench-composer",

@@ -84,14 +84,15 @@ const DecisionEdit: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = 
     actions.handlePageUpdate(decision.id, [...commands, ...newCommands])
   }
 
+  const decisionId = decision.id;
 
   React.useEffect(() => {
-    service.ast(decision.id, commands).then(data => {
+    service.ast(decisionId, commands).then(data => {
       console.log("new commands applied");
       setAst(data.ast);
     });
 
-  }, [commands])
+  }, [commands, decisionId, service])
 
   if (!ast) {
     return <span>loading ...</span>

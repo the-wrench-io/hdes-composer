@@ -7,7 +7,7 @@ import Burger from '@the-wrench-io/react-burger';
 
 
 interface ActivityData {
-  type: "releases" | "decisions" | "flows" | "services" | "types" | "migration" | "templates";
+  type: "releases" | "decisions" | "flows" | "services" | "migration" | "templates";
   title: string;
   desc: string;
   buttonCreate: string;

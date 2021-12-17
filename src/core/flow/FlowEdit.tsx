@@ -27,10 +27,11 @@ const FlowEdit: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }) =
   const [ast, setAst] = React.useState<Client.AstFlow | undefined>(flow.ast);
   const [guided, setGuided] = React.useState<{ cm: CodeMirror.Editor, data: CodeMirror.Hints, cur: CodeMirror.Hint, guided: FlowAstAutocomplete }>();
   const commands = React.useMemo(() => update ? update.value : flow.source.commands, [flow, update]);
+  const flowId = flow.id;
   
   React.useEffect(() => {
-    service.ast(flow.id, commands).then(data => setAst(data.ast));
-  }, [commands])
+    service.ast(flowId, commands).then(data => setAst(data.ast));
+  }, [commands, flowId, service])
 
 
   return (<Box height="100%">

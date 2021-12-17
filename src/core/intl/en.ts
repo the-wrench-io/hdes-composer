@@ -24,10 +24,6 @@ const en = {
   'activities.migration.title': 'Migration',
   'activities.migration.desc': 'TODO:: ',
 
-  'activities.types.title': 'Types',
-  'activities.types.desc': 'TODO:: ',
-  'activities.types.view': 'View all types',
-
   'activities.releases.title': 'Releases',
   'activities.releases.desc': 'A Release is a snapshot of all site content at one certain point of time. Use this for testing, prouduction, or backup purposes.',
   'activities.releases.view': 'View all releases',
@@ -51,7 +47,12 @@ const en = {
   'flows.delete.error.title': 'Failed to delete flow',
   'flows.delete.content': "Are you sure you want to delete FLOW: {name}?",
   'flows.deleted.message': "Deleted FLOW: {name}",
-    
+
+  'flows.composer.title': 'Create new FLOW',
+  'flows.composer.createdMessage': 'Created FLOW: {name}',
+  'flows.composer.errorsTitle': 'Failed to create FLOW',
+  'flows.composer.assetName': 'Unique name for the FLOW',
+
   'flows.autocomplete.task.create': 'Create new asset',
   'flows.autocomplete.task.link': 'Link selected asset',
   'flows.autocomplete.task.searchField': 'Search for asset...',
@@ -64,27 +65,36 @@ const en = {
   'flows.autocomplete.task.snackbar.creating': "Creating new {type}: {name}",
 
 
-
   'services.edit.title': "Edit service",
   'services.copyas.title': "Copy service as",
   'services.delete.title': "Delete service",
   'services.delete.error.title': 'Failed to delete SERVICE',
   'services.delete.content': "Are you sure you want to delete SERVICE: {name}?",
   'services.deleted.message': "Deleted SERVICE: {name}",
-    
+  
+  'services.composer.title': 'Create new SERVICE',
+  'services.composer.createdMessage': 'Created SERVICE: {name}',
+  'services.composer.errorsTitle': 'Failed to create SERVICE',
+  'services.composer.assetName': 'Unique name for the SERVICE',
+
 
   'decisions.name': "Name",
   'decisions.desc': "Description",
   'decisions.hitpolicy': "Hit-policy",
   'decisions.edit.title': "Edit decision",
   'decisions.copyas.title': "Copy decision as",
-  'decisions.delete.error.title': 'Failed to delete decision',
+  'decisions.delete.error.title': 'Failed to delete DECISION',
   'decisions.delete.title': "Delete decision",
   'decisions.delete.content': "Are you sure you want to delete DECISION: {name}?",
   'decisions.deleted.message': "Deleted DECISION: {name}",
   'decisions.table.hitpolicy': "Matches",
   'decisions.table.options': "Options",
 
+  'decisions.composer.title': 'Create new DECISION',
+  'decisions.composer.createdMessage': 'Created DECISION: {name}',
+  'decisions.composer.errorsTitle': 'Failed to create DECISION',
+  'decisions.composer.assetName': 'Unique name for the DECISION',
+  
   'decisions.toolbar.addInputColumn': "Add input column",
   'decisions.toolbar.addOutputColumn': "Add output column",
   'decisions.toolbar.addRow': "Add row",
