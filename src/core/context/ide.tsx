@@ -150,7 +150,9 @@ namespace Composer {
       actions.handleLoad();
     }, [service, actions]);
 
-    return (<ComposerContext.Provider value={{ session, actions, service }}>{children}</ComposerContext.Provider>);
+    return (<ComposerContext.Provider value={{ session, actions, service }}>
+      {children}
+    </ComposerContext.Provider>);
   };
 }
 

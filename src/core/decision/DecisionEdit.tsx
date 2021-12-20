@@ -108,25 +108,26 @@ const DecisionEdit: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = 
     <Drawer anchor="top" open={edit?.options} onClose={() => setEdit(undefined)} sx={{ zIndex: "10000" }}>
       <Box sx={{ display: "flex", backgroundColor: "explorer.main", color: "primary.contrastText" }}>
         <DrawerSection>
-          <DrawerOption label='decisions.toolbar.addInputColumn' icon={<DoubleArrowRoundedIcon sx={{ transform: "rotate(-180deg)" }} />} onClick={() => onChange([{ type: 'ADD_HEADER_IN', id: "in-" + ast.headers.acceptDefs.length + 1 }])}/>
-          <DrawerOption label='decisions.toolbar.addOutputColumn' icon={<DoubleArrowRoundedIcon />}  onClick={() => onChange([{ type: 'ADD_HEADER_OUT', id: "out-" + ast.headers.returnDefs.length + 1 }])} />
-          <DrawerOption label='decisions.toolbar.addRow' icon={<DoubleArrowRoundedIcon sx={{ transform: "rotate(90deg)" }} />}  onClick={() => onChange([{ type: 'ADD_ROW', id: "" }])} />
+          <DrawerOption label='decisions.toolbar.addInputColumn' icon={<DoubleArrowRoundedIcon sx={{ transform: "rotate(-180deg)" }} />} onClick={() => onChange([{ type: 'ADD_HEADER_IN', id: "in-" + ast.headers.acceptDefs.length + 1 }])} />
+          <DrawerOption label='decisions.toolbar.addOutputColumn' icon={<DoubleArrowRoundedIcon />} onClick={() => onChange([{ type: 'ADD_HEADER_OUT', id: "out-" + ast.headers.returnDefs.length + 1 }])} />
+          <DrawerOption label='decisions.toolbar.addRow' icon={<DoubleArrowRoundedIcon sx={{ transform: "rotate(90deg)" }} />} onClick={() => onChange([{ type: 'ADD_ROW', id: "" }])} />
         </DrawerSection>
         <DrawerSection>
-          <DrawerOption label='decisions.toolbar.csvDownload' icon={<FileDownloadDoneIcon />} onClick={() => saveCsv(ast)}/>
-          <DrawerOption label='decisions.toolbar.csvUpload' icon={<UploadIcon />} onClick={() => setEdit({upload: true})} />
+          <DrawerOption label='decisions.toolbar.csvDownload' icon={<FileDownloadDoneIcon />} onClick={() => saveCsv(ast)} />
+          <DrawerOption label='decisions.toolbar.csvUpload' icon={<UploadIcon />} onClick={() => setEdit({ upload: true })} />
         </DrawerSection>
         <DrawerSection>
-          <DrawerOption label="decisions.toolbar.nameAndHitpolicy" icon={<EditIcon />} onClick={() => setEdit({meta: true})} />
+          <DrawerOption label="decisions.toolbar.nameAndHitpolicy" icon={<EditIcon />} onClick={() => setEdit({ meta: true })} />
           <DrawerOption label="decisions.toolbar.organize.rows.columns" icon={<CompareArrowsRoundedIcon />} onClick={() => setEdit({ rowsColumns: true })} />
         </DrawerSection>
       </Box>
     </Drawer>
 
     <Decision.Table ast={ast}
-      renderHeader={headerProps => (<Decision.Header {...headerProps}>
-        <Burger.PrimaryButton label="decisions.table.options" onClick={() => setEdit({ options: true })} />
-      </Decision.Header>
+      renderHeader={headerProps => (
+        <Decision.Header {...headerProps}>
+          <Burger.PrimaryButton label="decisions.table.options" onClick={() => setEdit({ options: true })} />
+        </Decision.Header>
       )}
       renderRow={rowProps => <Decision.Row {...rowProps} />}
       renderCell={cellProps => <Decision.Cell {...cellProps} onClick={() => setEdit({ cell: cellProps.cell })} />}

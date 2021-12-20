@@ -56,6 +56,7 @@ export interface TypeDef {
   valueType: ValueType;
   required: boolean;
   properties: TypeDef[];
+  values?: string;
 }
 export interface AstBody {
   name: string;
@@ -206,6 +207,64 @@ export interface ServiceErrorProps {
   errors: ServiceErrorMsg[];
 }
 
+
+// Debug related
+
+export interface DebugRequest {
+  id: string;
+  input?: string;
+  inputCSV?: string;
+}
+export interface DebugResponse {
+  id: string;
+  body?: ProgramResult;
+  bodyCsv?: string;
+}  
+export interface ProgramResult {}  
+
+export interface ServiceResult extends ProgramResult { value: any; }
+  
+export interface DecisionResult extends ProgramResult {
+  rejections: DecisionLog[];
+  matches: DecisionLog[];
+}
+export interface DecisionLog  {
+  match: boolean;
+  order: number;
+  accepts: DecisionLogEntry[];
+  returns: DecisionLogEntry[];
+}
+export interface DecisionLogEntry {
+  match: boolean;
+  headerType: TypeDef;
+  expression: string;
+  usedValue?: any;
+}
+
+export type FlowProgramStepPointerType = "SWITCH" | "THEN" | "END";
+export type FlowProgramStepRefType = "SERVICE" | "DT" 
+export type FlowExecutionStatus = "COMPLETED" | "ERROR";
+export interface FlowResult extends ProgramResult {
+  stepId: string;
+  shortHistory: string;
+  logs: FlowResultLog[];
+  status: FlowExecutionStatus;
+  accepts: Record<string, any>;
+  returns: Record<string, any>;
+}
+export interface FlowResultLog {
+  id: number;
+  stepId: string;
+  start: string | Date; 
+  end: string | Date;
+  errors: FlowResultErrorLog[];
+  status: FlowExecutionStatus;
+  accepts: Record<string, any>;
+  returns: Record<string, any>;
+}
+export interface FlowResultErrorLog { id: string; msg: string; }
+
+
 export interface CreateBuilder {
   site(): Promise<Site>;
   tag(name: string): Promise<Site>;
@@ -225,6 +284,7 @@ export interface Service {
   delete(): DeleteBuilder;
   create(): CreateBuilder;
   ast(id: string, body: AstCommand[]): Promise<Entity<any>>;
+  debug(input: DebugRequest): Promise<DebugResponse>;
   getSite(): Promise<Site>
 }
 

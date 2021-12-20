@@ -9,6 +9,7 @@ import { Composer } from './context';
 import { FlowEdit } from './flow';
 import { DecisionEdit } from './decision';
 import { ServiceEdit } from './service';
+import { DebugView } from './debug';
 
 import { Client } from './context';
 
@@ -50,6 +51,8 @@ const Main: React.FC<{}> = () => {
       return (<Box sx={root}>graph</Box>);
     } else if (active.id === 'templates') {
       return (<Box sx={root}>templates</Box>);
+    } else if (active.id === 'debug') {
+      return (<Box sx={root}><DebugView /></Box>);
     }
     if (entity) {
       return <Box sx={root}><EntityEditor entity={entity} /></Box>

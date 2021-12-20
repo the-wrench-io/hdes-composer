@@ -7,7 +7,6 @@ import Burger from '@the-wrench-io/react-burger';
 
 
 interface ActivityData {
-  type: "releases" | "decisions" | "flows" | "services" | "migration" | "templates";
   title: string;
   desc: string;
   buttonCreate: string;
@@ -15,7 +14,6 @@ interface ActivityData {
   buttonTertiary?: string;
   onView?: () => void;
   onTertiary?: () => void;
-  composer: (handleClose: () => void) => React.ReactChild;
 }
 
 const cardStyle: SxProps = {

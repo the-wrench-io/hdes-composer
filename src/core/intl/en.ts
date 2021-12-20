@@ -33,6 +33,11 @@ const en = {
   'activities.templates.desc': 'FEATURE IS NOT IMPLEMENTED YET, BUT IT IS COMING SOON!  Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. ',
   'activities.templates.view': 'View all templates',
 
+  'activities.debug.title': 'Debug',
+  'activities.debug.desc': 'Simulate execution of the asset',
+  'activities.debug.view': 'Simulate',
+
+
   'programs.error.title': 'Program error',
   'programs.warning.title': 'Program warning',
 
@@ -71,7 +76,7 @@ const en = {
   'services.delete.error.title': 'Failed to delete SERVICE',
   'services.delete.content': "Are you sure you want to delete SERVICE: {name}?",
   'services.deleted.message': "Deleted SERVICE: {name}",
-  
+
   'services.composer.title': 'Create new SERVICE',
   'services.composer.createdMessage': 'Created SERVICE: {name}',
   'services.composer.errorsTitle': 'Failed to create SERVICE',
@@ -94,7 +99,7 @@ const en = {
   'decisions.composer.createdMessage': 'Created DECISION: {name}',
   'decisions.composer.errorsTitle': 'Failed to create DECISION',
   'decisions.composer.assetName': 'Unique name for the DECISION',
-  
+
   'decisions.toolbar.addInputColumn': "Add input column",
   'decisions.toolbar.addOutputColumn': "Add output column",
   'decisions.toolbar.addRow': "Add row",
@@ -192,8 +197,32 @@ const en = {
   'releases.add.button.create': 'Create Release',
 
 
-  'debug.tab.name': 'Debug asset',
-
+  'debug.toolbar.options': "Options",
+  'debug.toolbar.selectAsset': "Select asset to debug",
+  'debug.toolbar.inputCsv': "Define input data as a CSV",
+  'debug.toolbar.inputForm': "Define input data as a FORM",
+  'debug.toolbar.inputJson': "Define input data as a JSON",
+  
+  'debug.input.noAsset': "There is no ASSET selected",
+  'debug.input.form': "Debug using FORM",
+  'debug.input.formTitle': "Define inputs",
+  'debug.input.json': "Debug using JSON",
+  'debug.input.jsonTitle': "Define JSON input",
+  'debug.input.csvUpload': "Debug using CSV",
+  'debug.input.csvFile': "Upload CSV FILE",
+  'debug.input.csvFileTitle': "Upload CSV format(;) file",
+  'debug.input.csvFileOrText': "Or paste CSV contents, format(;)",
+  
+  'debug.select.assetType': "Asset type to filter",
+  'debug.select.searchField': "Asset name to search",
+  'debug.select.searchHelper': "Search matches asset name or description",
+  'debug.select.searchResults': "Found assets",
+  'debug.select.confirm': "Select",
+  
+  
+  'debug.header.noAsset': "Select asset from options",
+  
+  
 
   'debug.asset.select.label': "Asset to debug",
   'debug.asset.select.clear': "Clear run data",

@@ -14,11 +14,16 @@ import TemplateComposer from '../template';
 
 import { ActivityItem, ActivityData } from './ActivityItem';
 
+interface ActivityType {
+  type: "releases" | "decisions" | "flows" | "services" | "migration" | "templates" | "debug";
+  composer?: (handleClose: () => void) => React.ReactChild;
+  onCreate?: () => void;
+}
 
-const createCards: (tabs: Burger.TabsActions) => ActivityData[] = (tabs) => ([
+const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[] = (tabs) => ([
   {
     composer: (handleClose) => (<FlowComposer onClose={handleClose} />),
-    onView: () => tabs.handleTabAdd({ id: 'flows', label: "Flows" }),
+    onView: undefined,
     title: "activities.flows.title",
     desc: "activities.flows.desc",
     type: "flows",
@@ -26,7 +31,7 @@ const createCards: (tabs: Burger.TabsActions) => ActivityData[] = (tabs) => ([
   },
   {
     composer: (handleClose) => (<DecisionComposer onClose={handleClose} />),
-    onView: () => tabs.handleTabAdd({ id: 'decisions', label: "Decisions" }),
+    onView: undefined,
     title: "activities.decisions.title",
     desc: "activities.decisions.desc",
     type: "decisions",
@@ -35,12 +40,21 @@ const createCards: (tabs: Burger.TabsActions) => ActivityData[] = (tabs) => ([
   },
   {
     composer: (handleClose) => (<ServiceComposer onClose={handleClose} />),
-    onView: () => tabs.handleTabAdd({ id: 'services', label: "Services" }),
+    onView: undefined,
     title: "activities.services.title",
     desc: "activities.services.desc",
     type: "services",
     buttonCreate: "buttons.create",
     buttonViewAll: undefined
+  },
+  {
+    onCreate: () => tabs.handleTabAdd({ id: 'debug', label: "Debug" }),
+    onView: undefined,
+    title: "activities.debug.title",
+    desc: "activities.debug.desc",
+    type: "debug",
+    buttonCreate: "activities.debug.view",
+    buttonViewAll: undefined,
   },
   {
     composer: (handleClose) => (<ReleaseComposer onClose={handleClose} />),
@@ -80,6 +94,12 @@ const Activities: React.FC<{}> = () => {
   const handleClose = () => setOpen(undefined);
   const cards = React.useMemo(() => createCards(actions), [actions]);
 
+  let composer: undefined | React.ReactChild = undefined;
+  let openComposer = open !== undefined ? cards[open].composer : undefined;
+  if(openComposer) {
+    composer = openComposer(handleClose);
+  }
+
   return (
     <>
       <Typography variant="h3" fontWeight="bold" sx={{ p: 1, m: 1 }}>
@@ -89,8 +109,14 @@ const Activities: React.FC<{}> = () => {
         </Typography>
       </Typography>
       <Box sx={{ margin: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-        {open === undefined ? null : (cards[open].composer(handleClose))}
-        {cards.map((card, index) => (<ActivityItem key={index} data={card} onCreate={() => setOpen(index)} />))}
+        {composer}
+        {cards.map((card, index) => (<ActivityItem key={index} data={card} onCreate={() => {
+          if(card.composer) {
+             setOpen(index);
+          } else if(card.onCreate) {
+            card.onCreate();
+          }
+        }} />))}
       </Box>
     </>
   );
