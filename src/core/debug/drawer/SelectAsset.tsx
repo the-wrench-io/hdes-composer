@@ -4,7 +4,7 @@ import { Box, List, ListItem, ListItemText, Typography, Divider } from '@mui/mat
 import { FormattedMessage, useIntl } from 'react-intl'
 import Burger from '@the-wrench-io/react-burger';
 
-import { Client, Composer } from '../context';
+import { Client, Composer } from '../../context';
 
 
 const SelectTask: React.FC<{ value: Client.Entity<Client.AstBody>, onClick: () => void, linked: boolean }> = ({ value, onClick, linked }) => {

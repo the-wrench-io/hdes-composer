@@ -1,10 +1,10 @@
 import React from 'react'
 
 import { TextareaAutosize, Box, Divider, Chip, Typography } from '@mui/material';
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
 import Burger from '@the-wrench-io/react-burger';
-import { Client } from '../context';
+import { Client } from '../../context';
 
 
 interface InputCSVProps {

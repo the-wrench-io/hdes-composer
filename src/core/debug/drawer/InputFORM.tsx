@@ -4,7 +4,7 @@ import { Box, Typography, Grid, ListItemText } from '@mui/material';
 import { FormattedMessage } from 'react-intl'
 
 import Burger from '@the-wrench-io/react-burger';
-import { Client, Composer } from '../context';
+import { Client, Composer } from '../../context';
 
 
 const GridItem: React.FC<{
@@ -36,16 +36,25 @@ const GridItem: React.FC<{
 
 
 interface InputFORMProps {
-  value: Object;
+  value: string;
   selected?: Client.EntityId;
 
   onClose: () => void;
   onSelect: (json: object) => void;
 }
 
+const parseInput = (json: string) => {
+  try {
+    return JSON.parse(json);
+  } catch(e) {
+    console.error(e);
+    return {};
+  }
+}
+
 const InputFORM: React.FC<InputFORMProps> = ({ onSelect, onClose, value, selected }) => {
   const { decisions, flows, services } = Composer.useSite();
-  const [json, setJson] = React.useState<object>(value);
+  const [json, setJson] = React.useState<object>(parseInput(value));
 
   const asset: Client.Entity<Client.AstBody> | undefined = React.useMemo(() => {
     if (!selected) {
