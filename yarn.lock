@@ -2623,6 +2623,7 @@ __metadata:
     "@types/react-dom": ^17.0.1
     codemirror: ^5.40.0
     css-loader: ^5.2.6
+    eslint-config-react-app: ^7.0.0
     js-file-download: ^0.4.4
     moment: ^2.29.1
     moment-timezone: ^0.5.33
@@ -5906,7 +5907,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.3.0":
+"eslint@npm:*, eslint@npm:^8.3.0":
   version: 8.5.0
   resolution: "eslint@npm:8.5.0"
   dependencies:
