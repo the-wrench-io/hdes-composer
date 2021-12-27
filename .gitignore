@@ -39,3 +39,6 @@ env-config.js
 /public/
 /.yalc/
 /yalc.lock
+/.yarn/
+/.pnp.cjs
+/.pnp.loader.mjs

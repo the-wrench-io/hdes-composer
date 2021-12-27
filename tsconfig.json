@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "lib": ["es6", "dom"],
+    "lib": ["es6", "dom", "es2017"],
     "outDir": "build",
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "rootDirs": [
-      "src",
-      "stories"
+      "src"
     ],
     "noImplicitAny": false,
     "allowJs": false,
@@ -19,7 +18,7 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "removeComments": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "resolveJsonModule": true,
     "declaration": true,
     "jsx": "react",
@@ -29,11 +28,13 @@
     ]
   },
   "include": [
-    "src",
-    "**/*.tsx"
+     "src/**/*"
   ],
   "exclude": [
     "node_modules",
+    ".yarn",
+    ".build-scripts",
+    ".github",
     "build",
     "src/setupTests.ts",
     "**/*.test.tsx",
