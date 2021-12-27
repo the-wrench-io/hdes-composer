@@ -25,7 +25,6 @@ jobs:
       run: ./.build-scripts/build-hdes-composer-release.sh
       env:
         CI: false
-        NODE_AUTH_TOKEN: ${{ secrets.HDES_BOT_TOKEN }}
         YARN_NPM_AUTH_TOKEN: ${{ secrets.HDES_BOT_TOKEN }}
         GIT_EMAIL: olev.mutso@gmail.com 
         GIT_USER: olev.mutso
