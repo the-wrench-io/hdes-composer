@@ -203,7 +203,9 @@ const en = {
   'debug.toolbar.inputForm': "Define input data as a FORM",
   'debug.toolbar.inputJson': "Define input data as a JSON",
   'debug.toolbar.execute': "Execute",
-  
+  'debug.toolbar.noAsset': "Select asset from options",
+  'debug.toolbar.openAsset': "Open",
+    
   'debug.input.noAsset': "There is no ASSET selected",
   'debug.input.form': "Debug using FORM",
   'debug.input.formTitle': "Define inputs",
@@ -213,6 +215,8 @@ const en = {
   'debug.input.csvFile': "Upload CSV FILE",
   'debug.input.csvFileTitle': "Upload CSV format(;) file",
   'debug.input.csvFileOrText': "Or paste CSV contents, format(;)",
+  'debug.inputs.fieldName': "Field Name",
+  'debug.inputs.fieldValue': "Field Value",
   
   'debug.select.title': "Select asset to debug",
   'debug.select.assetType': "Asset type to filter",
@@ -222,7 +226,6 @@ const en = {
   'debug.select.searchResults': "Found assets",
   'debug.select.confirm': "Select",
   
-  'debug.header.noAsset': "Select asset from options",
   'debug.inputs.format': "Asset input format: {type}",
   
 

@@ -60,16 +60,17 @@ const DebugInput: React.FC<{
 
   const [open, setOpen] = React.useState(false);
 
-  return (<><TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-    <TableCell>
-      <IconButton size="small" onClick={() => setOpen(!open)}>
-        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-      </IconButton>
-    </TableCell>
-    <TableCell component="th" scope="row">
-      <FormattedMessage id="debug.inputs.format" values={{ type }} />
-    </TableCell>
-  </TableRow>
+  return (<>
+    <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableCell>
+        <IconButton size="small" onClick={() => setOpen(!open)}>
+          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+      </TableCell>
+      <TableCell component="th" scope="row">
+        <FormattedMessage id="debug.inputs.format" values={{ type }} />
+      </TableCell>
+    </TableRow>
 
     <TableRow>
       <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>

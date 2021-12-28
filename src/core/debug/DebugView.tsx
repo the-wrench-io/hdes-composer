@@ -13,17 +13,19 @@ import { InputFORM } from './drawer/InputFORM';
 
 import { DebugHeader } from './DebugHeader';
 import { DebugInput } from './DebugInput';
-import { DebugOutput } from './DebugOutput';
+import { DebugOutput } from './outputs/DebugOutput';
 
 
 const DebugView: React.FC<{}> = ({ }) => {
   const { service } = Composer.useComposer();
+  const nav = Composer.useNav();
   const [option, setOption] = React.useState<DebugOptionType | undefined>();
   const [inputType, setInputType] = React.useState<DebugInputType>("JSON");
   const [csv, setCsv] = React.useState<string>("");
   const [json, setJson] = React.useState<string>("{}");
   const [selected, setSelected] = React.useState<Client.Entity<Client.AstBody>>();
   const [debug, setDebug] = React.useState<Client.DebugResponse>();
+  const ast = selected?.ast;
 
   const handleCsv = (csv: string) => {
     setCsv(csv);
@@ -36,8 +38,9 @@ const DebugView: React.FC<{}> = ({ }) => {
   }
   
   const handleSelectAsset = (selected: Client.Entity<Client.AstBody>) => {
-    setSelected(selected)
-    setOption("INPUT_FORM")
+    setSelected(selected);
+    setJson("{}");
+    setOption("INPUT_FORM");
   }
   
   const handleExecute = () => {
@@ -64,9 +67,14 @@ const DebugView: React.FC<{}> = ({ }) => {
 
     <TableContainer sx={{ height: "calc(100vh - 150px)" }}>
       <Table stickyHeader size="small">
-        <DebugHeader type={inputType} asset={selected}>
-          <Burger.PrimaryButton label="debug.toolbar.options" onClick={() => setOption('DRAWER')} />
-          <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.execute" onClick={() => handleExecute()} sx={{ml: 2}}/>
+        <DebugHeader>
+          { ast ? 
+            (<Burger.PrimaryButton label={`${ast.bodyType} - ${ast.name}`} onClick={() => setOption('SELECT_ASSET')} />) : 
+            (<Burger.PrimaryButton label="debug.toolbar.noAsset" onClick={() => setOption('SELECT_ASSET')} />) 
+          }
+          <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.openAsset" onClick={() => selected && nav.handleInTab({ article: selected })} sx={{ml: 1}}/>
+          <Burger.PrimaryButton label="debug.toolbar.options" onClick={() => setOption('DRAWER')} sx={{ml: 1}}/>
+          <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.execute" onClick={() => handleExecute()} sx={{ml: 1}}/>
         </DebugHeader>
 
         <TableBody>
