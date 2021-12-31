@@ -42,6 +42,7 @@ yarn npm publish --access public
 git push origin --tags
 
 # Next
+yarn plugin import version
 yarn version patch
 readonly local PROJECT_VERSION_NEXT=$(node -e "console.log(require('./package.json').version);")
 git commit -am "After release: '${PROJECT_VERSION_NEXT}'"
