@@ -30,7 +30,6 @@ fi
 corepack enable
 yarn set version 3.1.1
 echo "Current yarn version: $(yarn -v)"
-yarn plugin import version
 yarn install
 yarn build
 
