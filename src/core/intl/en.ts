@@ -36,6 +36,8 @@ const en = {
   'activities.debug.title': 'Debug',
   'activities.debug.desc': 'Simulate execution of the asset',
   'activities.debug.view': 'Simulate',
+  
+  'activities.assets.saveSuccess': 'Saved asset: {name}',
 
 
   'programs.error.title': 'Program error',

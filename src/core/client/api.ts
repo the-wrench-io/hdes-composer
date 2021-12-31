@@ -283,6 +283,7 @@ export interface DeleteBuilder {
 export interface Service {
   delete(): DeleteBuilder;
   create(): CreateBuilder;
+  update(id: string, body: AstCommand[]): Promise<Site>;
   ast(id: string, body: AstCommand[]): Promise<Entity<any>>;
   debug(input: DebugRequest): Promise<DebugResponse>;
   getSite(): Promise<Site>

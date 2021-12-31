@@ -3,6 +3,8 @@ import React from 'react';
 import { Tabs, Tab, Box, TabProps, TabsProps } from '@mui/material';
 import { styled } from "@mui/material/styles";
 
+
+import { FormattedMessage } from 'react-intl';
 import FlipToFrontOutlinedIcon from '@mui/icons-material/FlipToFrontOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -10,6 +12,7 @@ import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
+import { useSnackbar } from 'notistack';
 
 import Burger from '@the-wrench-io/react-burger';
 import { Composer } from './context';
@@ -39,35 +42,43 @@ const Toolbar: React.FC<{}> = () => {
   const composer = Composer.useComposer();
   const drawer = Burger.useDrawer();
   const tabs = Burger.useTabs();
-  const tabActions = tabs.actions;
   const secondary = Burger.useSecondary();
-  const drawerOpen = drawer.session.drawer;
+  const { enqueueSnackbar } = useSnackbar();
   
+  const tabActions = tabs.actions;  
+  const drawerOpen = drawer.session.drawer;
   React.useEffect(() => tabActions.handleTabAdd({ id: 'activities', label: "Activities" }), [tabActions]);
+  
 
-  //const active = tabs.session.tabs.length ? tabs.session.tabs[tabs.session.history.open] : undefined;
-  //const article = active ? composer.site.articles[active.id] : undefined;
   //const articlePagesView = active?.data?.nav?.type === "ARTICLE_PAGES";
   const unsavedPages = Object.values(composer.session.pages).filter(p => !p.saved);
   const saveSx = unsavedPages.length ? { color: "explorerItem.contrastText" } : undefined;
-  //const unsavedArticlePages: Composer.PageUpdate[] = (article ? unsavedPages.filter(p => !p.saved).filter(p => p.origin.body.article === article.id) : []);
 
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
-
     if (newValue === 'toolbar.save' && unsavedPages) {
       if (unsavedPages.length === 0) {
         return;
       }
-
-/*      
-      const update: StencilClient.PageMutator[] = unsavedArticlePages.map(p => ({ pageId: p.origin.id, locale: p.origin.body.locale, content: p.value }));
-      composer.service.update().pages(update).then(success => {
-        composer.actions.handlePageUpdateRemove(success.map(p => p.id));
-      }).then(() => {
-        composer.actions.handleLoadSite();
+      const active = tabs.session.tabs.length ? tabs.session.tabs[tabs.session.history.open] : undefined;
+      
+      const article = active ? composer.session.getEntity(active.id) : undefined;
+      if(!article) {
+        return;
+      }
+      const toBeSaved = unsavedPages.filter(p => !p.saved).filter(p => p.origin.id === article.id);
+      if(toBeSaved.length !== 1) {
+        return;
+      }
+      
+      const unsavedArticlePages: Composer.PageUpdate = toBeSaved[0];
+      composer.service.update(article.id, unsavedArticlePages.value).then(success => {
+        composer.actions.handlePageUpdateRemove([article.id]);
+        enqueueSnackbar(<FormattedMessage id="activities.assets.saveSuccess" values={{ name: article.ast?.name }} />);
+        composer.actions.handleLoadSite(success);
+      }).catch((error) => {
+        
       });
-*/
 
     } else if (newValue === 'toolbar.activities') {
       tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });

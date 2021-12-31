@@ -105,6 +105,9 @@ namespace HdesClient {
       const tag = (id: TagId) => deleteMethod(id);
       return { flow, service, decision, tag };
     }
+    update(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Site> {
+      return this._store.fetch("/resources", { method: "PUT", body: JSON.stringify({ id, body }) });
+    }
     createAsset(name: string, type: HdesClient.AstBodyType | "SITE"): Promise<HdesClient.Site> {
       return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({ name, type }) });
     }

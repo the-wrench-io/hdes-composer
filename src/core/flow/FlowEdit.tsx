@@ -10,7 +10,7 @@ import { AutocompleteVisitor, FlowAstAutocomplete, AutocompleteTask } from './au
 type GuidedHint = (cm: CodeMirror.Editor, data: CodeMirror.Hints, cur: CodeMirror.Hint) => void;
 
 const SticyGraph: React.FC<{ flow: Client.Entity<Client.AstFlow>, site: Client.Site }> = ({ flow, site }) => {
-  return (<Box sx={{ top: "64px", right: "30px", position: "absolute", zIndex: "100000000000" }}>
+  return (<Box sx={{ top: "64px", right: "30px", position: "absolute", zIndex: "1" }}>
     <Graph flow={flow} site={site}
       onClick={() => console.log("single")}
       onDoubleClick={() => console.log("double")} />
