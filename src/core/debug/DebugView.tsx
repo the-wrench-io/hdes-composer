@@ -21,37 +21,36 @@ const getData = (session: Composer.Session): {
   ast?: Client.AstBody;
   entity?: Client.Entity<Client.AstBody>
   debug?: Composer.DebugSession;
+  debugValues: string
 } => {
   const entity = session.debug.selected ? session.getEntity(session.debug.selected) : undefined;
   const ast = entity ? entity?.ast : undefined;
-  const debug: Composer.DebugSession | undefined = session.debug.selected ? session.debug.values[session.debug.selected] : undefined;  
-  return { ast, debug, entity };
+  const debug: Composer.DebugSession | undefined = session.debug.selected ? session.debug.values[session.debug.selected] : undefined;
+
+  const elements = ast ? ast.headers.acceptDefs : [];
+  const data = {};
+  for (const parameter of elements) {
+    if (parameter.values !== undefined) {
+      data[parameter.name] = parameter.values ? parameter.values : "";
+    }
+  }
+
+  return { ast, debug, entity, debugValues: JSON.stringify(data) };
 }
 
 
 const DebugView: React.FC<{}> = ({ }) => {
   const { service, session, actions } = Composer.useComposer();
   const nav = Composer.useNav();
-  const { ast, debug, entity } = getData(session);
+  const { ast, debug, entity, debugValues } = getData(session);
   const [option, setOption] = React.useState<DebugOptionType | undefined>();
-    
+
   const selected = debug?.selected ? debug.selected : "";
-  const json = debug?.json;
+  const json = debug?.json ? debug?.json : debugValues;
   const csv = debug?.csv ? debug.csv : "";
   const inputType = debug ? debug.inputType : "JSON";
   const response = debug?.debug;
   const error = debug?.error;
-  
-  
-  /*
-  const [option, setOption] = React.useState<DebugOptionType | undefined>();
-  const [inputType, setInputType] = React.useState<DebugInputType>("JSON");
-  const [csv, setCsv] = React.useState<string>("");
-  const [json, setJson] = React.useState<string>();
-  const [selected, setSelected] = React.useState<Client.Entity<Client.AstBody>>();
-  const [debug, setDebug] = React.useState<Client.DebugResponse>();
-  const [error, setError] = React.useState<Client.StoreError>();*/
-  
 
   const handleCsv = (csv: string) => {
     actions.handleDebugUpdate({ inputType: "CSV", csv, selected, debug: response, error, json })
@@ -60,37 +59,31 @@ const DebugView: React.FC<{}> = ({ }) => {
     actions.handleDebugUpdate({ inputType: "JSON", csv, selected, debug: response, error, json: JSON.stringify(input) })
   }
   const handleSelectAsset = (selected: Client.Entity<Client.AstBody>) => {
-    if(session.debug.selected && session.debug.selected !== selected.id) {
+    if (session.debug.selected && session.debug.selected !== selected.id) {
       const previous = session.debug.values[selected.id];
-      if(previous) {
+      if (previous) {
         setOption(undefined);
         actions.handleDebugUpdate(previous);
-        return;        
+        return;
       }
     }
-    
-    const elements = selected?.ast ? selected.ast.headers.acceptDefs : [];
-    const data = {};
-    for(const parameter of elements) {
-      if (parameter.values !== undefined) {
-        data[parameter.name] = parameter.values ? parameter.values : "";
-      }
-    }
-    actions.handleDebugUpdate({ inputType: "JSON", csv, selected: selected.id, debug: response, error, json: JSON.stringify(data) })
+
+    actions.handleDebugUpdate({ inputType: "JSON", selected: selected.id })
     setOption("INPUT_FORM");
   }
-  
+
   const handleExecute = () => {
-    if(!selected) {
+    if (!selected) {
       return;
     }
 
-    service.debug({ 
-      id: selected, 
+    service.debug({
+      id: selected,
       input: inputType === 'JSON' ? json : undefined,
-      inputCSV: inputType === 'CSV' ? csv : undefined })
-    .then(response => actions.handleDebugUpdate({ inputType, csv, selected, json, debug: response, error: undefined }))
-    .catch(error => actions.handleDebugUpdate({ inputType, csv, selected, json, error, debug: undefined }))
+      inputCSV: inputType === 'CSV' ? csv : undefined
+    })
+      .then(response => actions.handleDebugUpdate({ inputType, csv, selected, json, debug: response, error: undefined }))
+      .catch(error => actions.handleDebugUpdate({ inputType, csv, selected, json, error, debug: undefined }))
   }
 
   return (<Box sx={{ width: '100%', overflow: 'hidden', padding: 1 }}>
@@ -106,17 +99,17 @@ const DebugView: React.FC<{}> = ({ }) => {
     <TableContainer sx={{ height: "calc(100vh - 150px)" }}>
       <Table stickyHeader size="small">
         <DebugHeader>
-          { ast ? 
-            (<Burger.PrimaryButton label={`${ast?.bodyType} - ${ast?.name}`} onClick={() => setOption('SELECT_ASSET')} />) : 
-            (<Burger.PrimaryButton label="debug.toolbar.noAsset" onClick={() => setOption('SELECT_ASSET')} />) 
+          {ast ?
+            (<Burger.PrimaryButton label={`${ast?.bodyType} - ${ast?.name}`} onClick={() => setOption('SELECT_ASSET')} />) :
+            (<Burger.PrimaryButton label="debug.toolbar.noAsset" onClick={() => setOption('SELECT_ASSET')} />)
           }
-          <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.openAsset" onClick={() => entity && nav.handleInTab({ article: entity })} sx={{ml: 1}}/>
-          <Burger.PrimaryButton label="debug.toolbar.options" onClick={() => setOption('DRAWER')} sx={{ml: 1}}/>
-          <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.execute" onClick={() => handleExecute()} sx={{ml: 1}}/>
+          <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.openAsset" onClick={() => entity && nav.handleInTab({ article: entity })} sx={{ ml: 1 }} />
+          <Burger.PrimaryButton label="debug.toolbar.options" onClick={() => setOption('DRAWER')} sx={{ ml: 1 }} />
+          <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.execute" onClick={() => handleExecute()} sx={{ ml: 1 }} />
         </DebugHeader>
 
         <TableBody>
-          {json ? <DebugInput type={inputType} csv={csv} json={json}/> : null}
+          {json ? <DebugInput type={inputType} csv={csv} json={json} /> : null}
           {error ? <DebugError error={error} /> : null}
           {response ? <DebugOutput debug={response} selected={ast} /> : null}
         </TableBody>
