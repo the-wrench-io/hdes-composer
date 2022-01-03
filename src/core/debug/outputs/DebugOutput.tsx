@@ -3,31 +3,31 @@ import React from 'react';
 import { Client } from '../../context';
 import { DebugOutputsDt } from './DebugOutputsDt';
 import { DebugOutputsFl } from './DebugOutputsFl';
+import { DebugOutputsFt } from './DebugOutputsFt';
+
 
 const DebugOutput: React.FC<{
-  selected?: Client.Entity<Client.AstBody>;
+  selected?: Client.AstBody;
   debug?: Client.DebugResponse;
 }> = ({ selected, debug }) => {
-
 
   if(!selected || !debug) {
     return null;
   }
 
-  const bodyType = selected.ast?.bodyType;
-
-  console.log(debug);
+  const bodyType = selected?.bodyType;
+  console.log("Debug asset", debug);
 
   let delegate = (<></>);
-  if (bodyType === "DT") {
+  if(!debug.body) {
+    
+  } else if (bodyType === "DT") {
     delegate = (<DebugOutputsDt debug={debug.body as Client.DecisionResult}/>);
   } else if (bodyType === "FLOW_TASK") {
-    //delegate = (<DebugOutputsFt />);
+    delegate = (<DebugOutputsFt debug={debug.body as Client.ServiceResult} />);
   } else if (bodyType === "FLOW") {
     delegate = (<DebugOutputsFl debug={debug.body as Client.FlowResult}/>);
   }
-
-
   return delegate;
 }
 

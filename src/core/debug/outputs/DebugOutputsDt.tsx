@@ -79,7 +79,6 @@ const DebugOutputsDt: React.FC<{ debug: Client.DecisionResult }> = ({ debug }) =
   const [rejects, setRejects] = React.useState(debug.rejections.length < 1);
   const rejections = createRejections(debug);
   const matches = createMatches(debug);
-  console.log(rejections);
 
   return (<>
     <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>

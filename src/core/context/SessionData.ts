@@ -5,7 +5,7 @@ class SiteCache {
   private _site: Client.Site;
   private _decisions: Record<string, Client.Entity<Client.AstDecision>> = {};
   private _flows: Record<string, Client.Entity<Client.AstFlow>> = {};
-  private _services: Record<string, Client.Entity<Client.AstService>> = {}
+  private _services: Record<string, Client.Entity<Client.AstService>> = {};
 
   constructor(site: Client.Site) {
     this._site = site;
@@ -67,21 +67,27 @@ class SessionData implements Composer.Session {
   private _site: Client.Site;
   private _pages: Record<Client.EntityId, Composer.PageUpdate>;
   private _cache: SiteCache;
-
+  private _debug: Composer.DebugSessions;
+  
   constructor(props: {
-    site?: Client.Site,
-    pages?: Record<Client.EntityId, Composer.PageUpdate>,
+    site?: Client.Site;
+    pages?: Record<Client.EntityId, Composer.PageUpdate>;
     cache?: SiteCache;
+    debug?: Composer.DebugSessions;
   }) {
     this._site = props.site ? props.site : { name: "", contentType: "OK", tags: {}, flows: {}, decisions: {}, services: {} };
     this._pages = props.pages ? props.pages : {};
     this._cache = props.cache ? props.cache : new SiteCache(this._site);
+    this._debug = props.debug ? props.debug : { values: {}};
   }
   get site() {
     return this._site;
   }
   get pages() {
     return this._pages;
+  }
+  get debug() {
+    return this._debug;
   }
   getDecision(decisionName: string): undefined | Client.Entity<Client.AstDecision> {
     return this._cache.getDecision(decisionName);
@@ -96,7 +102,16 @@ class SessionData implements Composer.Session {
     return this._cache.getEntity(entityId);
   }
   withSite(site: Client.Site) {
-    return new SessionData({ site: site, pages: this._pages });
+    return new SessionData({ site: site, pages: this._pages, debug: this._debug });
+  }
+  withDebug(debugSession: Composer.DebugSession) {
+    const newDebug: Record<Client.EntityId, Composer.DebugSession> = {};
+    newDebug[debugSession.selected] = Object.assign({}, debugSession);
+    const debug: Composer.DebugSessions = {
+      selected: debugSession.selected,
+      values: Object.assign({}, this._debug.values, newDebug)
+    }
+    return new SessionData({ site: this._site, pages: this._pages, cache: this._cache, debug });
   }
   withoutPages(pageIds: Client.EntityId[]): Composer.Session {
     const pages = {};
@@ -106,7 +121,7 @@ class SessionData implements Composer.Session {
       }
       pages[page.origin.id] = page;
     }
-    return new SessionData({ site: this._site, pages, cache: this._cache });
+    return new SessionData({ site: this._site, pages, cache: this._cache, debug: this._debug });
   }
   withPage(page: Client.EntityId): Composer.Session {
     if (this._pages[page]) {
@@ -121,7 +136,7 @@ class SessionData implements Composer.Session {
     }
 
     pages[page] = new ImmutablePageUpdate({ origin, saved: true, value: [] });
-    return new SessionData({ site: this._site, pages, cache: this._cache });
+    return new SessionData({ site: this._site, pages, cache: this._cache, debug: this._debug });
   }
   withPageValue(page: Client.EntityId, value: Client.AstCommand[]): Composer.Session {
     const session = this.withPage(page);
@@ -130,7 +145,7 @@ class SessionData implements Composer.Session {
     const pages = Object.assign({}, session.pages);
     pages[page] = pageUpdate.withValue(value);
 
-    return new SessionData({ site: session.site, pages, cache: this._cache });
+    return new SessionData({ site: session.site, pages, cache: this._cache, debug: this._debug });
   }
 }
 

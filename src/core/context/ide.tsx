@@ -21,6 +21,22 @@ declare namespace Composer {
 
   }
 
+  interface DebugSession {
+    error?: HdesClient.StoreError;
+    debug?: HdesClient.DebugResponse;
+    csv?: string;
+    json?: string;
+
+    selected: HdesClient.EntityId;
+    inputType: DebugInputType;
+  }
+  type DebugInputType = "CSV" | "JSON";
+
+  interface DebugSessions {
+    selected?: HdesClient.EntityId,
+    values: Record<HdesClient.EntityId, DebugSession>
+  }
+
   interface PageUpdate {
     saved: boolean;
     origin: HdesClient.Entity<any>;
@@ -32,12 +48,14 @@ declare namespace Composer {
   interface Session {
     site: HdesClient.Site,
     pages: Record<HdesClient.EntityId, PageUpdate>;
+    debug: DebugSessions;
 
     getDecision(decisionName: string): undefined | HdesClient.Entity<HdesClient.AstDecision>;
     getFlow(flowName: string): undefined | HdesClient.Entity<HdesClient.AstFlow>;
     getService(serviceName: string): undefined | HdesClient.Entity<HdesClient.AstService>;
     getEntity(id: HdesClient.EntityId): undefined | HdesClient.Entity<any>;
 
+    withDebug(page: DebugSession): Session;
     withPage(page: HdesClient.EntityId): Session;
     withPageValue(page: HdesClient.EntityId, value: HdesClient.AstCommand[]): Session;
     withoutPages(pages: HdesClient.EntityId[]): Session;
@@ -48,6 +66,7 @@ declare namespace Composer {
   interface Actions {
     handleLoad(): Promise<void>;
     handleLoadSite(site?: HdesClient.Site): Promise<void>;
+    handleDebugUpdate(debug: DebugSession): void;
     handlePageUpdate(page: HdesClient.EntityId, value: HdesClient.AstCommand[]): void;
     handlePageUpdateRemove(pages: HdesClient.EntityId[]): void;
   }
@@ -105,7 +124,7 @@ namespace Composer {
 
     const handleInTab = (props: { article: HdesClient.Entity<any> }) => {
       const nav = { value: props.article.id };
-          
+
       const icon = <ArticleTabIndicator entity={props.article} />;
       const tab: Composer.Tab = {
         id: props.article.id,
@@ -135,8 +154,28 @@ namespace Composer {
     }
 
 
-    return { handleInTab, findTab };
+    return { handleInTab, findTab }
   }
+
+  export const useDebug = () => {
+    const layout = Burger.useTabs();
+    const { session, actions } = useComposer();
+
+    const handleDebugInit = (selected: HdesClient.EntityId) => {
+      layout.actions.handleTabAdd({ id: 'debug', label: "Debug" })
+
+      if (session.debug.selected && session.debug.selected !== selected) {
+        const previous = session.debug.values[selected];
+        if (previous) {
+          actions.handleDebugUpdate(previous);
+          return;
+        }
+      }
+      actions.handleDebugUpdate({ inputType: "JSON", selected })
+    }
+    return { handleDebugInit }
+  }
+
 
   export const Provider: React.FC<{ children: React.ReactNode, service: HdesClient.Service }> = ({ children, service }) => {
     const [session, dispatch] = React.useReducer(Reducer, sessionData);

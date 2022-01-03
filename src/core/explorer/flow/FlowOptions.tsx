@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import EditIcon from '@mui/icons-material/ModeEdit';
+import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
 import { Typography, Box } from "@mui/material";
 
 import { useSnackbar } from 'notistack';
@@ -65,6 +66,7 @@ const FlowOptions: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }
 
   const [dialogOpen, setDialogOpen] = React.useState<undefined | 'FlowDelete'>(undefined);
   const nav = Composer.useNav();
+  const {handleDebugInit} = Composer.useDebug();
   const handleDialogClose = () => setDialogOpen(undefined);
 
   return (
@@ -76,6 +78,13 @@ const FlowOptions: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }
         icon={EditIcon}
         onClick={() => nav.handleInTab({ article: flow })}
         labelText={<FormattedMessage id="flows.edit.title" />}>
+      </Burger.TreeItemOption>
+
+      <Burger.TreeItemOption nodeId={flow.id + 'simulate-nested'}
+        color='article'
+        icon={ScienceOutlinedIcon}
+        onClick={() => handleDebugInit(flow.id)}
+        labelText={<FormattedMessage id="flows.simulate.title" />}>
       </Burger.TreeItemOption>
 
       <Burger.TreeItemOption nodeId={flow.id + 'delete-nested'}

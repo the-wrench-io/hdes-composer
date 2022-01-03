@@ -3,6 +3,7 @@ import Client from '../client';
 
 
 enum ActionType {
+  setDebugUpdate = "setDebugUpdate",
   setSite = "setSite",
   setPageUpdate = "setPageUpdate",
   setPageUpdateRemove = "setPageUpdateRemove"
@@ -13,12 +14,14 @@ interface Action {
   setPageUpdateRemove?: {pages: Client.EntityId[]}
   setPageUpdate?: { page: Client.EntityId, value: Client.AstCommand[] };
   setSite?: { site: Client.Site };
+  setDebugUpdate?: Ide.DebugSession;
 }
 
 const ActionBuilder = {
   setPageUpdateRemove: (setPageUpdateRemove: { pages: Client.EntityId[] } ) => ({type: ActionType.setPageUpdateRemove, setPageUpdateRemove }),
   setPageUpdate: (setPageUpdate: { page: Client.EntityId, value: Client.AstCommand[] }) => ({ type: ActionType.setPageUpdate, setPageUpdate }),
   setSite: (setSite: { site: Client.Site }) => ({ type: ActionType.setSite, setSite }),
+  setDebugUpdate: (setDebugUpdate: Ide.DebugSession) => ({ type: ActionType.setDebugUpdate, setDebugUpdate }),
 }
 
 class ReducerDispatch implements Ide.Actions {
@@ -47,6 +50,9 @@ class ReducerDispatch implements Ide.Actions {
       return this._service.getSite().then(site => this._sessionDispatch(ActionBuilder.setSite({site})));  
     }
   }
+  handleDebugUpdate(debug: Ide.DebugSession): void {
+    this._sessionDispatch(ActionBuilder.setDebugUpdate(debug));
+  }
   handlePageUpdate(page: Client.EntityId, value: Client.AstCommand[]): void {
     this._sessionDispatch(ActionBuilder.setPageUpdate({page, value}));
   }
@@ -68,6 +74,13 @@ const Reducer = (state: Ide.Session, action: Action): Ide.Session => {
     case ActionType.setPageUpdate: {
       if (action.setPageUpdate) {
         return state.withPageValue(action.setPageUpdate.page, action.setPageUpdate.value);
+      }
+      console.error("Action data error", action);
+      return state;
+    }
+    case ActionType.setDebugUpdate: {
+      if (action.setDebugUpdate) {
+        return state.withDebug(action.setDebugUpdate);
       }
       console.error("Action data error", action);
       return state;

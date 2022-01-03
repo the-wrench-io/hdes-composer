@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Typography, Box } from "@mui/material";
-
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
 import EditIcon from '@mui/icons-material/ModeEdit';
 
 import { useSnackbar } from 'notistack';
@@ -10,7 +10,7 @@ import { useSnackbar } from 'notistack';
 import Burger from '@the-wrench-io/react-burger';
 
 import { Composer, Client } from '../../context';
-import {ErrorView} from '../../styles';
+import { ErrorView } from '../../styles';
 
 
 const DecisionDelete: React.FC<{ decisionId: Client.DecisionId, onClose: () => void }> = ({ decisionId, onClose }) => {
@@ -27,7 +27,7 @@ const DecisionDelete: React.FC<{ decisionId: Client.DecisionId, onClose: () => v
       <Typography variant="h4">
         <FormattedMessage id="decisions.delete.error.title" />
       </Typography>
-      <ErrorView error={errors}/>
+      <ErrorView error={errors} />
     </Box>)
   } else {
     editor = (<Typography variant="h4">
@@ -66,6 +66,7 @@ const DecisionDelete: React.FC<{ decisionId: Client.DecisionId, onClose: () => v
 const DecisionOptions: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = ({ decision }) => {
   const [dialogOpen, setDialogOpen] = React.useState<undefined | 'DecisionDelete'>(undefined);
   const nav = Composer.useNav();
+  const {handleDebugInit} = Composer.useDebug();
   const handleDialogClose = () => setDialogOpen(undefined);
 
   return (
@@ -76,6 +77,12 @@ const DecisionOptions: React.FC<{ decision: Client.Entity<Client.AstDecision> }>
         icon={EditIcon}
         onClick={() => nav.handleInTab({ article: decision })}
         labelText={<FormattedMessage id="decisions.edit.title" />}>
+      </Burger.TreeItemOption>
+      <Burger.TreeItemOption nodeId={decision.id + 'simulate-nested'}
+        color='page'
+        icon={ScienceOutlinedIcon}
+        onClick={() => handleDebugInit(decision.id)}
+        labelText={<FormattedMessage id="decisions.simulate.title" />}>
       </Burger.TreeItemOption>
       <Burger.TreeItemOption nodeId={decision.id + 'delete-nested'}
         color='page'

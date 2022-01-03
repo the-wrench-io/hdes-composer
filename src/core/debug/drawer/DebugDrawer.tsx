@@ -35,9 +35,6 @@ const DebugDrawer: React.FC<{
   onSelect: (type: DebugOptionType) => void;
 }> = ({ open, selected, onClose, onSelect }) => {
 
-  const { session } = Composer.useComposer();
-
-
   return (<Drawer anchor="top" open={open} onClose={onClose} sx={{ zIndex: "10000" }}>
     <Box sx={{ display: "flex", backgroundColor: "explorer.main", color: "primary.contrastText" }}>
       <DrawerSection>

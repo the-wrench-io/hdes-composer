@@ -1,34 +1,41 @@
 import React from 'react';
 
-/*
-import { Accordion, AccordionSummary, AccordionDetails, Typography, useTheme } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Box, TableCell, TableRow, IconButton, Collapse } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { FormattedMessage } from 'react-intl';
 
-import { CodeEditor } from '../deps';
-import { useContext, Session } from './context';
+import { Client } from '../../context';
 
-const DebugOutputsFt: React.FC<{}> = () => {
+import CodeEditor from '../../../code-editor';
+import { toYaml } from './utils'
+
+
+const DebugOutputsFt: React.FC<{ debug: Client.ServiceResult }> = ({ debug }) => {
+  const [expanded, setExpanded] = React.useState(false);
   
-  const context = useContext();
-  const theme = useTheme();
-  const active: Session.Active = context.active as Session.Active;
-  
-  return (
-    <Accordion expanded={context.session.outputs} onChange={() => context.actions.handleOutputs(!context.session.outputs)}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography color="primary"><FormattedMessage id={"debug.asset.execute.outputs"} /></Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <CodeEditor.Provider mode="json" theme={theme.palette.mode === 'dark' ? 'dark' : 'light'} onCommands={() => { }}>
-          {JSON.stringify(active.debug.output.service, null, 2)}
-        </CodeEditor.Provider>
-      </AccordionDetails>
-    </Accordion>
-  );
+  return (<>
+    <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableCell>
+        <IconButton size="small" onClick={() => setExpanded(!expanded)}>
+          {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+      </TableCell>
+      <TableCell component="th" scope="row">
+        <FormattedMessage id="debug.asset.execute.outputs.service" />
+      </TableCell>
+    </TableRow>
+
+    <TableRow sx={expanded ? undefined : { visibility: "hidden" }}>
+      <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Box sx={{ margin: 1 }}>
+            <CodeEditor id="debug-output" mode="yaml" src={toYaml(debug.value)} onChange={(value) => { console.log(value); }} />
+          </Box>
+        </Collapse>
+      </TableCell>
+    </TableRow>
+  </>);
 }
 
 export { DebugOutputsFt };
-
-
-*/

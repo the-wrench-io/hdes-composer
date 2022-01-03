@@ -6,9 +6,9 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { FormattedMessage } from 'react-intl'
 import CodeEditor from '../../code-editor';
-import { DebugInputType } from './api';
+import { Composer } from '../context';
 
-const InputSectionJson: React.FC<{ json: string, csv: string, type: DebugInputType }> = (props) => {
+const InputSectionJson: React.FC<{ json: string, csv: string, type: Composer.DebugInputType }> = (props) => {
 
   if (props.type === "CSV") {
     return (<CodeEditor id="debug-input" mode="json" src={props.csv} onChange={(value) => { console.log(value); }} />);
@@ -45,7 +45,7 @@ const InputSectionJson: React.FC<{ json: string, csv: string, type: DebugInputTy
 
 
 const DebugInput: React.FC<{
-  type: DebugInputType,
+  type: Composer.DebugInputType,
   csv: string,
   json: string
 }> = ({ type, csv, json }) => {

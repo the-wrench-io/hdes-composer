@@ -2,18 +2,20 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import EditIcon from '@mui/icons-material/ModeEdit';
+import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
 import { Typography, Box } from "@mui/material";
 
 import { useSnackbar } from 'notistack';
 import Burger from '@the-wrench-io/react-burger';
 
 import { Composer, Client } from '../../context';
-import {ErrorView} from '../../styles';
+import { ErrorView } from '../../styles';
 
 
 const ServiceDelete: React.FC<{ serviceId: Client.ServiceId, onClose: () => void }> = ({ serviceId, onClose }) => {
   const { services } = Composer.useSite();
   const { service: composerService, actions } = Composer.useComposer();
+  
   const { enqueueSnackbar } = useSnackbar();
   const [apply, setApply] = React.useState(false);
   const [errors, setErrors] = React.useState<Client.StoreError>();
@@ -25,7 +27,7 @@ const ServiceDelete: React.FC<{ serviceId: Client.ServiceId, onClose: () => void
       <Typography variant="h4">
         <FormattedMessage id="services.delete.error.title" />
       </Typography>
-      <ErrorView error={errors}/>
+      <ErrorView error={errors} />
     </Box>)
   } else {
     editor = (<Typography variant="h4">
@@ -62,18 +64,25 @@ const ServiceDelete: React.FC<{ serviceId: Client.ServiceId, onClose: () => void
 
 const ServiceOptions: React.FC<{ service: Client.Entity<Client.AstService> }> = ({ service }) => {
 
-  const [dialogOpen, setDialogOpen] = React.useState<undefined | 'ServiceDelete' >(undefined);
+  const [dialogOpen, setDialogOpen] = React.useState<undefined | 'ServiceDelete'>(undefined);
   const nav = Composer.useNav();
+  const {handleDebugInit} = Composer.useDebug();
   const handleDialogClose = () => setDialogOpen(undefined);
 
   return (
     <>
-      { dialogOpen === 'ServiceDelete' ? <ServiceDelete serviceId={service.id} onClose={handleDialogClose} /> : null}
+      {dialogOpen === 'ServiceDelete' ? <ServiceDelete serviceId={service.id} onClose={handleDialogClose} /> : null}
       <Burger.TreeItemOption nodeId={service.id + 'edit-nested'}
         color='link'
         icon={EditIcon}
         onClick={() => nav.handleInTab({ article: service })}
         labelText={<FormattedMessage id="services.edit.title" />}>
+      </Burger.TreeItemOption>
+      <Burger.TreeItemOption nodeId={service.id + 'simulate-nested'}
+        color='link'
+        icon={ScienceOutlinedIcon}
+        onClick={() => handleDebugInit(service.id)}
+        labelText={<FormattedMessage id="services.simulate.title" />}>
       </Burger.TreeItemOption>
       <Burger.TreeItemOption nodeId={service.id + 'delete-nested'}
         color='link'

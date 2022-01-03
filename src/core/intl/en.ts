@@ -54,6 +54,7 @@ const en = {
   'flows.delete.error.title': 'Failed to delete flow',
   'flows.delete.content': "Are you sure you want to delete FLOW: {name}?",
   'flows.deleted.message': "Deleted FLOW: {name}",
+  'flows.simulate.title': "Debug the flow",
 
   'flows.composer.title': 'Create new FLOW',
   'flows.composer.createdMessage': 'Created FLOW: {name}',
@@ -78,7 +79,8 @@ const en = {
   'services.delete.error.title': 'Failed to delete SERVICE',
   'services.delete.content': "Are you sure you want to delete SERVICE: {name}?",
   'services.deleted.message': "Deleted SERVICE: {name}",
-
+  'services.simulate.title': "Debug the service",
+  
   'services.composer.title': 'Create new SERVICE',
   'services.composer.createdMessage': 'Created SERVICE: {name}',
   'services.composer.errorsTitle': 'Failed to create SERVICE',
@@ -87,6 +89,7 @@ const en = {
 
   'decisions.name': "Name",
   'decisions.desc': "Description",
+  'decisions.simulate.title': "Debug the decision",
   'decisions.hitpolicy': "Hit-policy",
   'decisions.edit.title': "Edit decision",
   'decisions.copyas.title': "Copy decision as",
