@@ -52,6 +52,8 @@ const DebugInput: React.FC<{
 
   const [open, setOpen] = React.useState(false);
 
+console.log(json);
+
   return (<>
     <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
       <TableCell>
