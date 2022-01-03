@@ -10,7 +10,6 @@ import UploadIcon from '@mui/icons-material/Upload';
 
 import { FormattedMessage } from 'react-intl';
 
-import { Composer } from '../../context';
 import { DebugOptionType } from '../api';
 
 

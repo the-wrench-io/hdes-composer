@@ -13,8 +13,9 @@ import { DebugView } from './debug';
 
 import { Client } from './context';
 
-const root: SxProps = { height: `100%`, backgroundColor: "mainContent.main" };
 
+
+const root: SxProps = { height: `100%`, backgroundColor: "mainContent.main" };
 
 const EntityEditor: React.FC<{ entity: Client.Entity<any> }> = ({ entity }) => {
   if (entity.source.bodyType === 'DT') {
