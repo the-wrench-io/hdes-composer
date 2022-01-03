@@ -11,6 +11,7 @@ import { InputCSV } from './drawer/InputCSV';
 import { InputJSON } from './drawer/InputJSON';
 import { InputFORM } from './drawer/InputFORM';
 
+import { DebugError } from './DebugError';
 import { DebugHeader } from './DebugHeader';
 import { DebugInput } from './DebugInput';
 import { DebugOutput } from './outputs/DebugOutput';
@@ -22,9 +23,11 @@ const DebugView: React.FC<{}> = ({ }) => {
   const [option, setOption] = React.useState<DebugOptionType | undefined>();
   const [inputType, setInputType] = React.useState<DebugInputType>("JSON");
   const [csv, setCsv] = React.useState<string>("");
-  const [json, setJson] = React.useState<string>("{}");
+  const [json, setJson] = React.useState<string>();
   const [selected, setSelected] = React.useState<Client.Entity<Client.AstBody>>();
   const [debug, setDebug] = React.useState<Client.DebugResponse>();
+  const [error, setError] = React.useState<Client.StoreError>();
+  
   const ast = selected?.ast;
 
   const handleCsv = (csv: string) => {
@@ -38,8 +41,15 @@ const DebugView: React.FC<{}> = ({ }) => {
   }
   
   const handleSelectAsset = (selected: Client.Entity<Client.AstBody>) => {
-    setSelected(selected);
-    setJson("{}");
+    const elements = selected?.ast ? selected.ast.headers.acceptDefs : [];
+    const data = {};
+    for(const parameter of elements) {
+      if (parameter.values !== undefined) {
+        data[parameter.name] = parameter.values ? parameter.values : "";
+      }
+    }
+    setSelected(selected);      
+    setJson(JSON.stringify(data));
     setOption("INPUT_FORM");
   }
   
@@ -48,11 +58,12 @@ const DebugView: React.FC<{}> = ({ }) => {
       return;
     }
     setDebug(undefined);
+    setError(undefined);
     service.debug({ 
       id: selected.id, 
       input: inputType === 'JSON' ? json : undefined,
       inputCSV: inputType === 'CSV' ? csv : undefined 
-    }).then(setDebug)
+    }).then(setDebug).catch(setError)
   }
 
   return (<Box sx={{ width: '100%', overflow: 'hidden', padding: 1 }}>
@@ -60,8 +71,8 @@ const DebugView: React.FC<{}> = ({ }) => {
     <DebugDrawer selected={selected?.id} open={option === "DRAWER"} onClose={() => setOption(undefined)} onSelect={setOption} />
 
     {option === 'SELECT_ASSET' ? <SelectAsset onClose={() => setOption(undefined)} selected={selected?.id} onSelect={handleSelectAsset} /> : null}
-    {option === 'INPUT_JSON' ? <InputJSON onClose={() => setOption(undefined)} onSelect={handleJson} value={json} /> : null}
-    {option === 'INPUT_FORM' ? <InputFORM onClose={() => setOption(undefined)} selected={selected?.id} onSelect={handleJson} value={json} /> : null}
+    {option === 'INPUT_JSON' && json ? <InputJSON onClose={() => setOption(undefined)} onSelect={handleJson} value={json} /> : null}
+    {option === 'INPUT_FORM' && json ? <InputFORM onClose={() => setOption(undefined)} selected={selected?.id} onSelect={handleJson} value={json} /> : null}
     {option === 'INPUT_CSV' ? <InputCSV onClose={() => setOption(undefined)} selected={selected?.id} onSelect={handleCsv} value={csv} /> : null}
 
 
@@ -78,7 +89,8 @@ const DebugView: React.FC<{}> = ({ }) => {
         </DebugHeader>
 
         <TableBody>
-          <DebugInput type={inputType} csv={csv} json={json}/>
+          {json ? <DebugInput type={inputType} csv={csv} json={json}/> : null}
+          {error ? <DebugError error={error} /> : null}
           <DebugOutput debug={debug} selected={selected} />
         </TableBody>
       </Table>

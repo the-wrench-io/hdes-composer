@@ -11,12 +11,8 @@ import { DebugInputType } from './api';
 const InputSectionJson: React.FC<{ json: string, csv: string, type: DebugInputType }> = (props) => {
 
   if (props.type === "CSV") {
-    return (<CodeEditor id="debug-input" mode="json" src={props.csv}
-      onChange={(value) => {
-        console.log(value);
-      }} />);
+    return (<CodeEditor id="debug-input" mode="json" src={props.csv} onChange={(value) => { console.log(value); }} />);
   }
-
 
   let entity: object | undefined;
   try {
@@ -26,11 +22,7 @@ const InputSectionJson: React.FC<{ json: string, csv: string, type: DebugInputTy
   }
 
   if (!entity) {
-
-    return (<CodeEditor id="debug-input" mode="json" src={props.json}
-      onChange={(value) => {
-        console.log(value);
-      }} />);
+    return (<CodeEditor id="debug-input" mode="json" src={props.json} onChange={(value) => { console.log(value); }} />);
   }
 
   return (<Table size="small">
@@ -72,7 +64,7 @@ const DebugInput: React.FC<{
       </TableCell>
     </TableRow>
 
-    <TableRow>
+    <TableRow sx={open ? undefined : { visibility: "hidden" }}>
       <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ margin: 1 }}>

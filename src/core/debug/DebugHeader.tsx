@@ -4,9 +4,6 @@ import { Box, TableCell, TableHead, TableRow } from '@mui/material';
 
 
 const DebugHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-
-  // <FormattedMessage id="debug.heade.noAsset" />
-  
   const totalCols = 2;
   return (<TableHead sx={{ position: "sticky", top: 0 }}>
     <TableRow>

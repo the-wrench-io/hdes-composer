@@ -78,7 +78,7 @@ namespace Vis {
       events: events,
       value: model,
       options: init.options
-    };
+    };    
     return (<Graph graph={props.value} options={props.options} events={props.events} />);
   }
 }

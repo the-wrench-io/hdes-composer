@@ -115,7 +115,10 @@ namespace HdesClient {
       return this._store.fetch("/commands", { method: "POST", body: JSON.stringify({ id, body }) });
     }
     getSite(): Promise<HdesClient.Site> {
-      return this._store.fetch("/dataModels", { method: "GET", body: undefined });
+      return this._store.fetch("/dataModels", { method: "GET", body: undefined }).then(data => {
+        console.log(data);
+        return data as HdesClient.Site;
+      });
     }
     debug(debug: HdesClient.DebugRequest): Promise<HdesClient.DebugResponse> {
       return this._store.fetch("/debugs", { method: "POST", body: JSON.stringify(debug) });

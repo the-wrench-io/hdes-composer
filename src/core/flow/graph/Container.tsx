@@ -44,27 +44,23 @@ const options = {
 }
 
 interface ContainerProps {
-  flow: Client.Entity<Client.AstFlow>;
+  flow: Client.AstFlow;
   site: Client.Site;
   onClick: (id: string) => void;
   onDoubleClick: (id: string) => void;
 };
 
 const Container: React.FC<ContainerProps> = ({ site, flow, onClick, onDoubleClick }) => {
-
-  if (!flow.ast) {
-    return (<></>);
-  }
+  
+  const events = { onClick, onDoubleClick };
+  const model = React.useMemo(() => GraphAPI.create({ fl: flow, models: site }), [flow, site]);
 
   return (<Box sx={{
     height: "calc(100vh - 64px)",
     width: '50vh',
     backgroundColor: 'transparent'
-  }}>{Vis.create({
-    events: { onClick, onDoubleClick },
-    options: options,
-    model: GraphAPI.create({ fl: flow.ast, models: site }),
-  })}</Box>);
+  }}>{model ? Vis.create({ events, options, model }) : null}
+  </Box>);
 }
 
 export type { ContainerProps };

@@ -22,8 +22,7 @@ const ErrorView: React.FC<{ error: Client.StoreError }> = ({ error }) => {
     }
   }
 
-  return (<Box sx={{ width: '100%', p: 1 }}>{items}
-  </Box>);
+  return (<Box sx={{ width: '100%', p: 1 }}>{items}</Box>);
 }
 
 

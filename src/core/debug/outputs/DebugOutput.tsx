@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Client } from '../../context';
 import { DebugOutputsDt } from './DebugOutputsDt';
+import { DebugOutputsFl } from './DebugOutputsFl';
 
 const DebugOutput: React.FC<{
   selected?: Client.Entity<Client.AstBody>;
@@ -23,7 +24,7 @@ const DebugOutput: React.FC<{
   } else if (bodyType === "FLOW_TASK") {
     //delegate = (<DebugOutputsFt />);
   } else if (bodyType === "FLOW") {
-    //delegate = (<DebugOutputsFl />);
+    delegate = (<DebugOutputsFl debug={debug.body as Client.FlowResult}/>);
   }
 
 

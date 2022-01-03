@@ -235,11 +235,13 @@ const en = {
   'debug.asset.select.clear': "Clear run data",
   'debug.asset.select.execute': 'Execute asset',
   'debug.asset.execute.inputs': "Debug inputs",
+  'debug.asset.execute.errors': "Execution errors",
 
   'debug.asset.execute.outputs.dt.json': "Matched row(s)",
   'debug.asset.execute.outputs.dt.rejects': "Rejected row(s)",
   'debug.asset.execute.outputs.dt.rejects.order': "Execution order",
 
+  'debug.asset.execute.outputs.flow.step': "Step name: {name}, status: {status}",
 
 
 };

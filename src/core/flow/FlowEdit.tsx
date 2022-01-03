@@ -9,8 +9,8 @@ import { AutocompleteVisitor, FlowAstAutocomplete, AutocompleteTask } from './au
 
 type GuidedHint = (cm: CodeMirror.Editor, data: CodeMirror.Hints, cur: CodeMirror.Hint) => void;
 
-const SticyGraph: React.FC<{ flow: Client.Entity<Client.AstFlow>, site: Client.Site }> = ({ flow, site }) => {
-  return (<Box sx={{ top: "64px", right: "30px", position: "absolute", zIndex: "1" }}>
+const SticyGraph: React.FC<{ flow: Client.AstFlow, site: Client.Site }> = ({ flow, site }) => {
+  return (<Box sx={{ top: "64px", right: "30px", position: "absolute", zIndex: "100" }}>
     <Graph flow={flow} site={site}
       onClick={() => console.log("single")}
       onDoubleClick={() => console.log("double")} />
@@ -36,7 +36,7 @@ const FlowEdit: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }) =
 
   return (<Box height="100%">
     {guided ? <AutocompleteTask onClose={() => setGuided(undefined)} flow={flow} {...guided} /> : undefined}
-    {flow.ast ? <SticyGraph flow={flow} site={site} /> : undefined}
+    {ast ? <SticyGraph flow={ast} site={site} /> : undefined}
         
     <CodeEditor id={flow.id} mode="yaml" src={src ? src : "#--failed-to-parse"}
       onChange={(value) => actions.handlePageUpdate(flow.id, [{ type: "SET_BODY", value }])}
