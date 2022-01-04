@@ -5,7 +5,8 @@ import {
   CreateBuilder,
   AstDecision, AstDecisionRow, AstDecisionCell,
   AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
-  AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, AstTag,
+  AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, 
+  AstTag, AstTagValue,
   ServiceErrorMsg, ServiceErrorProps, Service, Store, DeleteBuilder,
   
   DebugRequest, DebugResponse, ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog
@@ -53,7 +54,8 @@ declare namespace HdesClient {
     CreateBuilder, DeleteBuilder,
     AstDecision, AstDecisionRow, AstDecisionCell,
     AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
-    AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, AstTag,
+    AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, 
+    AstTag, AstTagValue,
     ServiceErrorMsg, ServiceErrorProps, Service, Store,
     
     DebugRequest, DebugResponse, 
@@ -90,12 +92,17 @@ namespace HdesClient {
       this._store = store;
     }
     create(): HdesClient.CreateBuilder {
-      const flow = (name: string) => this.createAsset(name, "FLOW");
-      const service = (name: string) => this.createAsset(name, "FLOW_TASK");
-      const decision = (name: string) => this.createAsset(name, "DT");
-      const tag = (name: string) => this.createAsset(name, "TAG");
-      const site = () => this.createAsset("repo", "SITE");
-      return { flow, service, decision, site, tag };
+      const flow = (name: string) => this.createAsset(name, undefined, "FLOW");
+      const service = (name: string) => this.createAsset(name, undefined, "FLOW_TASK");
+      const decision = (name: string) => this.createAsset(name, undefined, "DT");
+      const tag = (props: {name: string, desc: string}) => this.createAsset(props.name, props.desc, "TAG");
+      const site = () => this.createAsset("repo", undefined, "SITE");
+      
+      const importData = (tagContentAsString: string): Promise<HdesClient.Site> => {
+        return this._store.fetch("/importTag", { method: "POST", body: tagContentAsString });
+      }
+      
+      return { flow, service, decision, site, tag, importData };
     }
     delete(): HdesClient.DeleteBuilder {
       const deleteMethod = (id: string): Promise<HdesClient.Site> => this._store.fetch(`/resources/${id}`, { method: "DELETE" });
@@ -108,8 +115,8 @@ namespace HdesClient {
     update(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Site> {
       return this._store.fetch("/resources", { method: "PUT", body: JSON.stringify({ id, body }) });
     }
-    createAsset(name: string, type: HdesClient.AstBodyType | "SITE"): Promise<HdesClient.Site> {
-      return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({ name, type }) });
+    createAsset(name: string, desc: string | undefined, type: HdesClient.AstBodyType | "SITE"): Promise<HdesClient.Site> {
+      return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({ name, desc, type }) });
     }
     ast(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Entity<any>> {
       return this._store.fetch("/commands", { method: "POST", body: JSON.stringify({ id, body }) });

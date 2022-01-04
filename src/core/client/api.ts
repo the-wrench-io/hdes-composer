@@ -195,7 +195,15 @@ export interface AstService extends AstBody {
 // Tag
 export interface AstTag extends AstBody {
   name: string;
+  created: string;
+  values: AstTagValue[];
 }
+
+export interface AstTagValue {
+  hash: string;
+  bodyType: AstBodyType;
+  commands: AstCommand[];
+} 
 
 export interface ServiceErrorMsg {
   id: string;
@@ -267,7 +275,8 @@ export interface FlowResultErrorLog { id: string; msg: string; }
 
 export interface CreateBuilder {
   site(): Promise<Site>;
-  tag(name: string): Promise<Site>;
+  importData(init: string): Promise<Site>;
+  tag(props: {name: string, desc: string}): Promise<Site>;
   flow(name: string): Promise<Site>;
   service(name: string): Promise<Site>;
   decision(name: string): Promise<Site>;

@@ -35,8 +35,7 @@ const en = {
 
   'activities.debug.title': 'Debug',
   'activities.debug.desc': 'Simulate execution of the asset',
-  'activities.debug.view': 'Simulate',
-  
+  'activities.debug.view': 'Simulate',  
   'activities.assets.saveSuccess': 'Saved asset: {name}',
 
 
@@ -44,9 +43,12 @@ const en = {
   'programs.warning.title': 'Program warning',
 
 
-
   'flows': "Flows",
   'options': "Options",
+
+  'migrations.title': "Migration",
+  'migrations.create': "Perform migration",
+  'migrations.select': "Select tag.json file",
 
   'flows.edit.title': "Edit flow",
   'flows.copyas.title': "Copy flow as",
@@ -190,7 +192,10 @@ const en = {
 
 
   'content.loading': 'loading',
-
+  'releases.composer.title': "Create new release",
+  'releases.composer.assetName': "Release name",
+  'releases.composer.assetDesc': "Release description",
+  'releases.composer.errorsTitle': "Error while creating release",
   'releases.table.column.name': 'Name',
   'releases.table.column.message': 'Message',
   'releases.table.column.created': 'Created',

@@ -10,6 +10,7 @@ import { FlowEdit } from './flow';
 import { DecisionEdit } from './decision';
 import { ServiceEdit } from './service';
 import { DebugView } from './debug';
+import { ReleasesView } from './release';
 
 import { Client } from './context';
 
@@ -47,7 +48,7 @@ const Main: React.FC<{}> = () => {
     if (active.id === 'activities') {
       return (<Box sx={root}><Activities /></Box>);
     } else if (active.id === 'releases') {
-      return (<Box sx={root}>releases</Box>);
+      return (<Box sx={root}><ReleasesView /></Box>);
     } else if (active.id === 'graph') {
       return (<Box sx={root}>graph</Box>);
     } else if (active.id === 'templates') {
