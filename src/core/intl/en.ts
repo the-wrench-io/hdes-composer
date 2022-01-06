@@ -3,6 +3,9 @@ const en = {
   'buttons.apply': "Apply",
   'buttons.delete': "Delete",
   'button.cancel': "Cancel",
+  
+  'content.loading': 'loading',
+  
 
   'explorer.tabs.flows': 'flows',
   'explorer.tabs.services': 'services',
@@ -189,9 +192,14 @@ const en = {
   'dialog.save.button.cancel': 'Cancel',
   'dialog.save.button.confirm': 'Save',
 
-
-
-  'content.loading': 'loading',
+  'releases.delete.content': 'Are you sure you want to delete release: {name}',
+  'releases.composer.createdMessage': 'Created new release {name}',
+  'release.delete.title': 'Delete release',
+  'release.deleted.message': 'Release {name} deleted',
+  'releases.view.note': 'Release notes',
+  'releases.view.tag': 'Release version name',
+  'releases.view.created': 'Date and time',
+  'releases.view.download': 'JSON download',
   'releases.composer.title': "Create new release",
   'releases.composer.assetName': "Release name",
   'releases.composer.assetDesc': "Release description",
