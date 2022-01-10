@@ -9,8 +9,9 @@ import { Client } from '../../context';
 const DecisionTableHeader: React.FC<{
   ast: Client.AstDecision,
   headers: Client.TypeDef[],
-  children: React.ReactNode
-}> = ({ ast, headers, children }) => {
+  children: React.ReactNode,
+  onClick: (header: Client.TypeDef) => void
+}> = ({ ast, headers, children, onClick }) => {
   const totalCols = ast.headers.returnDefs.length + ast.headers.acceptDefs.length + 1;
 
   return (<TableHead sx={{ position: "sticky", top: 0 }}>
@@ -38,7 +39,8 @@ const DecisionTableHeader: React.FC<{
       <TableRow>
         <TableCell align="left" sx={{ fontWeight: "bold", width: "30px", backgroundColor: "page.main", color: "primary.contrastText" }}>#</TableCell>
         {headers.map((accept) => (
-          <TableCell key={accept.id} align="left"
+          <TableCell key={accept.id} align="left" 
+            onClick={() => onClick(accept)}
             sx={{
               fontWeight: "bold", minWidth: "50px", maxWidth: "200px",
               backgroundColor: accept.direction === "OUT" ? "uiElements.main" : "page.main",

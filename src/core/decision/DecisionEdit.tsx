@@ -13,7 +13,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Burger from '@the-wrench-io/react-burger';
 import { Client, Composer } from '../context';
-import { CellEdit, NameDescHitPolicyEdit, UploadCSV, OrderEdit } from './editors';
+import { CellEdit, NameDescHitPolicyEdit, UploadCSV, OrderEdit, HeaderEdit } from './editors';
 import fileDownload from 'js-file-download'
 
 
@@ -104,6 +104,7 @@ const DecisionEdit: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = 
     {edit?.rowsColumns ? <OrderEdit decision={ast} onChange={onChange} onClose={() => setEdit(undefined)} /> : null}
     {edit?.upload ? <UploadCSV onChange={onChange} onClose={() => setEdit(undefined)} /> : null}
     {edit?.cell ? <CellEdit dt={ast} cell={edit?.cell} onClose={() => setEdit(undefined)} onChange={(command) => onChange([command])} /> : null}
+    {edit?.header ? <HeaderEdit dt={ast} header={edit.header} onChange={onChange} onClose={() => setEdit(undefined)} /> : null}
 
     <Drawer anchor="top" open={edit?.options} onClose={() => setEdit(undefined)} sx={{ zIndex: "10000" }}>
       <Box sx={{ display: "flex", backgroundColor: "explorer.main", color: "primary.contrastText" }}>
@@ -125,7 +126,7 @@ const DecisionEdit: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = 
 
     <Decision.Table ast={ast}
       renderHeader={headerProps => (
-        <Decision.Header {...headerProps}>
+        <Decision.Header {...headerProps} onClick={(header) => setEdit({ header })}>
           <Burger.PrimaryButton label="decisions.table.options" onClick={() => setEdit({ options: true })} />
         </Decision.Header>
       )}
