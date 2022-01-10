@@ -22,6 +22,7 @@ const FlowExplorer: React.FC<{}> = () => {
         onNodeToggle={(_event: React.SyntheticEvent, nodeIds: string[]) => setToggle(toggle.onNodeToggle(nodeIds))}>
         
         { Object.values(session.site.flows)
+          .sort((a, b) => (a.ast ? a.ast.name : a.id).localeCompare((b.ast ? b.ast.name : b.id)) )
           .map(flow => (<FlowItem key={flow.id} flowId={flow.id} />))
         }
       </TreeView>

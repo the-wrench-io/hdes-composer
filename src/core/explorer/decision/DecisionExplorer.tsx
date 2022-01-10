@@ -22,6 +22,7 @@ const DecisionExplorer: React.FC<{}> = () => {
         defaultEndIcon={<div style={{ width: 24 }} />}
         onNodeToggle={(_event: React.SyntheticEvent, nodeIds: string[]) => setToggle(toggle.onNodeToggle(nodeIds))}>
         { Object.values(session.site.decisions)
+          .sort((a, b) => (a.ast ? a.ast.name : a.id).localeCompare((b.ast ? b.ast.name : b.id)) )
           .map(decision => (<DecisionItem key={decision.id} decisionId={decision.id} />))
         }
       </TreeView>

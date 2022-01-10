@@ -35,7 +35,6 @@ const ServiceDelete: React.FC<{ serviceId: Client.ServiceId, onClose: () => void
     </Typography>)
   }
 
-
   return (<Burger.Dialog open={true}
     onClose={onClose}
     children={editor}

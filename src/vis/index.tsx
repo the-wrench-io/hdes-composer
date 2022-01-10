@@ -7,6 +7,7 @@ declare namespace Vis {
   interface Model {
     nodes: Node[];
     edges: Edge[];
+    visited: string[];
   }
 
   interface Node {

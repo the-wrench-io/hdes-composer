@@ -57,6 +57,9 @@ const Main: React.FC<{}> = () => {
       return (<Box sx={root}><DebugView /></Box>);
     }
     if (entity) {
+      
+  console.log(entity);
+
       return <Box sx={root}><EntityEditor entity={entity} /></Box>
     }
     throw new Error("unknown view: " + JSON.stringify(active, null, 2));

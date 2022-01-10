@@ -64,7 +64,7 @@ const DecisionItem: React.FC<{ decisionId: Client.DecisionId }> = ({ decisionId 
       </Burger.TreeItem>
 
 
-      {/** Flow options */}
+      {/** Decision options */}
       <Burger.TreeItem nodeId={decision.id + 'flows-nested'}
         labelText={<FormattedMessage id="flows" />}
         labelIcon={FolderOutlinedIcon}

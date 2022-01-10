@@ -2,10 +2,11 @@ import Vis from '../../../vis';
 import { Client } from '../../context';
 
 
-type ModelType = 'switch' | 'decisionTable' | 'service' | undefined;
+type ModelType = 'switch' | 'decisionTable' | 'service' | 'flow' | undefined;
 
 class ModelVisitor {
   private _fl: Client.AstFlow;
+  private _nested: boolean;
   private _visited: string[] = [];
   private _nodes: Vis.Node[] = [];
   private _edges: Vis.Edge[] = [];
@@ -19,9 +20,10 @@ class ModelVisitor {
     switch: number;
   };
 
-  constructor(fl: Client.AstFlow, models: Client.Site) {
+  constructor(fl: Client.AstFlow, models: Client.Site, nested?: {x: number, y: number, visited: string[]}) {
     this._fl = fl;
     this._models = models;
+    this._nested = nested ? true : false;
     this._constraints = {
       width: { maximum: 150, minimum: 150 }
     }
@@ -30,22 +32,29 @@ class ModelVisitor {
       switch: 80 + this._constraints.width.minimum
     };
     this._start = {
-      x: -500, y: -500
+      x: nested ? nested.x : -500, 
+      y: nested ? nested.y : -500
     };
+    
+    if(nested) {
+      this._visited.push(...nested.visited);
+    }
   }
 
   visit(): Vis.Model {
     const steps = Object.values(this._fl.src.tasks);    
     
     const start: Vis.Node = {id: 'start', label: 'start', shape: 'circle', x: 0, y: this._start.y, parents: []};
-    this._nodes.push(start);
+    if(!this._nested) {
+      this._nodes.push(start);
+    }
     
     const first = steps.filter(step => step.order === 0);
     if(first.length === 1) {
       this.visitStep(first[0], {parent: start});
     }
 
-    if (steps.length === 0) {
+    if (steps.length === 0 && !this._nested) {
       this._edges.push({ from: 'start', to: 'end' });
       this._nodes.push({
         id: 'end', label: 'end', shape: 'circle',
@@ -55,11 +64,11 @@ class ModelVisitor {
       })
     }
 
-    return { nodes: this._nodes, edges: this._edges };
+    return { nodes: this._nodes, edges: this._edges, visited: this._visited };
   }
 
   visitEdge(step: Client.AstFlowTaskNode, props: { parent: Vis.Node, index?: number }) {
-    const id = step.id.value;
+    const id = this._fl.name + "/" + step.id.value;
     const parent = props.parent;
 
     if (parent) {
@@ -80,7 +89,7 @@ class ModelVisitor {
   }
 
   visitStep(step: Client.AstFlowTaskNode, props: { parent: Vis.Node, index?: number }) {
-    const id = step.id.value;
+    const id = this._fl.name + "/" + step.id.value;
     const parent = props.parent;
 
     this.visitEdge(step, props);
@@ -113,17 +122,93 @@ class ModelVisitor {
     }
 
     this._nodes.push(node)
-    this._visited.push(step.id.value);
+    this._visited.push(id);
 
     if (group === "switch") {
       this.visitSwitch(step, { parent: node, index: props.index });
     } else if (group === "decisionTable") {
       this.visitThen(step.then, { parent: node, index: props.index });
     } else if (group === "service") {
+      if(ref) {
+        //this.visitServiceAssoc(ref, { parent: node, index: props.index });
+      }
       this.visitThen(step.then, { parent: node, index: props.index });
     }
 
     this.visitOverlapping(node);
+  }
+  
+  visitServiceAssoc(entity: Client.Entity<Client.AstService>, props: { parent: Vis.Node, index?: number }) {
+    if(!entity.ast) {
+      return;
+    }  
+    
+    const {parent} = props;
+    const assocs = entity.associations.filter(assoc => assoc.owner);
+    
+    let index = 0
+    let evenX = 0
+    let oddX = 0
+    for (let caseInTask of assocs) {
+      let caseX
+      if (index === 0) {
+        caseX = 0;
+      } else if (index % 2 === 0) {
+        // even
+        evenX += this._seperation.switch;
+        caseX = evenX;
+      } else {
+        // odd
+        oddX += this._seperation.switch;
+        caseX = oddX * -1;
+      }
+      index++;
+      
+      const ref = this.findRef(caseInTask.ref, caseInTask.refType);
+      const parents: string[] = [];
+      parents.push(...parent.parents);
+      parents.push(parent.id);
+      const group: ModelType = caseInTask.refType === "FLOW" ? "flow" : 'decisionTable';
+      const id = caseInTask.ref + "/" + parent.id  + "/" + (caseInTask.id ? caseInTask.id : caseInTask.ref);
+      const node: Vis.Node = {
+        id: id,
+        parents: parents,
+        externalId: caseInTask.id,
+        label: "::" + caseInTask.ref,
+        group: group,
+        color: this.visitColor(group),
+        shape: this.visitShape(group),
+        x: caseX, y: parent.y,
+        body: { ref },
+        widthConstraint: this._constraints.width
+      }
+      
+      this._edges.push({ from: props.parent.id, to: node.id})
+      this._nodes.push(node)
+      
+      const ast: Client.AstBody | undefined = ref?.ast;
+      
+      if(ast && ast.bodyType === "FLOW") {
+        const flow: Client.AstFlow  = ast as any;
+        if(this._visited.includes(flow.name)) {
+          continue;
+        }
+        this._visited.push(flow.name);
+        const nested = new ModelVisitor(flow, this._models, {x: node.x, y: node.y, visited: this._visited}).visit();
+        this._edges.push(...nested.edges)
+        this._nodes.push(...nested.nodes)
+        this._visited.push(...nested.visited);
+        
+        //this.visitStep(flow., { parent: node });
+      }
+      /*
+      this.visitThen(caseInTask.then, {
+        parent: props.parent,
+        index: props.index ? props.index : 0 + caseX
+      });
+      */
+      
+    }
   }
   
   visitEnd(props: { parent: Vis.Node, index?: number }) {
@@ -268,19 +353,30 @@ class ModelVisitor {
     if (!ref) {
       return undefined;
     }
-
-    const models: Client.Entity<any>[] = [];
     if (step.decisionTable) {
-      models.push(...Object.values(this._models.decisions));
+      return this.findRef(ref, "DT");
     } else if (step.service) {
-      models.push(...Object.values(this._models.services));
+      return this.findRef(ref, "FLOW_TASK");
     }
-    const result = models.filter(m => m.ast && m.ast.name === ref)
+    return undefined;
+  }
+  
+  findRef(name: string, type: Client.AstBodyType): Client.Entity<any> | undefined {
+    const models: Client.Entity<any>[] = [];
+    if (type === "DT") {
+      models.push(...Object.values(this._models.decisions));
+    } else if (type === "FLOW_TASK") {
+      models.push(...Object.values(this._models.services));
+    } else if (type === "FLOW") {
+      models.push(...Object.values(this._models.flows));
+    }
+    const result = models.filter(m => m.ast && m.ast.name === name)
     if (result.length === 0) {
       return undefined;
     }
     return result[0];
   }
+
 
   visitCyclicDependency(step: Client.AstFlowTaskNode, parent?: Vis.Node) {
     const id = step.id.value;
