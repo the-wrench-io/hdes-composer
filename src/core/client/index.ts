@@ -12,7 +12,7 @@ import {
   DebugRequest, DebugResponse, ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog
 } from "./api";
 
-import { StoreError as StoreErrorAs} from './error';
+import { StoreErrorImpl as StoreErrorImplAs, StoreError } from './error';
 import { DefaultStore, StoreConfig } from './store';
 
 declare namespace HdesClient {
@@ -25,7 +25,7 @@ declare namespace HdesClient {
     AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
     AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, 
     AstTag, AstTagValue,
-    ServiceErrorMsg, ServiceErrorProps, Service, Store, StoreConfig,
+    ServiceErrorMsg, ServiceErrorProps, Service, Store, StoreError, StoreConfig,
     
     DebugRequest, DebugResponse, 
     ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
@@ -34,7 +34,7 @@ declare namespace HdesClient {
 }
 
 namespace HdesClient {
-  export const StoreError = StoreErrorAs;
+  export const StoreErrorImpl = StoreErrorImplAs;
   export const StoreImpl = DefaultStore;
   
   export class ServiceImpl implements HdesClient.Service {

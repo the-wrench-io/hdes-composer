@@ -33,7 +33,14 @@ const parseErrors = (props: any[]): ServiceErrorMsg[] => {
   return result;
 }
 
-export class StoreError extends Error {
+export interface StoreError extends Error {
+  text: string;
+  status: number;
+  errors: ServiceErrorMsg[];
+}
+
+
+export class StoreErrorImpl extends Error {
   private _props: ServiceErrorProps;
   constructor(props: ServiceErrorProps) {
     super(props.text);

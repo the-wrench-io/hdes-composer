@@ -1,4 +1,4 @@
-import { StoreError } from './error';
+import { StoreErrorImpl } from './error';
 import { Store } from './api';
 
 interface StoreConfig {
@@ -92,7 +92,7 @@ class DefaultStore implements Store {
               }
               return response.json().then(data => {
                 console.error(data);
-                throw new StoreError({
+                throw new StoreErrorImpl({
                   text: response.statusText,
                   status: response.status,
                   errors: data
@@ -104,7 +104,7 @@ class DefaultStore implements Store {
         if (!response.ok) {
           return response.json().then(data => {
             console.error(data);
-            throw new StoreError({
+            throw new StoreErrorImpl({
               text: response.statusText,
               status: response.status,
               errors: data
