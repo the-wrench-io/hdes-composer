@@ -14,41 +14,7 @@ const init = {
 
 console.log("INIT", init);
 
-const store: Client.Store = {
-  fetch<T>(path: string, req?: RequestInit): Promise<T> {
-    if (!path) {
-      throw new Error("can't fetch with undefined url")
-    }
-
-    const defRef: RequestInit = {
-      method: "GET",
-      credentials: 'same-origin',
-      headers: {
-        "Content-Type": "application/json;charset=UTF-8"
-      }
-    };
-
-    const url = init.url;
-    const finalInit: RequestInit = Object.assign(defRef, req ? req : {});
-    return fetch(url + path, finalInit)
-      .then(response => {
-        if (response.status === 302) {
-          return null;
-        }
-        if (!response.ok) {
-          return response.json().then(data => {
-            console.error(data);
-            throw new Client.StoreError({
-              text: response.statusText,
-              status: response.status,
-              errors: data
-            });
-          });
-        }
-        return response.json();
-      })
-  }
-};
+const store: Client.Store = new Client.StoreImpl(init);
 
 const CreateApps: React.FC<{}> = () => {
   // eslint-disable-next-line 

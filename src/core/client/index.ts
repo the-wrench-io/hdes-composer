@@ -12,39 +12,8 @@ import {
   DebugRequest, DebugResponse, ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog
 } from "./api";
 
-const getErrorMsg = (error: any) => {
-  if (error.msg) {
-    return error.msg;
-  }
-  if (error.value) {
-    return error.value
-  }
-  if (error.message) {
-    return error.message;
-  }
-}
-const getErrorId = (error: any) => {
-  if (error.id) {
-    return error.id;
-  }
-  if (error.code) {
-    return error.code
-  }
-  return "";
-}
-const parseErrors = (props: any[]): ServiceErrorMsg[] => {
-  if (!props) {
-    return []
-  }
-
-  const result: ServiceErrorMsg[] = props.map(error => ({
-    id: getErrorId(error),
-    value: getErrorMsg(error)
-  }));
-
-  return result;
-}
-
+import { StoreError as StoreErrorAs} from './error';
+import { DefaultStore, StoreConfig } from './store';
 
 declare namespace HdesClient {
   export type {
@@ -56,7 +25,7 @@ declare namespace HdesClient {
     AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
     AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, 
     AstTag, AstTagValue,
-    ServiceErrorMsg, ServiceErrorProps, Service, Store,
+    ServiceErrorMsg, ServiceErrorProps, Service, Store, StoreConfig,
     
     DebugRequest, DebugResponse, 
     ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
@@ -65,26 +34,9 @@ declare namespace HdesClient {
 }
 
 namespace HdesClient {
-  export class StoreError extends Error {
-    private _props: HdesClient.ServiceErrorProps;
-    constructor(props: HdesClient.ServiceErrorProps) {
-      super(props.text);
-      this._props = {
-        text: props.text,
-        status: props.status,
-        errors: parseErrors(props.errors)
-      };
-    }
-    get name() {
-      return this._props.text;
-    }
-    get status() {
-      return this._props.status;
-    }
-    get errors() {
-      return this._props.errors;
-    }
-  }
+  export const StoreError = StoreErrorAs;
+  export const StoreImpl = DefaultStore;
+  
   export class ServiceImpl implements HdesClient.Service {
     private _store: Store;
 

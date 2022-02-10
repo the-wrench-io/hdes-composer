@@ -297,7 +297,6 @@ export interface Service {
   debug(input: DebugRequest): Promise<DebugResponse>;
   getSite(): Promise<Site>
 }
-
 export interface Store {
   fetch<T>(path: string, init?: RequestInit): Promise<T>;
 }
