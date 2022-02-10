@@ -5,14 +5,8 @@ interface StoreConfig {
   url: string;
   oidc?: string;
   status?: string;
+  csrf?: { key: string, value: string }
 }
-const defRef: RequestInit = {
-  method: "GET",
-  credentials: 'same-origin',
-  headers: {
-    "Content-Type": "application/json;charset=UTF-8"
-  }
-};
 
 
 
@@ -20,9 +14,22 @@ class DefaultStore implements Store {
   private _config: StoreConfig;
   private _updateStarted: boolean = false;
   private _iapSessionRefreshWindow: Window | null = null;
+  private _defRef: RequestInit;
 
   constructor(config: StoreConfig) {
     this._config = config;
+    this._defRef = {
+      method: "GET",
+      credentials: 'same-origin',
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8"
+      }
+    }
+    
+    if (this._config.csrf) {
+      const headers: Record<string, string> = this._defRef.headers as any;
+      headers[this._config.csrf.key] = this._config.csrf.value;
+    }
   }
 
   iapRefresh(): Promise<void> {
@@ -77,7 +84,7 @@ class DefaultStore implements Store {
     }
 
     const url = this._config.url;
-    const finalInit: RequestInit = Object.assign(defRef, req ? req : {});
+    const finalInit: RequestInit = Object.assign({}, this._defRef, req ? req : {});
     return fetch(url + path, finalInit)
       .then(response => {
         if (response.status === 302) {
