@@ -9,7 +9,7 @@ import CompareArrowsRoundedIcon from '@mui/icons-material/CompareArrowsRounded';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import UploadIcon from '@mui/icons-material/Upload';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Burger from '@the-wrench-io/react-burger';
 import { Client, Composer } from '../context';
@@ -79,6 +79,8 @@ const DecisionEdit: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = 
   const commands = React.useMemo(() => update ? update.value : decision.source.commands, [decision, update]);
   const [ast, setAst] = React.useState<Client.AstDecision | undefined>();
   const [edit, setEdit] = React.useState<EditMode | undefined>();
+  const intl = useIntl(); 
+
 
   const onChange = (newCommands: Client.AstCommand[]) => {
     actions.handlePageUpdate(decision.id, [...commands, ...newCommands])
@@ -127,7 +129,11 @@ const DecisionEdit: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = 
     <Decision.Table ast={ast}
       renderHeader={headerProps => (
         <Decision.Header {...headerProps} onClick={(header) => setEdit({ header })}>
-          <Burger.PrimaryButton label="decisions.table.options" onClick={() => setEdit({ options: true })} />
+          <Burger.SecondaryButton label={`${ast.name} - ${intl.formatMessage({id: "decisions.table.hitpolicy"})}: ${ast.hitPolicy}`} onClick={() => setEdit({ options: true })} />
+          <Burger.SecondaryButton label="decisions.toolbar.addInputColumn" onClick={() => onChange([{ type: 'ADD_HEADER_IN', id: "in-" + ast.headers.acceptDefs.length + 1 }])} />
+          <Burger.SecondaryButton label="decisions.toolbar.addOutputColumn" onClick={() => onChange([{ type: 'ADD_HEADER_OUT', id: "out-" + ast.headers.returnDefs.length + 1 }])} />
+          <Burger.SecondaryButton label="decisions.toolbar.addRow" onClick={() => onChange([{ type: 'ADD_ROW', id: "" }])} />
+          <Burger.SecondaryButton label="decisions.toolbar.organize.rows.columns" onClick={() => setEdit({ rowsColumns: true })} />
         </Decision.Header>
       )}
       renderRow={rowProps => <Decision.Row {...rowProps} />}
