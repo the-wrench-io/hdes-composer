@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Box, TableCell, TableHead, TableRow, Typography } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import EditIcon from '@mui/icons-material/Edit';
 import { FormattedMessage } from 'react-intl'
 
 import { Client } from '../../context';
@@ -52,7 +52,11 @@ const DecisionTableHeader: React.FC<{
             backgroundColor: accept.direction === "OUT" ? "uiElements.main" : "page.main",
             color: "primary.contrastText"
           }}>
-          {accept.name}
+          
+          <Box display="flex">
+            <Box flexGrow="1">{accept.name}</Box>
+            <Box><EditIcon /></Box>
+          </Box>
         </TableCell>))}
     </TableRow>
   </TableHead>);
