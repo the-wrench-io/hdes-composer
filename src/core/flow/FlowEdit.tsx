@@ -10,10 +10,26 @@ import { AutocompleteVisitor, FlowAstAutocomplete, AutocompleteTask } from './au
 type GuidedHint = (cm: CodeMirror.Editor, data: CodeMirror.Hints, cur: CodeMirror.Hint) => void;
 
 const SticyGraph: React.FC<{ flow: Client.AstFlow, site: Client.Site }> = ({ flow, site }) => {
+  
+  const nav = Composer.useNav();
+
+  
   return (<Box sx={{ top: "64px", right: "30px", position: "absolute", zIndex: "100" }}>
     <Graph flow={flow} site={site}
       onClick={() => console.log("single")}
-      onDoubleClick={() => console.log("double")} />
+      onDoubleClick={(id) => {
+        
+        let article: Client.Entity<any> = site.decisions[id];
+        if(!article) {
+          article = site.flows[id];
+        }
+        if(!article) {
+          article = site.services[id];
+        }
+        if(article) {
+          nav.handleInTab({ article })
+        }
+      }} />
   </Box>);
 }
 
