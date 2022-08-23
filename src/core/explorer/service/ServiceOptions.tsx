@@ -63,10 +63,51 @@ const ServiceDelete: React.FC<{ serviceId: Client.ServiceId, onClose: () => void
 
 const ServiceOptions: React.FC<{ service: Client.Entity<Client.AstService> }> = ({ service }) => {
 
-  const [dialogOpen, setDialogOpen] = React.useState<undefined | 'ServiceDelete'>(undefined);
+  const [dialogOpen, setDialogOpen] = React.useState<undefined | 'ServiceDelete' | 'ServiceCopy'>(undefined);
   const nav = Composer.useNav();
   const {handleDebugInit} = Composer.useDebug();
   const handleDialogClose = () => setDialogOpen(undefined);
+  const { service: clientService, actions } = Composer.useComposer();
+  const { enqueueSnackbar } = useSnackbar();
+  const [name, setName] = React.useState(service.ast?.name + "_Copy");
+  const [apply, setApply] = React.useState(false);
+  const [errors, setErrors] = React.useState<Client.StoreError>();
+
+  const handleCopy = () => {
+    setErrors(undefined);
+    setApply(true);
+
+    clientService.copy(service.id, name)
+      .then(data => {
+        enqueueSnackbar(<FormattedMessage id="services.composer.copiedMessage" values={{ name: service.ast?.name, newName: name }} />);
+        actions.handleLoadSite(data).then(() => {
+          const [article] = Object.values(data.services).filter(d => d.ast?.name === name);
+          nav.handleInTab({ article })
+        });
+        handleDialogClose();
+      }).catch((error: Client.StoreError) => {
+        setErrors(error);
+      });
+  }
+
+
+  let editor = (<></>);
+  if (errors) {
+    editor = (<Box>
+      <Typography variant="h4">
+        <FormattedMessage id="services.composer.errorsTitle" />
+      </Typography>
+      <ErrorView error={errors} />
+    </Box>)
+  } else {
+    editor = (<Typography variant="h4">
+      <Burger.TextField
+        label='services.composer.assetName'
+        value={name}
+        onChange={setName}
+        onEnter={() => handleCopy()} />
+    </Typography>)
+  }
 
   return (
     <>
@@ -92,9 +133,21 @@ const ServiceOptions: React.FC<{ service: Client.Entity<Client.AstService> }> = 
       <Burger.TreeItemOption nodeId={service.id + 'copyas-nested'}
         color='link'
         icon={EditIcon}
-        onClick={() => nav.handleInTab({ article: service })}
+        onClick={() => setDialogOpen('ServiceCopy')}
         labelText={<FormattedMessage id="services.copyas.title" />}>
       </Burger.TreeItemOption>
+      {dialogOpen === 'ServiceCopy' ? 
+      <Burger.Dialog open={true}
+        onClose={handleDialogClose}
+        children={editor}
+        backgroundColor="uiElements.main"
+        title='services.composer.copyTitle'
+        submit={{
+          title: "buttons.copy",
+          disabled: apply,
+          onClick: () => handleCopy()
+        }}
+      /> : null}
     </>
   );
 }

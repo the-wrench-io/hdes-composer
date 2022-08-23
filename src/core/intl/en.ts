@@ -3,6 +3,7 @@ const en = {
   'buttons.apply': "Apply",
   'buttons.delete': "Delete",
   'button.cancel': "Cancel",
+  'buttons.copy': "Copy",
   
   'content.loading': 'loading',
   
@@ -62,7 +63,9 @@ const en = {
   'flows.simulate.title': "Debug the flow",
 
   'flows.composer.title': 'Create new FLOW',
+  'flows.composer.copyTitle': 'Copy FLOW as',
   'flows.composer.createdMessage': 'Created FLOW: {name}',
+  'flows.composer.copiedMessage': 'Copied FLOW {name} as: {newName}',
   'flows.composer.errorsTitle': 'Failed to create FLOW',
   'flows.composer.assetName': 'Unique name for the FLOW',
 
@@ -87,7 +90,9 @@ const en = {
   'services.simulate.title': "Debug the service",
   
   'services.composer.title': 'Create new SERVICE',
+  'services.composer.copyTitle': 'Copy SERVICE as',
   'services.composer.createdMessage': 'Created SERVICE: {name}',
+  'services.composer.copiedMessage': 'Copied SERVICE {name} as: {newName}',
   'services.composer.errorsTitle': 'Failed to create SERVICE',
   'services.composer.assetName': 'Unique name for the SERVICE',
 
@@ -106,7 +111,9 @@ const en = {
   'decisions.table.options': "Options",
 
   'decisions.composer.title': 'Create new DECISION',
+  'decisions.composer.copyTitle': 'Copy DECISION as',
   'decisions.composer.createdMessage': 'Created DECISION: {name}',
+  'decisions.composer.copiedMessage': 'Copied DECISION {name} as: {newName}',
   'decisions.composer.errorsTitle': 'Failed to create DECISION',
   'decisions.composer.assetName': 'Unique name for the DECISION',
 

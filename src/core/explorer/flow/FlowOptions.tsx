@@ -10,6 +10,7 @@ import Burger from '@the-wrench-io/react-burger';
 
 import { Composer, Client } from '../../context';
 import {ErrorView} from '../../styles';
+import { FlowComposer } from '../../flow';
 
 
 const FlowDelete: React.FC<{ flowId: Client.FlowId, onClose: () => void }> = ({ flowId, onClose }) => {
@@ -64,10 +65,52 @@ const FlowDelete: React.FC<{ flowId: Client.FlowId, onClose: () => void }> = ({ 
 
 const FlowOptions: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }) => {
 
-  const [dialogOpen, setDialogOpen] = React.useState<undefined | 'FlowDelete'>(undefined);
+  const [dialogOpen, setDialogOpen] = React.useState<undefined | 'FlowDelete' | 'FlowCopy'>(undefined);
   const nav = Composer.useNav();
   const {handleDebugInit} = Composer.useDebug();
   const handleDialogClose = () => setDialogOpen(undefined);
+  const { service, actions } = Composer.useComposer();
+  const { enqueueSnackbar } = useSnackbar();
+  const [name, setName] = React.useState(flow.ast?.name + "_copy");
+  const [apply, setApply] = React.useState(false);
+  const [errors, setErrors] = React.useState<Client.StoreError>();
+
+  const handleCopy = () => {
+    setErrors(undefined);
+    setApply(true);
+
+    service.copy(flow.id, name)
+      .then(data => {
+        enqueueSnackbar(<FormattedMessage id="flows.composer.copiedMessage" values={{ name: flow.ast?.name, newName: name }} />);
+        actions.handleLoadSite(data).then(() => {
+          const [article] = Object.values(data.flows).filter(d => d.ast?.name === name);
+          nav.handleInTab({ article })
+        });
+        handleDialogClose();
+      }).catch((error: Client.StoreError) => {
+        setErrors(error);
+      });
+  }
+
+
+  let editor = (<></>);
+  if (errors) {
+    editor = (<Box>
+      <Typography variant="h4">
+        <FormattedMessage id="flows.composer.errorsTitle" />
+      </Typography>
+      <ErrorView error={errors} />
+    </Box>)
+  } else {
+    editor = (<Typography variant="h4">
+      <Burger.TextField
+        label='flows.composer.assetName'
+        value={name}
+        onChange={setName}
+        onEnter={() => handleCopy()} />
+    </Typography>)
+  }
+  
 
   return (
     <>
@@ -97,9 +140,22 @@ const FlowOptions: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }
       <Burger.TreeItemOption nodeId={flow.id + 'copyas-nested'}
         color='article'
         icon={EditIcon}
-        onClick={() => nav.handleInTab({ article: flow })}
+        onClick={() => setDialogOpen('FlowCopy')}
         labelText={<FormattedMessage id="flows.copyas.title" />}>
       </Burger.TreeItemOption>
+
+      {dialogOpen === 'FlowCopy' ? 
+      <Burger.Dialog open={true}
+        onClose={handleDialogClose}
+        children={editor}
+        backgroundColor="uiElements.main"
+        title='flows.composer.copyTitle'
+        submit={{
+          title: "buttons.copy",
+          disabled: apply,
+          onClick: () => handleCopy()
+        }}
+      /> : null}
     </>
   );
 }
