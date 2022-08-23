@@ -296,6 +296,7 @@ export interface Service {
   ast(id: string, body: AstCommand[]): Promise<Entity<any>>;
   debug(input: DebugRequest): Promise<DebugResponse>;
   getSite(): Promise<Site>
+  copy(id: string, name: string): Promise<Site>
 }
 export interface Store {
   fetch<T>(path: string, init?: RequestInit): Promise<T>;

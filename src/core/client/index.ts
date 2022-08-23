@@ -82,6 +82,9 @@ namespace HdesClient {
     debug(debug: HdesClient.DebugRequest): Promise<HdesClient.DebugResponse> {
       return this._store.fetch("/debugs", { method: "POST", body: JSON.stringify(debug) });
     }
+    copy(id: string, name: string): Promise<HdesClient.Site> {
+      return this._store.fetch("/copyas", { method: "POST", body: JSON.stringify({ id, name }) });
+    }
   }
 }
 
