@@ -64,10 +64,51 @@ const DecisionDelete: React.FC<{ decisionId: Client.DecisionId, onClose: () => v
 
 
 const DecisionOptions: React.FC<{ decision: Client.Entity<Client.AstDecision> }> = ({ decision }) => {
-  const [dialogOpen, setDialogOpen] = React.useState<undefined | 'DecisionDelete'>(undefined);
+  const [dialogOpen, setDialogOpen] = React.useState<undefined | 'DecisionDelete' | 'DecisionCopy'>(undefined);
   const nav = Composer.useNav();
   const {handleDebugInit} = Composer.useDebug();
   const handleDialogClose = () => setDialogOpen(undefined);
+  const { service, actions } = Composer.useComposer();
+  const { enqueueSnackbar } = useSnackbar();
+  const [name, setName] = React.useState(decision.ast?.name + "_copy");
+  const [apply, setApply] = React.useState(false);
+  const [errors, setErrors] = React.useState<Client.StoreError>();
+
+  const handleCopy = () => {
+    setErrors(undefined);
+    setApply(true);
+
+    service.copy(decision.id, name)
+      .then(data => {
+        enqueueSnackbar(<FormattedMessage id="decisions.composer.copiedMessage" values={{ name: decision.ast?.name, newName: name }} />);
+        actions.handleLoadSite(data).then(() => {
+          const [article] = Object.values(data.decisions).filter(d => d.ast?.name === name);
+          nav.handleInTab({ article })
+        });
+        handleDialogClose();
+      }).catch((error: Client.StoreError) => {
+        setErrors(error);
+      });
+  }
+
+
+  let editor = (<></>);
+  if (errors) {
+    editor = (<Box>
+      <Typography variant="h4">
+        <FormattedMessage id="decisions.composer.errorsTitle" />
+      </Typography>
+      <ErrorView error={errors} />
+    </Box>)
+  } else {
+    editor = (<Typography variant="h4">
+      <Burger.TextField
+        label='decisions.composer.assetName'
+        value={name}
+        onChange={setName}
+        onEnter={() => handleCopy()} />
+    </Typography>)
+  }
 
   return (
     <>
@@ -93,9 +134,21 @@ const DecisionOptions: React.FC<{ decision: Client.Entity<Client.AstDecision> }>
       <Burger.TreeItemOption nodeId={decision.id + 'copyas-nested'}
         color='page'
         icon={EditIcon}
-        onClick={() => nav.handleInTab({ article: decision })}
+        onClick={() => setDialogOpen('DecisionCopy')}
         labelText={<FormattedMessage id="decisions.copyas.title" />}>
       </Burger.TreeItemOption>
+      {dialogOpen === 'DecisionCopy' ? 
+      <Burger.Dialog open={true}
+        onClose={handleDialogClose}
+        children={editor}
+        backgroundColor="uiElements.main"
+        title='decisions.composer.copyTitle'
+        submit={{
+          title: "buttons.copy",
+          disabled: apply,
+          onClick: () => handleCopy()
+        }}
+      /> : null}
     </>
   );
 }

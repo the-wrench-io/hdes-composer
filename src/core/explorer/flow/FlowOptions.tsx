@@ -144,17 +144,18 @@ const FlowOptions: React.FC<{ flow: Client.Entity<Client.AstFlow> }> = ({ flow }
         labelText={<FormattedMessage id="flows.copyas.title" />}>
       </Burger.TreeItemOption>
 
-      {dialogOpen === 'FlowCopy' ? <Burger.Dialog open={true}
-      onClose={handleDialogClose}
-      children={editor}
-      backgroundColor="uiElements.main"
-      title='flows.composer.copyTitle'
-      submit={{
-        title: "buttons.copy",
-        disabled: apply,
-        onClick: () => handleCopy()
-      }}
-    /> : null}
+      {dialogOpen === 'FlowCopy' ? 
+      <Burger.Dialog open={true}
+        onClose={handleDialogClose}
+        children={editor}
+        backgroundColor="uiElements.main"
+        title='flows.composer.copyTitle'
+        submit={{
+          title: "buttons.copy",
+          disabled: apply,
+          onClick: () => handleCopy()
+        }}
+      /> : null}
     </>
   );
 }

@@ -90,7 +90,9 @@ const en = {
   'services.simulate.title': "Debug the service",
   
   'services.composer.title': 'Create new SERVICE',
+  'services.composer.copyTitle': 'Copy SERVICE as',
   'services.composer.createdMessage': 'Created SERVICE: {name}',
+  'services.composer.copiedMessage': 'Copied SERVICE {name} as: {newName}',
   'services.composer.errorsTitle': 'Failed to create SERVICE',
   'services.composer.assetName': 'Unique name for the SERVICE',
 
@@ -109,7 +111,9 @@ const en = {
   'decisions.table.options': "Options",
 
   'decisions.composer.title': 'Create new DECISION',
+  'decisions.composer.copyTitle': 'Copy DECISION as',
   'decisions.composer.createdMessage': 'Created DECISION: {name}',
+  'decisions.composer.copiedMessage': 'Copied DECISION {name} as: {newName}',
   'decisions.composer.errorsTitle': 'Failed to create DECISION',
   'decisions.composer.assetName': 'Unique name for the DECISION',
 
