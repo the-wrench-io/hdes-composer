@@ -3,6 +3,7 @@ const en = {
   'buttons.apply': "Apply",
   'buttons.delete': "Delete",
   'button.cancel': "Cancel",
+  'buttons.copy': "Copy",
   
   'content.loading': 'loading',
   
@@ -62,7 +63,9 @@ const en = {
   'flows.simulate.title': "Debug the flow",
 
   'flows.composer.title': 'Create new FLOW',
+  'flows.composer.copyTitle': 'Copy FLOW as',
   'flows.composer.createdMessage': 'Created FLOW: {name}',
+  'flows.composer.copiedMessage': 'Copied FLOW {name} as: {newName}',
   'flows.composer.errorsTitle': 'Failed to create FLOW',
   'flows.composer.assetName': 'Unique name for the FLOW',
 
