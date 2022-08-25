@@ -42,7 +42,7 @@ function isValidNumber(value: string | null, type: API.TypeDef) {
     return false;
   }
   let isInteger = /^\d+$/.test(value);
-  let isDouble = ((value as any) % 1 !== 0); 
+  let isDouble = /^\d+\.\d*$/.test(value);
   if(type.valueType === 'INTEGER' || type.valueType === 'LONG') {
     return isInteger && !isDouble;
   } else if(type.valueType === 'DECIMAL') {
@@ -125,6 +125,7 @@ class NumberBuilder {
   }
   
   getValue() {
+    console.log('getValue', this._value);
     if(this._value) {
       let split = this._value.split(' ');
       if(split.length > 1) {
