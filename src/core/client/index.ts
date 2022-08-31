@@ -9,7 +9,10 @@ import {
   AstTag, AstTagValue,
   ServiceErrorMsg, ServiceErrorProps, Service, Store, DeleteBuilder,
   
-  DebugRequest, DebugResponse, ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog
+  DebugRequest, DebugResponse, 
+  ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
+  FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
+  Input, Output, CsvRow
 } from "./api";
 
 import { StoreErrorImpl as StoreErrorImplAs, StoreError } from './error';
@@ -29,7 +32,8 @@ declare namespace HdesClient {
     
     DebugRequest, DebugResponse, 
     ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
-    FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog
+    FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
+    Input, Output, CsvRow  
   };
 }
 
