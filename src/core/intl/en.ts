@@ -266,6 +266,8 @@ const en = {
 
   'debug.asset.execute.outputs.flow.step': "Step name: {name}, status: {status}",
 
+  'debug.csv.row': "Data row: {row}",
+
 
 };
 

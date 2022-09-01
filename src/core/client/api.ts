@@ -272,6 +272,22 @@ export interface FlowResultLog {
 }
 export interface FlowResultErrorLog { id: string; msg: string; }
 
+export interface Input {
+  name: string | null | undefined;
+  value: string | null | undefined
+}
+
+export interface Output {
+  name: string | null | undefined;
+  value: string | null | undefined
+}
+
+export interface CsvRow {
+  id: string;
+  inputs: Input[];
+  outputs: Output[]
+}
+
 
 export interface CreateBuilder {
   site(): Promise<Site>;
