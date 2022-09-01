@@ -48,7 +48,7 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
 
         {/** name and type */}
         <Grid item xs={6}>
-          <Burger.TextField label="dt.header.name"
+          <Burger.TextField label="Name"
             value={name}
             onChange={(value: string) => {
               setCommands(addCommand({ type: 'SET_HEADER_REF', id: header.id, value }, commands));
@@ -56,13 +56,13 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
             }} />
         </Grid>
         <Grid item xs={6}>
-          <Burger.Select label="dt.header.dataType"
+          <Burger.Select label="Data Type"
             selected={valueType}
             onChange={(value) => {
               setCommands(addCommand({ type: 'SET_HEADER_TYPE', id: header.id, value }, commands));
               setValueType(value);
             }}
-            empty={{ id: '', label: 'dt.header.dataType' }}
+            empty={{ id: '', label: 'Data Type' }}
             items={dt.headerTypes.map((type) => ({
               id: type,
               value: (<ListItemText primary={type} />)
@@ -72,26 +72,26 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
 
         <Grid item xs={6}>
           {header.direction === 'OUT' ? null : (
-            <Burger.Select label="dt.header.expression"
+            <Burger.Select label="Expression"
               selected={exp}
               onChange={(value) => {
                 setCommands(addCommand({ type: 'SET_HEADER_EXPRESSION', id: header.id, value }, commands));
                 setExp(value);
               }}
-              empty={{ id: '', label: 'dt.header.expression' }}
+              empty={{ id: '', label: 'Expression' }}
               items={(expressions ? expressions : []).map((type) => ({
                 id: type,
                 value: (<ListItemText primary={type} />)
               }))} />)}
 
           {header.direction === 'IN' ? null : (
-            <Burger.Select label="dt.header.script"
+            <Burger.Select label="Script"
               selected={script}
               onChange={(value) => {
                 setCommands(addCommand({ type: 'SET_HEADER_SCRIPT', id: header.id, value }, commands));
                 setScript(value);
               }}
-              empty={{ id: '', label: 'dt.header.script' }}
+              empty={{ id: '', label: 'Script' }}
               items={(expressions ? expressions : []).map((type) => ({
                 id: type,
                 value: (<ListItemText primary={type} />)
@@ -105,12 +105,12 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
     onClose={onClose}
     children={editor}
     backgroundColor="uiElements.main"
-    title='decisions.header.dialog.title'
+    title='Column Editor'
     titleArgs={{
       name: header.name
     }}
     actions={
-      <Burger.SecondaryButton label="dt.header.delete" onClick={() => {
+      <Burger.SecondaryButton label="Delete" onClick={() => {
         onChange([{ type: 'DELETE_HEADER', id: header.id }]);
         onClose();
       }} />
