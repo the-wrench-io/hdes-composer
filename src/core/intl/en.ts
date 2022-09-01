@@ -138,6 +138,7 @@ const en = {
 
   'decisions.table.inputs.title': "Matching rules",
   'decisions.table.outputs.title': "Results",
+  'decisions.header.dialog.title': "Decision table: {name}, column: {column}",
   'decisions.cells.dialog.title': "Decision table: {name}, column: {column}, value: {value}",
   'decisions.cells.newvalue.boolean': "Enter new value",
   'decisions.cells.newvalue.boolean.helper': "Select boolean value",
@@ -160,6 +161,12 @@ const en = {
   "decisions.cells.newvalue.string.selected": "Selected values",
   'decisions.cells.newvalue.string.empty': "Comparison not selected",
   'decisions.cells.newvalue.clear': "Clear current value",
+
+  'dt.header.name': "Name",
+  'dt.header.delete': "Delete",
+  'dt.header.expression': "Expression",
+  'dt.header.dataType': "Data type",
+  'dt.header.script': "Script",
 
   'decisions': "Decisions",
   'services': "Services",
