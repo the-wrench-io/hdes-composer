@@ -3,6 +3,8 @@ import React from 'react';
 import { Button, Box, Grid, ListItemText } from '@mui/material';
 import Burger from '@the-wrench-io/react-burger';
 import { Client } from '../../context';
+import { useIntl } from 'react-intl';
+import { DnsTwoTone } from '@mui/icons-material';
 
 
 interface HeaderEditProps {
@@ -41,14 +43,14 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
   const [script, setScript] = React.useState<string>('');
   const [valueType, setValueType] = React.useState<string>(header.valueType);
   const expressions = dt.headerExpressions[header.valueType] ;
-  
+  const intl = useIntl();
   const editor = (
     <Box component="form" noValidate autoComplete="off">
       <Grid container spacing={2}>
 
         {/** name and type */}
         <Grid item xs={6}>
-          <Burger.TextField label="dt.header.name"
+          <Burger.TextField label={intl.formatMessage({ id: 'dt.header.name' })}
             value={name}
             onChange={(value: string) => {
               setCommands(addCommand({ type: 'SET_HEADER_REF', id: header.id, value }, commands));
@@ -56,13 +58,13 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
             }} />
         </Grid>
         <Grid item xs={6}>
-          <Burger.Select label="dt.header.dataType"
+          <Burger.Select label={intl.formatMessage({ id: 'dt.header.dataType' })}
             selected={valueType}
             onChange={(value) => {
               setCommands(addCommand({ type: 'SET_HEADER_TYPE', id: header.id, value }, commands));
               setValueType(value);
             }}
-            empty={{ id: '', label: 'dt.header.dataType' }}
+            empty={{ id: '', label: intl.formatMessage({ id: 'dt.header.dataType' }) }}
             items={dt.headerTypes.map((type) => ({
               id: type,
               value: (<ListItemText primary={type} />)
@@ -72,26 +74,26 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
 
         <Grid item xs={6}>
           {header.direction === 'OUT' ? null : (
-            <Burger.Select label="dt.header.expression"
+            <Burger.Select label={intl.formatMessage({ id: 'dt.header.expression' })}
               selected={exp}
               onChange={(value) => {
                 setCommands(addCommand({ type: 'SET_HEADER_EXPRESSION', id: header.id, value }, commands));
                 setExp(value);
               }}
-              empty={{ id: '', label: 'dt.header.expression' }}
+              empty={{ id: '', label: intl.formatMessage({ id: 'dt.header.expression' }) }}
               items={(expressions ? expressions : []).map((type) => ({
                 id: type,
                 value: (<ListItemText primary={type} />)
               }))} />)}
 
           {header.direction === 'IN' ? null : (
-            <Burger.Select label="dt.header.script"
+            <Burger.Select label={intl.formatMessage({ id: 'dt.header.script' })}
               selected={script}
               onChange={(value) => {
                 setCommands(addCommand({ type: 'SET_HEADER_SCRIPT', id: header.id, value }, commands));
                 setScript(value);
               }}
-              empty={{ id: '', label: 'dt.header.script' }}
+              empty={{ id: '', label: intl.formatMessage({ id: 'dt.header.script' }) }}
               items={(expressions ? expressions : []).map((type) => ({
                 id: type,
                 value: (<ListItemText primary={type} />)
@@ -107,10 +109,11 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
     backgroundColor="uiElements.main"
     title='decisions.header.dialog.title'
     titleArgs={{
-      name: header.name
+      name: dt.name,
+      column: header.name
     }}
     actions={
-      <Burger.SecondaryButton label="dt.header.delete" onClick={() => {
+      <Burger.SecondaryButton label={intl.formatMessage({ id: 'dt.header.delete' })} onClick={() => {
         onChange([{ type: 'DELETE_HEADER', id: header.id }]);
         onClose();
       }} />

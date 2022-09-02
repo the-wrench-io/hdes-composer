@@ -17,16 +17,16 @@ const en = {
   'activities.desc': 'Create, view, and navigate site resources',
 
   'activities.flows.title': 'Flows',
-  'activities.flows.desc': 'TODO:: ',
+  'activities.flows.desc': 'A a sequence of tasks which are defined by using simple configuration language.',
 
   'activities.decisions.title': 'Decisions',
-  'activities.decisions.desc': 'TODO:: ',
+  'activities.decisions.desc': 'A decision table that can be used to make decisions based on input data.',
 
   'activities.services.title': 'Services',
-  'activities.services.desc': 'TODO:: ',
+  'activities.services.desc': 'A piece of Java or Groovy code that is embedded inside of a flow as a task.',
 
   'activities.migration.title': 'Migration',
-  'activities.migration.desc': 'TODO:: ',
+  'activities.migration.desc': 'Use a JSON file to perform a migration of a site.',
 
   'activities.releases.title': 'Releases',
   'activities.releases.desc': 'A Release is a snapshot of all site content at one certain point of time. Use this for testing, prouduction, or backup purposes.',
@@ -34,11 +34,11 @@ const en = {
   'activities.releases.graph': 'Graph',
 
   'activities.templates.title': 'Templates',
-  'activities.templates.desc': 'FEATURE IS NOT IMPLEMENTED YET, BUT IT IS COMING SOON!  Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. ',
+  'activities.templates.desc': 'Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. Not implemented yet!',
   'activities.templates.view': 'View all templates',
 
   'activities.debug.title': 'Debug',
-  'activities.debug.desc': 'Simulate execution of the asset',
+  'activities.debug.desc': 'Simulate execution of an asset. Can be done via form input, JSON input, or by using a CSV file.',
   'activities.debug.view': 'Simulate',  
   'activities.assets.saveSuccess': 'Saved asset: {name}',
 
@@ -138,6 +138,7 @@ const en = {
 
   'decisions.table.inputs.title': "Matching rules",
   'decisions.table.outputs.title': "Results",
+  'decisions.header.dialog.title': "Decision table: {name}, column: {column}",
   'decisions.cells.dialog.title': "Decision table: {name}, column: {column}, value: {value}",
   'decisions.cells.newvalue.boolean': "Enter new value",
   'decisions.cells.newvalue.boolean.helper': "Select boolean value",
@@ -157,10 +158,15 @@ const en = {
   "decisions.cells.newvalue.number.rangeToComparison": "Change to comparison",
   "decisions.cells.newvalue.string.comparisonType": "Comparison",
   "decisions.cells.newvalue.string.addValue": "Add new value",
+  "decisions.cells.newvalue.string.selected": "Selected values",
   'decisions.cells.newvalue.string.empty': "Comparison not selected",
   'decisions.cells.newvalue.clear': "Clear current value",
 
-
+  'dt.header.name': "Name",
+  'dt.header.delete': "Delete",
+  'dt.header.expression': "Expression",
+  'dt.header.dataType': "Data type",
+  'dt.header.script': "Script",
 
   'decisions': "Decisions",
   'services': "Services",

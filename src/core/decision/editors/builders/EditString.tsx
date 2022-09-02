@@ -67,7 +67,7 @@ export const EditString: React.FC<{ builder: StringBuilder, onChange: (value: st
       </Grid>
     </Grid>
 
-    <InputLabel sx={{ mt: 1 }}><FormattedMessage id='dt.cell.selected' /></InputLabel>
+    <InputLabel sx={{ mt: 1 }}><FormattedMessage id='decisions.cells.newvalue.string.selected' /></InputLabel>
     <List>{list}</List>
 
   </>);
