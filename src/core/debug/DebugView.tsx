@@ -86,6 +86,27 @@ const DebugView: React.FC<{}> = ({ }) => {
       .catch(error => actions.handleDebugUpdate({ inputType, csv, selected, json, error, debug: undefined }))
   }
 
+  const downloadCsv = () => {
+    var content : string = debug?.debug?.bodyCsv ? debug?.debug?.bodyCsv : "";
+    const lines = content.split('\n');
+    const outputHeaders = lines[0].split(',');
+    const outputLines = lines.slice(1, lines.length/2);
+    const inputHeaders = lines[lines.length/2].split(';');
+    const inputLines = lines.slice(lines.length/2+1, lines.length);
+    const finalHeaders = inputHeaders.concat(outputHeaders);
+    const finalLines = inputLines.map((inputLine, index) => {
+      const outputLine = outputLines[index];
+      return inputLine.replace(';',',').concat(',').concat(outputLine);
+    });
+    const finalContent = finalHeaders.join(',').concat('\n').concat(finalLines.join('\n'));
+    var blob = new Blob([finalContent], { type: 'text/csv' });
+    var url = window.URL.createObjectURL(blob);
+    var pom = document.createElement('a');
+    pom.href = url;
+    pom.setAttribute('download', 'results.csv');
+    pom.click();
+  }
+
   return (<Box sx={{ width: '100%', overflow: 'hidden', padding: 1 }}>
 
     <DebugDrawer selected={selected} open={option === "DRAWER"} onClose={() => setOption(undefined)} onSelect={setOption} />
@@ -106,6 +127,7 @@ const DebugView: React.FC<{}> = ({ }) => {
           <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.openAsset" onClick={() => entity && nav.handleInTab({ article: entity })} sx={{ ml: 1 }} />
           <Burger.PrimaryButton label="debug.toolbar.options" onClick={() => setOption('DRAWER')} sx={{ ml: 1 }} />
           <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.execute" onClick={() => handleExecute()} sx={{ ml: 1 }} />
+          {inputType === 'CSV' && debug?.debug?.bodyCsv ? <Burger.PrimaryButton disabled={selected ? false : true} label="debug.toolbar.download" onClick={() => downloadCsv()} sx={{ ml: 1 }} /> : null}
         </DebugHeader>
 
         <TableBody>

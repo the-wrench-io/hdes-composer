@@ -230,6 +230,7 @@ const en = {
   'debug.toolbar.execute': "Execute",
   'debug.toolbar.noAsset': "Select asset from options",
   'debug.toolbar.openAsset': "Open",
+  'debug.toolbar.download': "Download results as CSV",
     
   'debug.input.noAsset': "There is no ASSET selected",
   'debug.input.form': "Debug using FORM",
@@ -238,8 +239,8 @@ const en = {
   'debug.input.jsonTitle': "Define JSON input",
   'debug.input.csvUpload': "Debug using CSV",
   'debug.input.csvFile': "Upload CSV FILE",
-  'debug.input.csvFileTitle': "Upload CSV format(;) file",
-  'debug.input.csvFileOrText': "Or paste CSV contents, format(;)",
+  'debug.input.csvFileTitle': "Upload CSV file - semicolon-delimited (;)",
+  'debug.input.csvFileOrText': "Or paste CSV contents - semicolon-delimited (;)",
   'debug.inputs.fieldName': "Field Name",
   'debug.inputs.fieldValue': "Field Value",
   
