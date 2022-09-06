@@ -7,6 +7,9 @@ const mapCsvRows = (debug: string): Client.CsvRow[] => {
         return [];
     }
     const result: Client.CsvRow[] = [];
+    if (debug.endsWith("\r") || debug.endsWith("\n") || debug.endsWith("") || debug.endsWith(" ")) {
+        debug = debug.substring(0, debug.length - 1);
+    }
     const lines = debug.split('\n');
     const outputHeaders = lines[0].split(',');
     const outputLines = lines.slice(1, lines.length/2);
