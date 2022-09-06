@@ -41,7 +41,7 @@ const mapCsvRows = (debug: string): Client.CsvRow[] => {
 const DebugOutputCsv: React.FC<{ debug: string }> = ({ debug }) => {
     const csvRows = mapCsvRows(debug);
     return (<>
-      {csvRows.map((csvRow: Client.CsvRow) => <DebugOutputCsvRow csvRow={csvRow} index={csvRow.id}/>)}
+      {csvRows.map((csvRow: Client.CsvRow) => <DebugOutputCsvRow key={csvRow.id} csvRow={csvRow} index={csvRow.id}/>)}
     </>);
 }
   
