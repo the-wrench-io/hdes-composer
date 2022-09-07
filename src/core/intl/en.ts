@@ -4,6 +4,7 @@ const en = {
   'buttons.delete': "Delete",
   'button.cancel': "Cancel",
   'buttons.copy': "Copy",
+  'buttons.download': "Download",
   
   'content.loading': 'loading',
   
@@ -268,6 +269,12 @@ const en = {
   'debug.asset.execute.outputs.flow.step': "Step name: {name}, status: {status}",
 
   'debug.csv.row': "Data row: {row}",
+  'debug.csv.download': "Download results as CSV",
+  'debug.csv.download.delimiter': "Choose a delimiter for the CSV file",
+  'debug.csv.download.delimiter.semicolon': "Semicolon (;)",
+  'debug.csv.download.delimiter.comma': "Comma (,)",
+  'debug.csv.download.options': "Export options",
+  'debug.csv.download.wrap': "Wrap cells containing delimiters with quotes",
 
 
 };
