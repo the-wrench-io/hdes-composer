@@ -20,6 +20,27 @@ const mapCsvRows = (debug: string): Client.CsvRow[] => {
         const outputLine = outputLines[i];
         const inputValues = inputLine.split(';');
         const outputValues = outputLine.split(',');
+        // handling cases where output contains a comma
+        for (let j = 0; j < outputValues.length; j++) {
+            const outputValue = outputValues[j];
+            if (outputValue.startsWith('"') && !outputValue.includes(';')) {
+                for (let k = j+1; k < outputValues.length; k++) {
+                    const outputValue2 = outputValues[k];
+                    if (outputValue2.endsWith('"')) {
+                        outputValues[j] = outputValues.slice(j, k+1).join(',').slice(1, -1);
+                        outputValues.splice(j+1, k-j);
+                        break;
+                    }
+                }
+            }
+        }
+        // handling cases where output contains a semicolon
+        for (let j = 0; j < outputValues.length; j++) {
+            const outputValue = outputValues[j];
+            if (outputValue.startsWith('"') && outputValue.includes(';')) {
+                outputValues[j] = outputValue.slice(1, -1);
+            }
+        }
         const rowId = outputLine[0];
         const csvRow: Client.CsvRow = { id: rowId, inputs: [], outputs: [] };
         for (let j = 0; j < inputValues.length; j++) {
