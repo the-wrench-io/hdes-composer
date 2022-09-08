@@ -41,7 +41,7 @@ const mapCsvRows = (debug: string): Client.CsvRow[] => {
                 outputValues[j] = outputValue.slice(1, -1);
             }
         }
-        const rowId = outputLine[0];
+        const rowId = outputValues[0];
         const csvRow: Client.CsvRow = { id: rowId, inputs: [], outputs: [] };
         for (let j = 0; j < inputValues.length; j++) {
             csvRow.inputs.push({
