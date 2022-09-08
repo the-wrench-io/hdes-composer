@@ -210,14 +210,6 @@ const DebugView: React.FC<{}> = ({ }) => {
     return combinedHeaders.join(';').concat('\n').concat(combinedLines.join('\n'));
   }
 
-  const StyledRadio = styled(Radio)({
-    marginLeft: 10, 
-    color: 'rgb(80, 72, 229)', 
-    '&.Mui-checked': { 
-      color: 'rgb(80, 72, 229)' 
-    }
-  });
-
   let dialogChildren = (
     <>
       <p><b>{intl.formatMessage({id: 'debug.csv.download.delimiter'})}</b></p>
@@ -227,8 +219,8 @@ const DebugView: React.FC<{}> = ({ }) => {
         value={delimiter}
         onChange={(e) => setDelimiter(e.target.value)}
       >
-        <FormControlLabel value="comma" control={<StyledRadio />} label={intl.formatMessage({id: 'debug.csv.download.delimiter.comma'})} />
-        <FormControlLabel value="semicolon" control={<StyledRadio />} label={intl.formatMessage({id: 'debug.csv.download.delimiter.semicolon'})} />
+        <FormControlLabel value="comma" control={<Burger.RadioButton />} label={intl.formatMessage({id: 'debug.csv.download.delimiter.comma'})} />
+        <FormControlLabel value="semicolon" control={<Burger.RadioButton />} label={intl.formatMessage({id: 'debug.csv.download.delimiter.semicolon'})} />
       </RadioGroup>
       <p>{intl.formatMessage({id: 'debug.csv.download.options'})}</p>
       <Burger.Checkbox checked={wrap} onChange={() => setWrap(!wrap)} />
