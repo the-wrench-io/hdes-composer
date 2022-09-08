@@ -7,7 +7,12 @@ const mapCsvRows = (debug: string): Client.CsvRow[] => {
         return [];
     }
     const result: Client.CsvRow[] = [];
-    if (debug.endsWith("\r") || debug.endsWith("\n") || debug.endsWith("\r\n")) {
+    // remove carriage returns
+    if (debug.includes('\r')) {
+        debug = debug.replace(/\r/g, '');
+    }
+    // remove empty row at the end (occurs with file import)
+    if (debug.endsWith("\n")) {
         debug = debug.substring(0, debug.length - 1);
     }
     const lines = debug.split('\n');

@@ -94,7 +94,10 @@ const DebugView: React.FC<{}> = ({ }) => {
 
   const downloadCsv = (delimiter: string, wrap: boolean) => {
     var content : string = debug?.debug?.bodyCsv ? debug?.debug?.bodyCsv : "";
-    if (content.endsWith("\r") || content.endsWith("\n") || content.endsWith("\r\n")) {
+    if (content.includes('\r')) {
+      content = content.replace(/\r/g, '');
+    }
+    if (content.endsWith("\n")) {
       content = content.substring(0, content.length - 1);
     }
     const lines = content.split('\n');
