@@ -4,6 +4,7 @@ const en = {
   'buttons.delete': "Delete",
   'button.cancel': "Cancel",
   'buttons.copy': "Copy",
+  'buttons.download': "Download",
   
   'content.loading': 'loading',
   
@@ -236,6 +237,7 @@ const en = {
   'debug.toolbar.execute': "Execute",
   'debug.toolbar.noAsset': "Select asset from options",
   'debug.toolbar.openAsset': "Open",
+  'debug.toolbar.download': "Download results as CSV",
     
   'debug.input.noAsset': "There is no ASSET selected",
   'debug.input.form': "Debug using FORM",
@@ -244,8 +246,8 @@ const en = {
   'debug.input.jsonTitle': "Define JSON input",
   'debug.input.csvUpload': "Debug using CSV",
   'debug.input.csvFile': "Upload CSV FILE",
-  'debug.input.csvFileTitle': "Upload CSV format(;) file",
-  'debug.input.csvFileOrText': "Or paste CSV contents, format(;)",
+  'debug.input.csvFileTitle': "Upload CSV file - semicolon-delimited (;)",
+  'debug.input.csvFileOrText': "Or paste CSV contents - semicolon-delimited (;)",
   'debug.inputs.fieldName': "Field Name",
   'debug.inputs.fieldValue': "Field Value",
   
@@ -273,6 +275,12 @@ const en = {
   'debug.asset.execute.outputs.flow.step': "Step name: {name}, status: {status}",
 
   'debug.csv.row': "Data row: {row}",
+  'debug.csv.download': "Download results as CSV",
+  'debug.csv.download.delimiter': "Choose a delimiter for the CSV file",
+  'debug.csv.download.delimiter.semicolon': "Semicolon (;)",
+  'debug.csv.download.delimiter.comma': "Comma (,)",
+  'debug.csv.download.options': "Export options",
+  'debug.csv.download.wrap': "Wrap cells containing delimiters with quotes",
 
 
 };
