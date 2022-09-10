@@ -7,35 +7,23 @@ echo "Last commit:    ${last_release_commit_hash} by $GIT_USER"
 echo "Current commit: ${GITHUB_SHA}"
 if [[ "${last_release_commit_hash}" = "${GITHUB_SHA}" ]]; then
      echo "No changes, skipping release"
-     #exit 0
+     exit 0
 fi
 
 # Config GIT
-echo "Setup git user name to '$GIT_USER' and email to '$GIT_EMAIL'"
+# echo "Setup git user name to '$GIT_USER' and email to '$GIT_EMAIL'"
 git config --global user.name "$GIT_USER";
 git config --global user.email "$GIT_EMAIL";
-
-# Checkout
-git branch -a --contains ${GITHUB_SHA} --format="%(refname)"
-
-readonly local refname=$(git branch -a --contains ${GITHUB_SHA} --format="%(refname)" | head -1)
-if [[ "${refname}" = "refs/heads/main" ]]; then
-     readonly local branch="main"
-else
-     readonly local branch=${refname#refs/remotes/origin/}
-fi
-
 
 # yarn
 corepack enable
 yarn set version 3.1.1
-echo "Current yarn version: $(yarn -v)"
+echo "Current yarn version: $(yarn -v), running install and build"
 yarn install
 yarn build
 
 # Publish and Tag
 readonly local PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
-echo "Git checkout refname: '${refname}' branch: '${branch}' commit: '${GITHUB_SHA}'"
 echo "Project version: '${PROJECT_VERSION}'"
 git tag -a ${PROJECT_VERSION} -m "release: '${PROJECT_VERSION}'"
 yarn npm publish --access public
@@ -48,5 +36,5 @@ yarn version patch
 
 readonly local PROJECT_VERSION_NEXT=$(node -e "console.log(require('./package.json').version);")
 git commit -am "release: '${PROJECT_VERSION_NEXT}'"
-git push origin ${branch}
+git push origin main
 echo "Released: '${PROJECT_VERSION}', now: '${PROJECT_VERSION_NEXT}'"
