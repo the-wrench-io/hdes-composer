@@ -4,11 +4,6 @@ set -e
 # No changes, skip release
 readonly local last_release_commit_hash=$(git log --author="$GIT_USER" --pretty=format:"%H" -1)
 echo "Last commit:    ${last_release_commit_hash} by $GIT_USER"
-echo "Current commit: ${GITHUB_SHA}"
-if [[ "${last_release_commit_hash}" = "${GITHUB_SHA}" ]]; then
-     echo "No changes, skipping release"
-     exit 0
-fi
 
 # Config GIT
 # echo "Setup git user name to '$GIT_USER' and email to '$GIT_EMAIL'"
