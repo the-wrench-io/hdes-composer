@@ -5,6 +5,8 @@ import {
 } from '@mui/material';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import SouthIcon from '@mui/icons-material/South';
+import NorthIcon from '@mui/icons-material/North';
 import { FormattedMessage } from 'react-intl';
 import fileDownload from 'js-file-download'
 import { useSnackbar } from 'notistack';
@@ -20,6 +22,7 @@ const ReleasesView: React.FC<{}> = () => {
   const layout = Burger.useTabs();
   const releases = Object.values(site.tags);
   const [releaseComposer, setReleaseComposer] = React.useState(false);
+  const [sortOption, setSortOption] = React.useState('name-asc');
 
   return (
     <>
@@ -52,8 +55,16 @@ const ReleasesView: React.FC<{}> = () => {
               <Table size="small">
                 <TableHead>
                   <TableRow sx={{ p: 1 }}>
-                    <TableCell align="left" sx={{ fontWeight: 'bold' }}><FormattedMessage id="releases.view.tag" /></TableCell>
-                    <TableCell align="left" sx={{ fontWeight: 'bold' }}><FormattedMessage id="releases.view.created" /></TableCell>
+                    <TableCell align="left" sx={{ fontWeight: 'bold' }}>
+                      <FormattedMessage id="releases.view.tag" />
+                      <SouthIcon fontSize="small" color={sortOption === "name-asc" ? 'error' : 'inherit'} onClick={() => setSortOption("name-asc")} />	
+                      <NorthIcon fontSize="small" color={sortOption === "name-desc" ? 'error' : 'inherit'} onClick={() => setSortOption("name-desc")} />
+                    </TableCell>
+                    <TableCell align="left" sx={{ fontWeight: 'bold' }}>
+                      <FormattedMessage id="releases.view.created" />
+                      <SouthIcon fontSize="small" color={sortOption === "date-asc" ? 'error' : 'inherit'} onClick={() => setSortOption("date-asc")} />
+                      <NorthIcon fontSize="small" color={sortOption === "date-desc" ? 'error' : 'inherit'} onClick={() => setSortOption("date-desc")} />
+                    </TableCell>
                     <TableCell align="left" sx={{ fontWeight: 'bold' }}><FormattedMessage id="releases.view.note" /></TableCell>
                     <TableCell align="center"><FormattedMessage id="releases.view.download" /></TableCell>
                     <TableCell align="right" sx={{ width: "30px" }}></TableCell>
@@ -61,7 +72,19 @@ const ReleasesView: React.FC<{}> = () => {
                 </TableHead>
                 <TableBody>
                   {releases.map(r => ({ id: new Date(r.ast?.created as string), body: r }))
-                    .sort(({ id: a }, { id: b }) => a > b ? -1 : a < b ? 1 : 0)
+                    .sort(({ body: a }, { body: b }) => {
+                      if (sortOption === "name-asc") {
+                        return ((a.ast?.name ?? "") > (b.ast?.name ?? "") ? 1 : -1);
+                      } else if (sortOption === "name-desc") {
+                        return ((a.ast?.name ?? "") < (b.ast?.name ?? "") ? 1 : -1);
+                      } else if (sortOption === "date-asc") {
+                        return ((a.ast?.created ?? "") > (b.ast?.created ?? "") ? 1 : -1);
+                      } else if (sortOption === "date-desc") {
+                        return ((a.ast?.created ?? "") < (b.ast?.created ?? "") ? 1 : -1);
+                      } else {
+                        return 0;
+                      }
+                    })
                     .map((release, index) => (<Row key={index} release={release.body} />))}
                 </TableBody>
               </Table>
@@ -135,11 +158,20 @@ const Row: React.FC<{ release: Client.Entity<Client.AstTag> }> = ({ release }) =
     }
   }
 
+  const formatReleaseDateTime = () => {
+    if (release.ast?.created) {
+      const date = new Date(release.ast.created);
+      console.log(date);
+      return date.toLocaleDateString("en-GB") + " " + date.toLocaleTimeString("en-GB");
+    }
+    return "";
+  }
+
   return (
     <>
       <TableRow key={release.id}>
         <TableCell align="left" >{release.ast?.name}</TableCell>
-        <TableCell align="left">{release.ast?.created}</TableCell>
+        <TableCell align="left">{formatReleaseDateTime()}</TableCell>
         <TableCell align="left">{release.ast?.description}</TableCell>
         <TableCell align="center">
           <IconButton onClick={onDownload} sx={{ color: 'uiElements.main' }}><GetAppIcon /> </IconButton>
