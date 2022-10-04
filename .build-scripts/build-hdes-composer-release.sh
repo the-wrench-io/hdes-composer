@@ -23,8 +23,7 @@ echo "Project version: '${PROJECT_VERSION}'"
 NEWLINE=$'\n'
 DATE=$(date +"%d/%m/%Y")
 echo "const version = {tag: '${PROJECT_VERSION}', built: '${DATE}'};${NEWLINE}export default version;" > ./src/core/version.ts
-git commit -am "update version.ts"
-git push origin main
+git commit -am "release: update version.ts"
 git tag -a ${PROJECT_VERSION} -m "release: '${PROJECT_VERSION}'"
 yarn npm publish --access public
 git push origin --tags
