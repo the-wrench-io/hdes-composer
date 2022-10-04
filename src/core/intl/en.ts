@@ -43,6 +43,9 @@ const en = {
   'activities.debug.view': 'Simulate',  
   'activities.assets.saveSuccess': 'Saved asset: {name}',
 
+  'activities.version.composer': 'Composer: build version {version}, build date {date}',
+  'activities.version.core': 'Core: build version {version}, build date {date}',
+
 
   'programs.error.title': 'Program error',
   'programs.warning.title': 'Program warning',

@@ -305,6 +305,11 @@ export interface DeleteBuilder {
   decision(decisionId: DecisionId): Promise<Site>;
 }
 
+export interface VersionEntity {
+  version: string;
+  timestamp: string;
+}
+
 export interface Service {
   delete(): DeleteBuilder;
   create(): CreateBuilder;
@@ -313,6 +318,7 @@ export interface Service {
   debug(input: DebugRequest): Promise<DebugResponse>;
   getSite(): Promise<Site>
   copy(id: string, name: string): Promise<Site>
+  version(): Promise<VersionEntity>
 }
 export interface Store {
   fetch<T>(path: string, init?: RequestInit): Promise<T>;

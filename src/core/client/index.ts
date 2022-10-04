@@ -12,7 +12,7 @@ import {
   DebugRequest, DebugResponse, 
   ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
   FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
-  Input, Output, CsvRow
+  Input, Output, CsvRow, VersionEntity
 } from "./api";
 
 import { StoreErrorImpl as StoreErrorImplAs, StoreError } from './error';
@@ -88,6 +88,9 @@ namespace HdesClient {
     }
     copy(id: string, name: string): Promise<HdesClient.Site> {
       return this._store.fetch("/copyas", { method: "POST", body: JSON.stringify({ id, name }) });
+    }
+    version(): Promise<VersionEntity> {
+      return this._store.fetch("/version", { method: "GET", body: undefined });
     }
   }
 }

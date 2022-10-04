@@ -14,6 +14,9 @@ import TemplateComposer from '../template';
 
 import { ActivityItem, ActivityData } from './ActivityItem';
 
+import version from '../version';
+import { Composer } from '../context';
+
 interface ActivityType {
   type: "releases" | "decisions" | "flows" | "services" | "migration" | "templates" | "debug";
   composer?: (handleClose: () => void) => React.ReactChild;
@@ -91,14 +94,22 @@ const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[]
 const Activities: React.FC<{}> = () => {
   const { actions } = Burger.useTabs();
   const [open, setOpen] = React.useState<number>();
+  const [coreVersion, setCoreVersion] = React.useState<string>();
+  const [coreVersionDate, setCoreVersionDate] = React.useState<string>();
   const handleClose = () => setOpen(undefined);
   const cards = React.useMemo(() => createCards(actions), [actions]);
+  const { service } = Composer.useComposer();
 
   let composer: undefined | React.ReactChild = undefined;
   let openComposer = open !== undefined ? cards[open].composer : undefined;
   if(openComposer) {
     composer = openComposer(handleClose);
   }
+
+  service.version().then((version) => {
+    setCoreVersion(version.version);
+    setCoreVersionDate(version.timestamp)
+  }); 
 
   return (
     <>
@@ -118,6 +129,12 @@ const Activities: React.FC<{}> = () => {
           }
         }} />))}
       </Box>
+      <Typography variant="caption" sx={{ pt: 1 }} display={'flex'} flexDirection={'column'} alignItems={'center'}>
+          <FormattedMessage id={"activities.version.composer"} values={{ version: version.tag, date: version.built}}/>
+          <Typography variant="caption" sx={{ pt: 1 }} >
+            <FormattedMessage id={"activities.version.core"} values={{ version: coreVersion, date: coreVersionDate}}/>
+          </Typography>
+      </Typography>
     </>
   );
 }
