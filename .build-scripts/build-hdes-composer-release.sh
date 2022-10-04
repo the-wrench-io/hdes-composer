@@ -20,6 +20,11 @@ yarn build
 # Publish and Tag
 readonly local PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
 echo "Project version: '${PROJECT_VERSION}'"
+NEWLINE=$'\n'
+DATE=$(date +"%d/%m/%Y")
+echo "const version = {tag: '${PROJECT_VERSION}', built: '${DATE}'};${NEWLINE}export default version;" > ./src/core/version.ts
+git commit -am "update version.ts"
+git push origin main
 git tag -a ${PROJECT_VERSION} -m "release: '${PROJECT_VERSION}'"
 yarn npm publish --access public
 git push origin --tags
