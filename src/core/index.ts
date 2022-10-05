@@ -6,10 +6,11 @@ import Toolbar from './Toolbar';
 import Client from './client';
 
 import { Composer } from './context'; 
+import version from './version';
 
 const ComposerProvider = Composer.Provider;
 const useComposer = Composer.useComposer;
 
 
-export { messages, Main, Secondary, Toolbar, ComposerProvider, useComposer, Composer };
+export { messages, Main, Secondary, Toolbar, ComposerProvider, useComposer, Composer, version };
 export default Client;
