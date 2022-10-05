@@ -307,7 +307,7 @@ export interface DeleteBuilder {
 
 export interface VersionEntity {
   version: string;
-  timestamp: string;
+  built: string;
 }
 
 export interface Service {

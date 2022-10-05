@@ -15,16 +15,17 @@ git update-index --assume-unchanged ".yarnrc.yml"
 corepack enable
 yarn set version 3.1.1
 echo "Current yarn version: $(yarn -v), running install and build"
+
+readonly local PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
+NEWLINE=$'\n'
+DATE=$(date +"%d/%m/%Y")
+echo "const version = {tag: '${PROJECT_VERSION}', built: '${DATE}'};${NEWLINE}export default version;" > ./src/core/version.ts
+echo "Project version: '${PROJECT_VERSION}'"
+git commit -am "release: update version.ts"
 yarn install
 yarn build
 
 # Publish and Tag
-readonly local PROJECT_VERSION=$(node -e "console.log(require('./package.json').version);")
-echo "Project version: '${PROJECT_VERSION}'"
-NEWLINE=$'\n'
-DATE=$(date +"%d/%m/%Y")
-echo "const version = {tag: '${PROJECT_VERSION}', built: '${DATE}'};${NEWLINE}export default version;" > ./src/core/version.ts
-git commit -am "release: update version.ts"
 git tag -a ${PROJECT_VERSION} -m "release: '${PROJECT_VERSION}'"
 yarn npm publish --access public
 git push origin --tags

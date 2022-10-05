@@ -14,7 +14,7 @@ import TemplateComposer from '../template';
 
 import { ActivityItem, ActivityData } from './ActivityItem';
 
-import version from '../version';
+import composerVersion from '../version';
 import { Composer } from '../context';
 
 interface ActivityType {
@@ -94,8 +94,7 @@ const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[]
 const Activities: React.FC<{}> = () => {
   const { actions } = Burger.useTabs();
   const [open, setOpen] = React.useState<number>();
-  const [coreVersion, setCoreVersion] = React.useState<string>();
-  const [coreVersionDate, setCoreVersionDate] = React.useState<string>();
+  const [coreVersion, setCoreVersion] = React.useState<{version: string, built: string}>();
   const handleClose = () => setOpen(undefined);
   const cards = React.useMemo(() => createCards(actions), [actions]);
   const { service } = Composer.useComposer();
@@ -106,11 +105,14 @@ const Activities: React.FC<{}> = () => {
     composer = openComposer(handleClose);
   }
 
-  service.version().then((version) => {
-    setCoreVersion(version.version);
-    setCoreVersionDate(version.timestamp)
-  }); 
+  React.useEffect(() => {
+    service.version().then((version) => {
+      console.log("hdes core version", version, "hdes composer version", composerVersion);
+      setCoreVersion(version)
+    }); 
 
+  }, [service, setCoreVersion]);
+  
   return (
     <>
       <Typography variant="h3" fontWeight="bold" sx={{ p: 1, m: 1 }}>
@@ -130,9 +132,9 @@ const Activities: React.FC<{}> = () => {
         }} />))}
       </Box>
       <Typography variant="caption" sx={{ pt: 1 }} display={'flex'} flexDirection={'column'} alignItems={'center'}>
-          <FormattedMessage id={"activities.version.composer"} values={{ version: version.tag, date: version.built}}/>
+          <FormattedMessage id={"activities.version.composer"} values={{ version: composerVersion.tag, date: composerVersion.built}}/>
           <Typography variant="caption" sx={{ pt: 1 }} >
-            <FormattedMessage id={"activities.version.core"} values={{ version: coreVersion, date: coreVersionDate}}/>
+            <FormattedMessage id={"activities.version.core"} values={{ version: coreVersion?.version, date: coreVersion?.built}}/>
           </Typography>
       </Typography>
     </>
