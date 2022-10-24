@@ -9,6 +9,7 @@ import Builder, {
   EditNumber, EditNumberSimple,
   EditDateTime, EditDateTimeSimple,
   EditDate, EditDateSimple } from './builders';
+import { ValueSetChooser } from './builders/ValueSetChooser';
 
 
 interface CellEditProps {
@@ -37,9 +38,11 @@ const CellEdit: React.FC<CellEditProps> = (props) => {
 
   let editor: React.ReactElement;
   if (type === 'STRING') {
-    editor = input ?
+    editor = header.valueSet && header.valueSet.length !== 0 ? 
+      <ValueSetChooser builder={value.builder} valueSet={header.valueSet} onChange={handleChangeValue} /> :
+      (input ?
       <EditString builder={value.builder} onChange={handleChangeValue} /> :
-      <EditStringSimple builder={value.builder} onChange={handleChangeValue} />
+      <EditStringSimple builder={value.builder} onChange={handleChangeValue} />)
 
   } else if (type === 'INTEGER' || type === 'LONG' || type === 'DECIMAL') {
     editor = input ?
