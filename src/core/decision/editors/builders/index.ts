@@ -23,11 +23,16 @@ import NumberBuilder from './TypeNumberBuilder';
 import StringBuilder from './TypeStringBuilder';
 import DateBuilder from './TypeDateBuilder';
 import BooleanBuilder from './TypeBooleanBuilder';
+import ValueSetBuilder from './TypeValueSetBuilder';
 
-const Builder = (props: {header: Client.TypeDef, value?: string}) => {
+const Builder = (props: {header: Client.TypeDef, value?: string, values?: string[]}) => {
   const value = props.value ? props.value : '';
   const header = props.header;
   const type = header.valueType;
+  const values = props.values;
+  if (values) {
+    return new ValueSetBuilder({header, values});
+  }
   if(type === 'INTEGER' || type === 'LONG' || type === 'DECIMAL') {
     return new NumberBuilder({value, header});
   } else if(type === 'STRING') {
