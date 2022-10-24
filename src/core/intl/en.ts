@@ -162,9 +162,17 @@ const en = {
   "decisions.cells.newvalue.number.rangeToComparison": "Change to comparison",
   "decisions.cells.newvalue.string.comparisonType": "Comparison",
   "decisions.cells.newvalue.string.addValue": "Add new value",
+  "decisions.cells.newvalue.string.available": "Available values",
   "decisions.cells.newvalue.string.selected": "Selected values",
   'decisions.cells.newvalue.string.empty': "Comparison not selected",
   'decisions.cells.newvalue.clear': "Clear current value",
+
+  'decisions.valueSet': "Define value set",
+  'decisions.valueSet.description': "Value sets can be used to define a predetermined set of values for any input",
+  'decisions.valueSet.add': "Add to value set",
+  'decisions.valueSet.remove': "Remove from value set",
+  'decisions.valueSet.current': "Current value set",
+  'decisions.valueSet.empty': "Value set is empty",
 
   'dt.header.name': "Name",
   'dt.header.delete': "Delete",
