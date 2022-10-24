@@ -25,7 +25,8 @@ export type AstCommandValue = (
   "SET_HEADER_TYPE" | "SET_HEADER_REF" | "SET_HEADER_NAME" |
   "SET_HEADER_SCRIPT" | "SET_HEADER_DIRECTION" | "SET_HEADER_EXPRESSION" | "SET_HIT_POLICY" | "SET_CELL_VALUE" |
   "DELETE_CELL" | "DELETE_HEADER" | "DELETE_ROW" |
-  "ADD_LOG" | "ADD_HEADER_IN" | "ADD_HEADER_OUT" | "ADD_ROW"
+  "ADD_LOG" | "ADD_HEADER_IN" | "ADD_HEADER_OUT" | "ADD_ROW" |
+  "DEFINE_VALUE_SET" | "ADD_TO_VALUE_SET" | "REMOVE_FROM_VALUE_SET"
 );
 export interface CommandsAndChanges {
   commands: AstCommand[];
@@ -57,6 +58,7 @@ export interface TypeDef {
   required: boolean;
   properties: TypeDef[];
   values?: string;
+  valueSet: string[];
 }
 export interface AstBody {
   name: string;
