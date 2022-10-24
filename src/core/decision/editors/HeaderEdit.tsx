@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Button, Box, Grid, ListItemText } from '@mui/material';
+import { Box, Grid, ListItemText } from '@mui/material';
 import Burger from '@the-wrench-io/react-burger';
 import { Client } from '../../context';
 import { useIntl } from 'react-intl';
-import { DnsTwoTone } from '@mui/icons-material';
+import { EditValueSet } from './builders/EditValueSet';
 
 
 interface HeaderEditProps {
@@ -42,6 +42,7 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
   const [name, setName] = React.useState<string>(header.name);
   const [script, setScript] = React.useState<string>('');
   const [valueType, setValueType] = React.useState<string>(header.valueType);
+  const [valueSet, setValueSet] = React.useState<string[]>(header.valueSet);
   const expressions = dt.headerExpressions[header.valueType] ;
   const intl = useIntl();
   const editor = (
@@ -100,6 +101,7 @@ const HeaderEdit: React.FC<HeaderEditProps> = ({ dt, header, onClose, onChange }
               }))} />)}
         </Grid>
       </Grid>
+      {header.direction === 'IN' && header.valueType === 'STRING' && <EditValueSet valueSet={valueSet} setValueSet={setValueSet} commands={commands} setCommands={setCommands} headerId={header.id} />}
     </Box >);
 
 
