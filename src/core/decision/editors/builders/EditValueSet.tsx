@@ -36,14 +36,14 @@ export const EditValueSet: React.FC<EditValueSetProps> = ({ valueSet, setValueSe
     if (value) {
       const newValueSet = [...valueSet, value];
       setValueSet(newValueSet);
-      setCommands(addCommand({ type: 'DEFINE_VALUE_SET', id: headerId, value: newValueSet.join(", ") }, commands));
+      setCommands(addCommand({ type: 'SET_VALUE_SET', id: headerId, value: newValueSet.join(", ") }, commands));
     }
   }
 
   const handleRemoveValue = (id: number) => {
     const newValueSet = valueSet.filter((_, index) => index !== id);
     setValueSet(newValueSet);
-    setCommands(addCommand({ type: 'DEFINE_VALUE_SET', id: headerId, value: newValueSet.join(", ") }, commands));
+    setCommands(addCommand({ type: 'SET_VALUE_SET', id: headerId, value: newValueSet.join(", ") }, commands));
   }
 
   const list = valueSet && valueSet.length > 0 && valueSet.map((value, index) => (
