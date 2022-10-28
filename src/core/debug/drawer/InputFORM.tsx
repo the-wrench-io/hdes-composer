@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box, Typography, Grid, ListItemText } from '@mui/material';
+import { Box, Typography, Grid, ListItemText, TextField } from '@mui/material';
 import { FormattedMessage } from 'react-intl'
 
 import Burger from '@the-wrench-io/react-burger';
@@ -12,6 +12,37 @@ const GridItem: React.FC<{
   typeDef: Client.TypeDef;
   onChange: (newValue: string, typeDef: Client.TypeDef) => void;
 }> = ({ typeDef, onChange, value }) => {
+
+  const [error, setError] = React.useState<string | undefined>(undefined);
+
+  const validateNumberRange = (value: string) => {
+    if (typeDef.values) {
+      const [min, max] = typeDef.values.split(" - ");
+      if (Number(value) < Number(min) || Number(value) > Number(max)) {
+        setError("Value must be between " + min + " and " + max);
+      } else {
+        setError(undefined);
+      }
+    }
+  }
+
+  const validateNumberType = (value: string) => {
+    if (typeDef.valueType === "INTEGER") {
+      if (!Number.isInteger(Number(value))) {
+        setError("Value must be an integer");
+      } else {
+        validateNumberRange(value);
+      }
+    } else if (typeDef.valueType === "DECIMAL" || typeDef.valueType === "LONG") {
+      if (isNaN(Number(value))) {
+        setError("Value must be a number");
+      } else {
+        validateNumberRange(value);
+      }
+    } else {
+      validateNumberRange(value);
+    }
+  }
 
   if (typeDef.valueType === 'BOOLEAN') {
     return (<Burger.Select label={typeDef.name}
@@ -25,6 +56,36 @@ const GridItem: React.FC<{
     />);
   }
 
+  if (typeDef.valueType === 'STRING') {
+    if (typeDef.values && typeDef.values.includes(", ")) {
+      return (<Burger.Select label={typeDef.name}
+        selected={value}
+        onChange={(newValue) => onChange(newValue, typeDef)}
+        empty={{ id: '', label: 'noValue' }}
+        items={typeDef.values.split(", ").map((type) => ({
+          id: type,
+          value: (<ListItemText primary={type} />)
+        }))}
+      />);
+    }
+  }
+
+  if (typeDef.valueType === 'INTEGER' || typeDef.valueType === 'LONG' || typeDef.valueType === 'DECIMAL') {
+    if (typeDef.values && typeDef.values.includes(" - ")) {
+      return (<Burger.TextField
+        error={error !== undefined}
+        onChange={(newValue) => {
+          validateNumberType(newValue);
+          onChange(newValue, typeDef);
+        }}
+        required={typeDef.required}
+        label={typeDef.name}
+        value={value}
+        helperText={error ? error : typeDef.values}
+      />);
+    }
+  }
+
   return (<Burger.TextField
     onChange={(newValue) => onChange(newValue, typeDef)}
     required={typeDef.required}
@@ -32,7 +93,6 @@ const GridItem: React.FC<{
     value={value} />
   )
 }
-
 
 
 interface InputFORMProps {
@@ -82,6 +142,9 @@ const InputFORM: React.FC<InputFORMProps> = ({ onSelect, onClose, value, selecte
     const init = json[parameter.name];
     if (init === undefined) {
       return parameter.values ? parameter.values : "";
+    }
+    if (init.includes(" - ") || init.includes(", ")) {
+      return "";
     }
     return init;
   }
