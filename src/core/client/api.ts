@@ -58,7 +58,7 @@ export interface TypeDef {
   required: boolean;
   properties: TypeDef[];
   values?: string;
-  valueSet: string[];
+  valueSet?: string[];
 }
 export interface AstBody {
   name: string;
