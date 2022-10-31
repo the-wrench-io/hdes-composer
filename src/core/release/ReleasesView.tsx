@@ -13,8 +13,6 @@ import Burger from '@the-wrench-io/react-burger';
 import { Composer, Client } from '../context';
 import { ReleaseComposer } from './ReleaseComposer';
 import { ErrorView } from '../styles';
-import { DateTimeFormatter } from './DateTimeFormatter';
-import { ReleasesTableBurger } from './ReleasesTable';
 
 const ReleasesView: React.FC<{}> = () => {
 
@@ -23,7 +21,7 @@ const ReleasesView: React.FC<{}> = () => {
   const releases = Object.values(site.tags);
   const [releaseComposer, setReleaseComposer] = React.useState(false);
 
-  const formattedReleases: ReleasesTableBurger.Release[] = releases.map((release) => {
+  const formattedReleases: Burger.Release[] = releases.map((release) => {
     const { id } = release;
     const name  = release.ast?.name || '';
     const created = release.ast?.created || '';
@@ -66,7 +64,7 @@ const ReleasesView: React.FC<{}> = () => {
             <Typography variant="h4" sx={{ p: 2, backgroundColor: "table.main" }}>
               <FormattedMessage id="activities.releases.title" />
             </Typography>
-            <ReleasesTableBurger.ReleasesTable releases={formattedReleases} tableRowComponent={Row} />
+            <Burger.ReleaseTable releases={formattedReleases} tableRowComponent={Row} />
           </Card>
         </Box>
       </Box>
@@ -76,7 +74,7 @@ const ReleasesView: React.FC<{}> = () => {
 
 
 
-const ReleaseDelete: React.FC<{ release: ReleasesTableBurger.Release, onClose: () => void }> = ({ release, onClose }) => {
+const ReleaseDelete: React.FC<{ release: Burger.Release, onClose: () => void }> = ({ release, onClose }) => {
   const { service, actions } = Composer.useComposer();
   const { enqueueSnackbar } = useSnackbar();
   const [apply, setApply] = React.useState(false);
@@ -125,7 +123,7 @@ const ReleaseDelete: React.FC<{ release: ReleasesTableBurger.Release, onClose: (
 
 
 
-const Row: React.FC<{ release: ReleasesTableBurger.Release }> = ({ release }) => {
+const Row: React.FC<{ release: Burger.Release }> = ({ release }) => {
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
   const handleDialogClose = () => setDialogOpen(false);
 
@@ -139,7 +137,7 @@ const Row: React.FC<{ release: ReleasesTableBurger.Release }> = ({ release }) =>
     <>
       <TableRow key={release.id}>
         <TableCell align="left" >{release.body.name}</TableCell>
-        <TableCell align="left"><DateTimeFormatter timestamp={release.body.created} /></TableCell>
+        <TableCell align="left"><Burger.DateTimeFormatter timestamp={release.body.created} /></TableCell>
         <TableCell align="left">{release.body.note}</TableCell>
         <TableCell align="center">
           <IconButton onClick={() => onDownload(release.body.data)} sx={{ color: 'uiElements.main' }}><GetAppIcon /> </IconButton>
