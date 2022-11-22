@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box, Typography, Grid, ListItemText, TextField } from '@mui/material';
+import { Box, Typography, Grid, ListItemText } from '@mui/material';
 import { FormattedMessage } from 'react-intl'
 
 import Burger from '@the-wrench-io/react-burger';
