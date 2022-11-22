@@ -105,7 +105,17 @@ interface InputFORMProps {
 
 const parseInput = (json: string) => {
   try {
-    return JSON.parse(json);
+    var parsed = JSON.parse(json);
+    for (var key in parsed) {
+      if (parsed[key].includes(" - ")) {
+        parsed[key] = parsed[key].split(" - ")[0];
+      }
+      if (parsed[key].includes(", ")) {
+        parsed[key] = parsed[key].split(", ")[0];
+      }
+    }
+    console.log(parsed);
+    return parsed;
   } catch(e) {
     console.error(e);
     return {};
@@ -143,8 +153,11 @@ const InputFORM: React.FC<InputFORMProps> = ({ onSelect, onClose, value, selecte
     if (init === undefined) {
       return parameter.values ? parameter.values : "";
     }
-    if (init.includes(" - ") || init.includes(", ")) {
-      return "";
+    if (init.includes(" - ")) {
+      return init.split(" - ")[0];
+    } 
+    if (init.includes(", ")) {
+      return init.split(", ")[0];
     }
     return init;
   }

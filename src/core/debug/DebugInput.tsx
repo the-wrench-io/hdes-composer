@@ -16,7 +16,16 @@ const InputSectionJson: React.FC<{ json: string, csv: string, type: Composer.Deb
 
   let entity: object | undefined;
   try {
-    entity = JSON.parse(props.json);
+    var parsed = JSON.parse(props.json);
+    for (var key in parsed) {
+      if (parsed[key].includes(" - ")) {
+        parsed[key] = parsed[key].split(" - ")[0];
+      }
+      if (parsed[key].includes(", ")) {
+        parsed[key] = parsed[key].split(", ")[0];
+      }
+    }
+    entity = parsed;
   } catch (e) {
     console.error(e);
   }
