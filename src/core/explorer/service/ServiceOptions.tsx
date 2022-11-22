@@ -15,7 +15,7 @@ import { ErrorView } from '../../styles';
 const ServiceDelete: React.FC<{ serviceId: Client.ServiceId, onClose: () => void }> = ({ serviceId, onClose }) => {
   const { services } = Composer.useSite();
   const { service: composerService, actions } = Composer.useComposer();
-  
+  const tabs = Burger.useTabs();
   const { enqueueSnackbar } = useSnackbar();
   const [apply, setApply] = React.useState(false);
   const [errors, setErrors] = React.useState<Client.StoreError>();
@@ -46,7 +46,10 @@ const ServiceDelete: React.FC<{ serviceId: Client.ServiceId, onClose: () => void
       onClick: () => {
         setErrors(undefined);
         setApply(true);
-
+        var serviceTab = tabs.session.tabs.find(tab => tab.id === serviceId);
+        if (serviceTab) {
+          tabs.actions.handleTabClose(serviceTab);
+        }
         composerService.delete().service(serviceId)
           .then(data => {
             enqueueSnackbar(<FormattedMessage id="services.deleted.message" values={{ name: service.ast?.name }} />);
