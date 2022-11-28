@@ -47,11 +47,11 @@ const ServiceDelete: React.FC<{ serviceId: Client.ServiceId, onClose: () => void
         setErrors(undefined);
         setApply(true);
         var serviceTab = tabs.session.tabs.find(tab => tab.id === serviceId);
-        if (serviceTab) {
-          tabs.actions.handleTabClose(serviceTab);
-        }
         composerService.delete().service(serviceId)
           .then(data => {
+            if (serviceTab) {
+              tabs.actions.handleTabClose(serviceTab);
+            }
             enqueueSnackbar(<FormattedMessage id="services.deleted.message" values={{ name: service.ast?.name }} />);
             actions.handleLoadSite(data);
             onClose();

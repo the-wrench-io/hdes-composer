@@ -49,11 +49,11 @@ const DecisionDelete: React.FC<{ decisionId: Client.DecisionId, onClose: () => v
         setErrors(undefined);
         setApply(true);
         var decisionTab = tabs.session.tabs.find(tab => tab.id === decisionId);
-        if (decisionTab) {
-          tabs.actions.handleTabClose(decisionTab);
-        }
         service.delete().decision(decisionId)
           .then(data => {
+            if (decisionTab) {
+              tabs.actions.handleTabClose(decisionTab);
+            }
             enqueueSnackbar(<FormattedMessage id="decisions.deleted.message" values={{ name: decision.ast?.name }} />);
             actions.handleLoadSite(data);
             onClose();

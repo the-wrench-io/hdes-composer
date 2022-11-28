@@ -10,7 +10,6 @@ import Burger from '@the-wrench-io/react-burger';
 
 import { Composer, Client } from '../../context';
 import {ErrorView} from '../../styles';
-import { FlowComposer } from '../../flow';
 
 
 const FlowDelete: React.FC<{ flowId: Client.FlowId, onClose: () => void }> = ({ flowId, onClose }) => {
@@ -49,11 +48,11 @@ const FlowDelete: React.FC<{ flowId: Client.FlowId, onClose: () => void }> = ({ 
         setErrors(undefined);
         setApply(true);
         var flowTab = tabs.session.tabs.find(tab => tab.id === flowId);
-        if (flowTab) {
-          tabs.actions.handleTabClose(flowTab);
-        }
         service.delete().flow(flowId)
           .then(data => {
+            if (flowTab) {
+              tabs.actions.handleTabClose(flowTab);
+            }
             enqueueSnackbar(<FormattedMessage id="flows.deleted.message" values={{ name: flow.ast?.name }} />);
             actions.handleLoadSite(data);
             onClose();
