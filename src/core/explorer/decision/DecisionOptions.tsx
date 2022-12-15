@@ -19,6 +19,7 @@ const DecisionDelete: React.FC<{ decisionId: Client.DecisionId, onClose: () => v
   const { enqueueSnackbar } = useSnackbar();
   const [apply, setApply] = React.useState(false);
   const [errors, setErrors] = React.useState<Client.StoreError>();
+  const tabs = Burger.useTabs();
 
   const decision = decisions[decisionId];
   let editor = (<></>);
@@ -47,9 +48,12 @@ const DecisionDelete: React.FC<{ decisionId: Client.DecisionId, onClose: () => v
       onClick: () => {
         setErrors(undefined);
         setApply(true);
-
+        var decisionTab = tabs.session.tabs.find(tab => tab.id === decisionId);
         service.delete().decision(decisionId)
           .then(data => {
+            if (decisionTab) {
+              tabs.actions.handleTabClose(decisionTab);
+            }
             enqueueSnackbar(<FormattedMessage id="decisions.deleted.message" values={{ name: decision.ast?.name }} />);
             actions.handleLoadSite(data);
             onClose();
