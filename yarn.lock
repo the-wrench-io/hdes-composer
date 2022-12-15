@@ -2673,7 +2673,7 @@ __metadata:
     "@mui/material": ^5.0.1
     "@mui/styles": ^5.0.1
     "@mui/system": ^5.0.1
-    "@the-wrench-io/react-burger": ^1.0.36
+    "@the-wrench-io/react-burger": ^1.0.41
     "@types/codemirror": ^5.60.0
     "@types/node": ^12.19.9
     "@types/react": ^17.0.1
@@ -2712,9 +2712,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@the-wrench-io/react-burger@npm:^1.0.36":
-  version: 1.0.36
-  resolution: "@the-wrench-io/react-burger@npm:1.0.36"
+"@the-wrench-io/react-burger@npm:^1.0.41":
+  version: 1.0.41
+  resolution: "@the-wrench-io/react-burger@npm:1.0.41"
+  dependencies:
+    moment: ^2.29.4
   peerDependencies:
     "@emotion/react": ^11.4.1
     "@emotion/styled": ^11.3.0
@@ -2724,7 +2726,7 @@ __metadata:
     "@mui/styles": ^5.0.1
     react: ^17.0.2
     react-dom: ^17.0.2
-  checksum: c6c55e6f526659c3674edb740bdafdb35008e89542ab0f110ac5ab579ffd11ecaeffc7c548c45b5c43dc3d10c76e0de48735a2e729516ad5276f33b46d34b130
+  checksum: 7a898e7c9ae2a961e0c3da161017730072d1d4b0eda56b813fa0f0c09f116043d444dd4f5f7ddb9ce3b5fb930b7f8837af18034e2a7c0f00d863fb0802f6db8e
   languageName: node
   linkType: hard
 
@@ -9968,6 +9970,13 @@ __metadata:
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
+  languageName: node
+  linkType: hard
+
+"moment@npm:^2.29.4":
+  version: 2.29.4
+  resolution: "moment@npm:2.29.4"
+  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
   languageName: node
   linkType: hard
 
