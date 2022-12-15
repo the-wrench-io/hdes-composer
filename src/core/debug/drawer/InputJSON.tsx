@@ -13,8 +13,22 @@ interface InputJSONProps {
   onSelect: (json: object) => void;
 }
 
+const parseInput = (value: string) => {
+  var parsed = JSON.parse(value);
+  for (var key in parsed) {
+    if (parsed[key].includes(" - ")) {
+      parsed[key] = parsed[key].split(" - ")[0];
+    }
+    if (parsed[key].includes(", ")) {
+      parsed[key] = parsed[key].split(", ")[0];
+    }
+  }
+  var stringified = JSON.stringify(parsed, null, 2);
+  return stringified;
+}
+
 const InputJSON: React.FC<InputJSONProps> = ({ onSelect, onClose, value }) => {
-  const [json, setJson] = React.useState<string>(JSON.stringify(JSON.parse(value), null, 2));
+  const [json, setJson] = React.useState<string>(parseInput(value));
   
   return (<Burger.Dialog title="debug.input.json" open={true} onClose={onClose}
     backgroundColor="uiElements.main"

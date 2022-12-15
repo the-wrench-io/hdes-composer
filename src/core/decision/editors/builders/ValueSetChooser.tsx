@@ -1,5 +1,5 @@
 import React from 'react'
-import { InputLabel, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Grid, Box } from '@mui/material';
+import { InputLabel, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Box } from '@mui/material';
 import { FormattedMessage } from 'react-intl'
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -8,8 +8,6 @@ import { StringBuilder } from './'
 
 
 export const ValueSetChooser: React.FC<{ builder: StringBuilder, valueSet: string[], onChange: (value: string) => void }> = (props) => {
-
-  const [value, setValue] = React.useState<string>('');
 
   const handleOperatorChange = (value: string) => {
     props.onChange(props.builder.withOperator(value))

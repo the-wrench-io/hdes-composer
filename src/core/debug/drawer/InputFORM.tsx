@@ -5,35 +5,7 @@ import { FormattedMessage } from 'react-intl'
 
 import Burger from '@the-wrench-io/react-burger';
 import { Client, Composer } from '../../context';
-
-
-const GridItem: React.FC<{
-  value: string;
-  typeDef: Client.TypeDef;
-  onChange: (newValue: string, typeDef: Client.TypeDef) => void;
-}> = ({ typeDef, onChange, value }) => {
-
-  if (typeDef.valueType === 'BOOLEAN') {
-    return (<Burger.Select label={typeDef.name}
-      selected={value}
-      onChange={(newValue) => onChange(newValue, typeDef)}
-      empty={{ id: '', label: 'noValue' }}
-      items={[{ text: "true" }, { text: "false" }].map((type) => ({
-        id: type.text,
-        value: (<ListItemText primary={type.text} />)
-      }))}
-    />);
-  }
-
-  return (<Burger.TextField
-    onChange={(newValue) => onChange(newValue, typeDef)}
-    required={typeDef.required}
-    label={typeDef.name}
-    value={value} />
-  )
-}
-
-
+import { InputFORMField } from './InputFORMField';
 
 interface InputFORMProps {
   value: string;
@@ -45,11 +17,34 @@ interface InputFORMProps {
 
 const parseInput = (json: string) => {
   try {
-    return JSON.parse(json);
+    var parsed = JSON.parse(json);
+    for (var key in parsed) {
+      if (parsed[key].includes(" - ")) {
+        parsed[key] = parsed[key].split(" - ")[0];
+      }
+      if (parsed[key].includes(", ")) {
+        parsed[key] = parsed[key].split(", ")[0];
+      }
+    }
+    return parsed;
   } catch(e) {
     console.error(e);
     return {};
   }
+}
+
+const getValueFromJson = (parameter: Client.TypeDef, json: object) => {
+  const init = json[parameter.name];
+  if (init === undefined) {
+    return parameter.values ? parameter.values : "";
+  }
+  if (init.includes(" - ")) {
+    return init.split(" - ")[0];
+  } 
+  if (init.includes(", ")) {
+    return init.split(", ")[0];
+  }
+  return init;
 }
 
 const InputFORM: React.FC<InputFORMProps> = ({ onSelect, onClose, value, selected }) => {
@@ -78,14 +73,6 @@ const InputFORM: React.FC<InputFORMProps> = ({ onSelect, onClose, value, selecte
     setJson(Object.assign({}, json, newObject))
   }
 
-  const getValue = (parameter: Client.TypeDef) => {
-    const init = json[parameter.name];
-    if (init === undefined) {
-      return parameter.values ? parameter.values : "";
-    }
-    return init;
-  }
-
   const elements = asset?.ast ? asset.ast.headers.acceptDefs : [];
 
   return (<Burger.Dialog title="debug.input.form" open={true} onClose={onClose}
@@ -106,7 +93,7 @@ const InputFORM: React.FC<InputFORMProps> = ({ onSelect, onClose, value, selecte
         <Grid container spacing={2}>
           {elements.map((typeDef, index) => (
             <Grid item xs={4} key={index}>
-              <GridItem typeDef={typeDef} value={getValue(typeDef)} onChange={handleChange} />
+              <InputFORMField typeDef={typeDef} value={getValueFromJson(typeDef, json)} onChange={handleChange} />
             </Grid>)
           )}
         </Grid>
