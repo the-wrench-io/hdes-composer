@@ -1,2 +1,2 @@
-const version = {tag: '0.2.58', built: '15/12/2022'};
+const version = {tag: '0.2.59', built: '10/03/2023'};
 export default version;
