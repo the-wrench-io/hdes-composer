@@ -41,6 +41,9 @@ function isValidNumber(value: string | null, type: API.TypeDef) {
   if(!value) {
     return false;
   }
+  if(value.startsWith('-') || value.startsWith('+')) {
+    value = value.substring(1);
+  }
   let isInteger = /^\d+$/.test(value);
   let isDouble = /^\d+\.\d*$/.test(value);
   if(type.valueType === 'INTEGER' || type.valueType === 'LONG') {
@@ -127,6 +130,9 @@ class NumberBuilder {
   getValue() {
     console.log('getValue', this._value);
     if(this._value) {
+      if (this._value === '-' || this._value === '+') {
+        return this._value;
+      }
       let split = this._value.split(' ');
       if(split.length > 1) {
         return isValidNumber(split[1], this._type) ? split[1] : '';        
