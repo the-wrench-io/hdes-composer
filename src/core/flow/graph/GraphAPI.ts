@@ -379,7 +379,7 @@ class ModelVisitor {
 
 
   visitCyclicDependency(step: Client.AstFlowTaskNode, parent?: Vis.Node) {
-    const id = step.id.value;
+    const id = this._fl.name + "/" + step.id.value;
     const parents: string[] = [];
     if (parent) {
       parents.push(...parent.parents);
