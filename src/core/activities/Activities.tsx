@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 
 import Burger from '@the-wrench-io/react-burger';
 
-import {FlowComposer} from '../flow';
-import {DecisionComposer} from '../decision';
-import {ServiceComposer} from '../service';
+import { FlowComposer } from '../flow';
+import { DecisionComposer } from '../decision';
+import { ServiceComposer } from '../service';
 
 import ReleaseComposer from '../release';
 import MigrationComposer from '../migration';
@@ -64,7 +64,7 @@ const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[]
     onView: () => tabs.handleTabAdd({ id: 'releases', label: "Releases" }),
     onTertiary: () => tabs.handleTabAdd({ id: 'graph', label: "Release Graph" }),
     title: "activities.releases.title",
-    desc: "activities.releases.desc",
+    desc: "activities.releases.desc1",
     type: "releases",
     buttonCreate: "buttons.create",
     buttonViewAll: "activities.releases.view",
@@ -94,14 +94,14 @@ const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[]
 const Activities: React.FC<{}> = () => {
   const { actions } = Burger.useTabs();
   const [open, setOpen] = React.useState<number>();
-  const [coreVersion, setCoreVersion] = React.useState<{version: string, built: string}>();
+  const [coreVersion, setCoreVersion] = React.useState<{ version: string, built: string }>();
   const handleClose = () => setOpen(undefined);
   const cards = React.useMemo(() => createCards(actions), [actions]);
   const { service } = Composer.useComposer();
 
   let composer: undefined | React.ReactChild = undefined;
   let openComposer = open !== undefined ? cards[open].composer : undefined;
-  if(openComposer) {
+  if (openComposer) {
     composer = openComposer(handleClose);
   }
 
@@ -109,10 +109,10 @@ const Activities: React.FC<{}> = () => {
     service.version().then((version) => {
       console.log("hdes core version", version, "hdes composer version", composerVersion);
       setCoreVersion(version)
-    }); 
+    });
 
   }, [service, setCoreVersion]);
-  
+
   return (
     <>
       <Typography variant="h3" fontWeight="bold" sx={{ p: 1, m: 1 }}>
@@ -124,18 +124,18 @@ const Activities: React.FC<{}> = () => {
       <Box sx={{ margin: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
         {composer}
         {cards.map((card, index) => (<ActivityItem key={index} data={card} onCreate={() => {
-          if(card.composer) {
-             setOpen(index);
-          } else if(card.onCreate) {
+          if (card.composer) {
+            setOpen(index);
+          } else if (card.onCreate) {
             card.onCreate();
           }
         }} />))}
       </Box>
       <Typography variant="caption" sx={{ pt: 1 }} display={'flex'} flexDirection={'column'} alignItems={'center'}>
-          <FormattedMessage id={"activities.version.composer"} values={{ version: composerVersion.tag, date: composerVersion.built}}/>
-          <Typography variant="caption" sx={{ pt: 1 }} >
-            <FormattedMessage id={"activities.version.core"} values={{ version: coreVersion?.version, date: coreVersion?.built}}/>
-          </Typography>
+        <FormattedMessage id={"activities.version.composer"} values={{ version: composerVersion.tag, date: composerVersion.built }} />
+        <Typography variant="caption" sx={{ pt: 1 }} >
+          <FormattedMessage id={"activities.version.core"} values={{ version: coreVersion?.version, date: coreVersion?.built }} />
+        </Typography>
       </Typography>
     </>
   );
