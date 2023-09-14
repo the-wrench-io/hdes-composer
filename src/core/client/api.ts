@@ -4,7 +4,7 @@ export type EntityId = string;
 export type FlowId = string;
 export type ServiceId = string;
 export type DecisionId = string;
-export type AstBodyType = "FLOW" | "FLOW_TASK" | "DT" | "TAG";
+export type AstBodyType = "FLOW" | "FLOW_TASK" | "DT" | "TAG" | "BRANCH";
 export type Direction = "IN" | "OUT";
 export type ValueType = "TIME" | "DATE" | "DATE_TIME" | "INSTANT" | "PERIOD" | "DURATION" |
   "STRING" | "INTEGER" | "LONG" | "BOOLEAN" | "PERCENT" | "OBJECT" | "ARRAY" | "DECIMAL" | 
@@ -26,7 +26,10 @@ export type AstCommandValue = (
   "SET_HEADER_SCRIPT" | "SET_HEADER_DIRECTION" | "SET_HEADER_EXPRESSION" | "SET_HIT_POLICY" | "SET_CELL_VALUE" |
   "DELETE_CELL" | "DELETE_HEADER" | "DELETE_ROW" |
   "ADD_LOG" | "ADD_HEADER_IN" | "ADD_HEADER_OUT" | "ADD_ROW" |
-  "SET_VALUE_SET"
+  "SET_VALUE_SET" |
+
+  // BRANCH related
+  "CREATE_BRANCH" | "SET_BRANCH_NAME" | "SET_BRANCH_TAG" | "SET_BRANCH_CREATED"
 );
 export interface CommandsAndChanges {
   commands: AstCommand[];
@@ -298,6 +301,7 @@ export interface CreateBuilder {
   flow(name: string): Promise<Site>;
   service(name: string): Promise<Site>;
   decision(name: string): Promise<Site>;
+  branch(body: AstCommand[]): Promise<Site>;
 }
 
 export interface DeleteBuilder {
@@ -313,6 +317,7 @@ export interface VersionEntity {
 }
 
 export interface Service {
+  withBranch(branchName: string): Service;
   delete(): DeleteBuilder;
   create(): CreateBuilder;
   update(id: string, body: AstCommand[]): Promise<Site>;

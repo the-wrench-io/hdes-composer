@@ -3,11 +3,9 @@ import {
   Box, Typography, IconButton,
   TableCell, TableRow, Card,
 } from '@mui/material';
-import GetAppIcon from '@mui/icons-material/GetApp';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import PublishIcon from '@mui/icons-material/Publish';
 import { FormattedMessage } from 'react-intl';
 import fileDownload from 'js-file-download'
 import { useSnackbar } from 'notistack';
@@ -17,6 +15,7 @@ import { Composer, Client } from '../context';
 import { ReleaseComposer } from './ReleaseComposer';
 import { ErrorView } from '../styles';
 import ReleasesTable, { Release } from './ReleasesTable';
+import { AstCommand } from '../client/api';
 
 const ReleasesView: React.FC<{}> = () => {
 
@@ -38,16 +37,6 @@ const ReleasesView: React.FC<{}> = () => {
         created,
         data,
       }
-    }
-  });
-
-  formattedReleases.push({
-    id: 'latest',
-    body: {
-      name: 'latest',
-      note: 'The current branch with the latest changes that can be released',
-      created: '',
-      data: '',
     }
   });
 
@@ -134,6 +123,7 @@ const ReleaseDelete: React.FC<{ release: Release, onClose: () => void }> = ({ re
 
 
 const Row: React.FC<{ release: Burger.Release }> = ({ release }) => {
+  const { service } = Composer.useComposer();
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [releaseComposer, setReleaseComposer] = React.useState(false);
@@ -152,6 +142,17 @@ const Row: React.FC<{ release: Burger.Release }> = ({ release }) => {
     if (data) {
       fileDownload(data, release.body.name + "_" + release.body.created + '.json');
     }
+  }
+
+  const handleBranch = (releaseName: string, releaseId: string) => {
+    const command: AstCommand = {
+      type: 'CREATE_BRANCH',
+      value: releaseName,
+      id: releaseId
+    }
+    service.withBranch(releaseName + '_dev').create().branch([command]).then((data) => {
+      console.log(data);
+    });
   }
 
   return (
@@ -176,7 +177,7 @@ const Row: React.FC<{ release: Burger.Release }> = ({ release }) => {
       {expanded && <TableRow>
         <TableCell />
         <TableCell colSpan={5}>
-          <Burger.PrimaryButton label={'releases.button.branch'} onClick={() => { }}></Burger.PrimaryButton>
+          <Burger.PrimaryButton label={'releases.button.branch'} onClick={() => handleBranch(release.body.name, release.id)}></Burger.PrimaryButton>
         </TableCell>
       </TableRow>}
     </>

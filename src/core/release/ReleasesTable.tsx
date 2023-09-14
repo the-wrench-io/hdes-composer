@@ -19,6 +19,16 @@ interface ReleasesTableProps {
   }>;
 }
 
+const latestRelease = {
+  id: 'latest',
+  body: {
+    name: 'latest',
+    note: 'The current branch with the latest changes that can be released',
+    created: '',
+    data: '',
+  }
+};
+
 
 const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowComponent: TableRowComponent }) => {
 
@@ -30,17 +40,19 @@ const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowCompone
   const sortByParam = (param: sortOptions, dir: sortDirections) => {
     switch (param) {
       case 'name':
-        return [...releases].sort((a, b) => {
+        const sortedByName = [...releases].sort((a, b) => {
           const nameA = a.body.name;
           const nameB = b.body.name;
           return (dir === 'asc') ? (nameA.localeCompare(nameB)) : (nameB.localeCompare(nameA));
         });
+        return [latestRelease, ...sortedByName];
       case 'created':
-        return [...releases].sort((a, b) => {
+        const sortedByCreated = [...releases].sort((a, b) => {
           const dateA = new Date(a.body.created);
           const dateB = new Date(b.body.created);
           return (dir === 'asc') ? (dateA.getTime() - dateB.getTime()) : (dateB.getTime() - dateA.getTime());
         });
+        return [latestRelease, ...sortedByCreated];
       default:
         return [];
     }
