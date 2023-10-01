@@ -40,3 +40,6 @@ env-config.js
 /.yalc/
 /yalc.lock
 /.yarn/
+
+# IDE
+.vscode/

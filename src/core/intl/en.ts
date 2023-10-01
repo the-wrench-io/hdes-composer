@@ -35,6 +35,10 @@ const en = {
   'activities.releases.view': 'View all releases',
   'activities.releases.graph': 'Graph',
 
+  'activities.compare.title': 'Compare',
+  'activities.compare.desc': 'Compare two releases to see what has changed between them.',
+  'activities.compare.view': 'Compare',
+
   'activities.templates.title': 'Templates',
   'activities.templates.desc': 'Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. Not implemented yet!',
   'activities.templates.view': 'View all templates',
@@ -302,6 +306,9 @@ const en = {
   'debug.csv.download.options': "Export options",
   'debug.csv.download.wrap': "Wrap cells containing delimiters with quotes",
 
+  'compare.tip': 'Select releases to compare below. Base is the starting point of the comparison, and target is the release that will be compared to the base.',
+  'compare.base': 'Select base release',
+  'compare.target': 'Select target release',
 
 };
 

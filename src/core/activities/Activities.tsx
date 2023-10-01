@@ -18,7 +18,7 @@ import composerVersion from '../version';
 import { Composer } from '../context';
 
 interface ActivityType {
-  type: "releases" | "decisions" | "flows" | "services" | "migration" | "templates" | "debug";
+  type: "releases" | "decisions" | "flows" | "services" | "migration" | "templates" | "debug" | "compare";
   composer?: (handleClose: () => void) => React.ReactChild;
   onCreate?: () => void;
 }
@@ -69,6 +69,15 @@ const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[]
     buttonCreate: "buttons.create",
     buttonViewAll: "activities.releases.view",
     buttonTertiary: "activities.releases.graph"
+  },
+  {
+    onCreate: () => tabs.handleTabAdd({ id: 'compare', label: "Compare" }),
+    onView: undefined,
+    title: "activities.compare.title",
+    desc: "activities.compare.desc",
+    type: "compare",
+    buttonCreate: "activities.compare.view",
+    buttonViewAll: undefined,
   },
   {
     composer: (handleClose) => <TemplateComposer onClose={handleClose} />,
