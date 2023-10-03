@@ -309,6 +309,9 @@ const en = {
   'compare.tip': 'Select releases to compare below. Base is the starting point of the comparison, and target is the release that will be compared to the base.',
   'compare.base': 'Select base release',
   'compare.target': 'Select target release',
+  'compare.dialog.title': 'Comparing releases',
+  'compare.dialog.line': 'Inline',
+  'compare.dialog.side': 'Side-by-side',
 
 };
 
