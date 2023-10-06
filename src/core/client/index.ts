@@ -12,7 +12,8 @@ import {
   DebugRequest, DebugResponse, 
   ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
   FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
-  Input, Output, CsvRow, VersionEntity
+  Input, Output, CsvRow, VersionEntity, 
+  DiffRequest, TagDiff
 } from "./api";
 
 import { StoreErrorImpl as StoreErrorImplAs, StoreError } from './error';
@@ -98,6 +99,9 @@ namespace HdesClient {
     }
     version(): Promise<VersionEntity> {
       return this._store.fetch("/version", { method: "GET", body: undefined });
+    }
+    diff(input: DiffRequest): Promise<TagDiff> {
+      return this._store.fetch(`/diff?baseId=${input.baseId}&targetId=${input.targetId}`, { method: "GET", body: undefined });
     }
   }
 }

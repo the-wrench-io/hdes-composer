@@ -311,6 +311,20 @@ export interface DeleteBuilder {
   decision(decisionId: DecisionId): Promise<Site>;
 }
 
+export interface TagDiff {
+  baseName: string;
+  targetName: string;
+  baseId: string;
+  targetId: string;
+  created: string;
+  body: string;
+}
+
+export interface DiffRequest {
+  baseId: string;
+  targetId: string;
+}
+
 export interface VersionEntity {
   version: string;
   built: string;
@@ -326,6 +340,7 @@ export interface Service {
   getSite(): Promise<Site>
   copy(id: string, name: string): Promise<Site>
   version(): Promise<VersionEntity>
+  diff(input: DiffRequest): Promise<TagDiff>
 }
 export interface Store {
   fetch<T>(path: string, init?: RequestInit): Promise<T>;

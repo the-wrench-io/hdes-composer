@@ -1,15 +1,5 @@
 import { AstBodyType } from "../client/api";
 
-export const diffStr = `--- src/main/resources/sumFlow.yml
-+++ src/main/resources/sumFlowNew.yml
-@@ -7,6 +7,6 @@
-     type: DECIMAL
-   val2:
--    required: true
--    type: DECIMAL
-+    required: false
-+    type: INTEGER`;
-
 interface ReleaseAsset<T extends AstBodyType> {
   name: string,
   type: T
@@ -38,6 +28,10 @@ export const releasePreviewBase: ReleasePreview = {
     {
       name: 'decimalTest',
       type: 'DT'
+    },
+    {
+      name: 'testDt',
+      type: 'DT'
     }
   ]
 };
@@ -52,6 +46,10 @@ export const releasePreviewTarget: ReleasePreview = {
   services: [
     {
       name: 'SumTask',
+      type: 'FLOW_TASK'
+    },
+    {
+      name: 'FlowTask',
       type: 'FLOW_TASK'
     }
   ],
