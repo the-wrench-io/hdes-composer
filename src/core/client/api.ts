@@ -325,6 +325,19 @@ export interface DiffRequest {
   targetId: string;
 }
 
+export interface SummaryItem {
+  id: string;
+  name: string;
+  body: string;
+}
+
+export interface AstTagSummary {
+  tagName: string;
+  flows: SummaryItem[];
+  services: SummaryItem[];
+  decisions: SummaryItem[];
+}
+
 export interface VersionEntity {
   version: string;
   built: string;
@@ -341,6 +354,7 @@ export interface Service {
   copy(id: string, name: string): Promise<Site>
   version(): Promise<VersionEntity>
   diff(input: DiffRequest): Promise<TagDiff>
+  summary(tagId: string): Promise<AstTagSummary>
 }
 export interface Store {
   fetch<T>(path: string, init?: RequestInit): Promise<T>;

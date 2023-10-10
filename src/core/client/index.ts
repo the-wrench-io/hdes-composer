@@ -13,7 +13,8 @@ import {
   ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
   FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
   Input, Output, CsvRow, VersionEntity, 
-  DiffRequest, TagDiff
+  DiffRequest, TagDiff,
+  SummaryItem, AstTagSummary
 } from "./api";
 
 import { StoreErrorImpl as StoreErrorImplAs, StoreError } from './error';
@@ -34,7 +35,9 @@ declare namespace HdesClient {
     DebugRequest, DebugResponse, 
     ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
     FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
-    Input, Output, CsvRow  
+    Input, Output, CsvRow, VersionEntity, 
+    DiffRequest, TagDiff,
+    SummaryItem, AstTagSummary
   };
 }
 
@@ -97,11 +100,14 @@ namespace HdesClient {
     copy(id: string, name: string): Promise<HdesClient.Site> {
       return this._store.fetch("/copyas", { method: "POST", body: JSON.stringify({ id, name }), headers: this._headers });
     }
-    version(): Promise<VersionEntity> {
+    version(): Promise<HdesClient.VersionEntity> {
       return this._store.fetch("/version", { method: "GET", body: undefined });
     }
-    diff(input: DiffRequest): Promise<TagDiff> {
+    diff(input: HdesClient.DiffRequest): Promise<HdesClient.TagDiff> {
       return this._store.fetch(`/diff?baseId=${input.baseId}&targetId=${input.targetId}`, { method: "GET", body: undefined });
+    }
+    summary(tagId: string): Promise<HdesClient.AstTagSummary> {
+      return this._store.fetch(`/summary/${tagId}`, { method: "GET", body: undefined });
     }
   }
 }
