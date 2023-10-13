@@ -51,10 +51,10 @@ namespace HdesClient {
 
     constructor(store: HdesClient.Store) {
       this._store = store;
-      this._headers = undefined;
+      this._headers = { "Content-Type": "application/json;charset=UTF-8" };
     }
     withBranch(branchName: string): HdesClient.ServiceImpl {
-      this._headers = { "Branch-Name": branchName };
+      this._headers = { "Branch-Name": branchName, "Content-Type": "application/json;charset=UTF-8" };
       return this;
     }
     create(): HdesClient.CreateBuilder {
@@ -83,10 +83,11 @@ namespace HdesClient {
       return this._store.fetch("/resources", { method: "PUT", body: JSON.stringify({ id, body }), headers: this._headers });
     }
     createAsset(name: string, desc: string | undefined, type: HdesClient.AstBodyType | "SITE", body?: HdesClient.AstCommand[]): Promise<HdesClient.Site> {
-      return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({ name, desc, type, body, headers: this._headers }) });
+      console.log(this._headers)
+      return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({ name, desc, type, body }), headers: this._headers });
     }
     ast(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Entity<any>> {
-      return this._store.fetch("/commands", { method: "POST", body: JSON.stringify({ id, body, headers: this._headers }) });
+      return this._store.fetch("/commands", { method: "POST", body: JSON.stringify({ id, body }), headers: this._headers });
     }
     getSite(): Promise<HdesClient.Site> {
       return this._store.fetch("/dataModels", { method: "GET", body: undefined, headers: this._headers }).then(data => {
