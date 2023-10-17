@@ -54,7 +54,7 @@ const ReleasesView: React.FC<{}> = () => {
         <Box>
           <Burger.SecondaryButton label={"button.cancel"} onClick={() => layout.actions.handleTabCloseCurrent()} sx={{ marginRight: 1 }} />
           <Burger.SecondaryButton label={"activities.releases.graph"} onClick={() => layout.actions.handleTabAdd({ id: 'graph', label: "Release Graph" })} sx={{ marginRight: 1 }} />
-          <Burger.PrimaryButton label={"releases.button.compare"} onClick={() => { }} />
+          <Burger.PrimaryButton label={"releases.button.compare"} onClick={() => layout.actions.handleTabAdd({ id: 'compare', label: "Compare" })} />
         </Box>
       </Box>
 
