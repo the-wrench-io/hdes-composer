@@ -344,7 +344,8 @@ export interface VersionEntity {
 }
 
 export interface Service {
-  withBranch(branchName: string): Service;
+  withBranch(branchName?: string): Service;
+  branch: string | undefined;
   delete(): DeleteBuilder;
   create(): CreateBuilder;
   update(id: string, body: AstCommand[]): Promise<Site>;

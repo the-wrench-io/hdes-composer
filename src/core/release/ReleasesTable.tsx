@@ -23,7 +23,7 @@ const latestRelease = {
   id: 'latest',
   body: {
     name: 'latest',
-    note: 'The current branch with the latest changes that can be released',
+    note: 'The default branch with the latest changes that can be released',
     created: '',
     data: '',
   }

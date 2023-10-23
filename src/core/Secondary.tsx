@@ -1,7 +1,7 @@
 import React from 'react';
-import { Tabs, Tab, Box, TabProps, TabsProps, TextField, TextFieldProps, alpha } from '@mui/material';
+import { Tabs, Tab, Box, TabProps, TabsProps, TextField, TextFieldProps, alpha, Typography, Button } from '@mui/material';
 import { styled } from "@mui/material/styles";
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 
 import { FlowExplorer, ServiceExplorer, DecisionExplorer } from './explorer';
@@ -54,6 +54,8 @@ const StyledTabs = styled(Tabs)<TabsProps>(() => ({
 
 const Secondary: React.FC<{}> = () => {
   const intl = useIntl();
+  const activeBranch = Composer.useBranchName();
+  const branchName = activeBranch || "latest";
   const getLabel = (id: string) => intl.formatMessage({ id });
 
   const [tab, setTab] = React.useState("tabs.flows")
@@ -75,7 +77,7 @@ const Secondary: React.FC<{}> = () => {
         <StyledTab label={getLabel("explorer.tabs.services")} value='tabs.services' />
         <StyledTab label={getLabel("explorer.tabs.decisions")} value='tabs.decisions' />
       </StyledTabs>
-      
+
       <Box alignSelf="center" sx={{ m: 1 }}>
         <TextFieldRoot focused placeholder={getLabel("explorer.tabs.search")}
           value={searchString}
@@ -83,6 +85,10 @@ const Secondary: React.FC<{}> = () => {
       </Box>
     </Box>
     {component}
+    <Box sx={{ position: 'absolute', bottom: '2%', left: '15%' }}>
+      <Typography sx={{ color: 'white' }}><FormattedMessage id='explorer.active.branch' values={{ name: branchName }} /></Typography>
+    </Box>
+
   </Box>)
 }
 export { Secondary }

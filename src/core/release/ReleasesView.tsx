@@ -159,7 +159,7 @@ const Row: React.FC<{ release: Burger.Release }> = ({ release }) => {
     <>
       {releaseComposer ? <ReleaseComposer onClose={() => setReleaseComposer(false)} /> : null}
       <TableRow key={release.id} sx={latestSx}>
-        <TableCell align="center" sx={{ width: "20px" }}><IconButton onClick={toggleExpand}>{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</IconButton></TableCell>
+        <TableCell align="center" sx={{ width: "20px" }}>{!isLatest && <IconButton onClick={toggleExpand}>{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</IconButton>}</TableCell>
         <TableCell align="left">{release.body.name}</TableCell>
         <TableCell align="left"><Burger.DateTimeFormatter timestamp={release.body.created} /></TableCell>
         <TableCell align="left">{release.body.note}</TableCell>

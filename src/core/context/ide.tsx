@@ -114,6 +114,11 @@ namespace Composer {
     return result.session.site;
   }
 
+  export const useBranchName = () => {
+    const result: ContextType = React.useContext(ComposerContext);
+    return result.service.branch;
+  }
+
   export const useSession = () => {
     const result: ContextType = React.useContext(ComposerContext);
     return result.session;
@@ -179,9 +184,10 @@ namespace Composer {
 
   export const Provider: React.FC<{ children: React.ReactNode, service: HdesClient.Service }> = ({ children, service }) => {
     const [session, dispatch] = React.useReducer(Reducer, sessionData);
+
     const actions = React.useMemo(() => {
       console.log("init ide dispatch");
-      return new ReducerDispatch(dispatch, service)
+      return new ReducerDispatch(dispatch, service);
     }, [dispatch, service]);
 
     React.useLayoutEffect(() => {

@@ -14,6 +14,8 @@ const en = {
   'explorer.tabs.decisions': 'decisions',
   'explorer.tabs.search': 'search',
 
+  'explorer.active.branch': 'Active branch: {name}',
+
   'activities.title': 'Activities',
   'activities.desc': 'Create, view, and navigate site resources',
 

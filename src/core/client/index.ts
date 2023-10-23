@@ -48,14 +48,23 @@ namespace HdesClient {
   export class ServiceImpl implements HdesClient.Service {
     private _store: Store;
     private _headers: HeadersInit | undefined;
+    private _branch: string | undefined;
 
-    constructor(store: HdesClient.Store) {
+    constructor(store: HdesClient.Store, branchName?: string) {
       this._store = store;
-      this._headers = { "Content-Type": "application/json;charset=UTF-8" };
+      if (branchName) {
+        this._headers = { "Branch-Name": branchName, "Content-Type": "application/json;charset=UTF-8" };
+      } else {
+        this._headers = { "Content-Type": "application/json;charset=UTF-8" };
+      }
+      this._branch = branchName;
     }
-    withBranch(branchName: string): HdesClient.ServiceImpl {
-      this._headers = { "Branch-Name": branchName, "Content-Type": "application/json;charset=UTF-8" };
-      return this;
+    withBranch(branchName?: string): HdesClient.ServiceImpl {
+      this._branch = branchName;
+      return new ServiceImpl(this._store, branchName);
+    }
+    get branch(): string | undefined {
+      return this._branch;
     }
     create(): HdesClient.CreateBuilder {
       const flow = (name: string) => this.createAsset(name, undefined, "FLOW");
