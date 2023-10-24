@@ -50,6 +50,9 @@ class SiteCache {
     if (!entity) {
       entity = this._site.tags[entityId];
     }
+    if (!entity) {
+      entity = this._site.branches[entityId];
+    }
     return entity;
   }
   getDecision(decisionName: string): undefined | Client.Entity<Client.AstDecision> {
@@ -75,7 +78,7 @@ class SessionData implements Composer.Session {
     cache?: SiteCache;
     debug?: Composer.DebugSessions;
   }) {
-    this._site = props.site ? props.site : { name: "", contentType: "OK", tags: {}, flows: {}, decisions: {}, services: {} };
+    this._site = props.site ? props.site : { name: "", contentType: "OK", tags: {}, flows: {}, decisions: {}, services: {}, branches: {} };
     this._pages = props.pages ? props.pages : {};
     this._cache = props.cache ? props.cache : new SiteCache(this._site);
     this._debug = props.debug ? props.debug : { values: {}};

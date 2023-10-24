@@ -1,11 +1,12 @@
 import React from 'react';
 import {
   Box, Typography, IconButton,
-  TableCell, TableRow, Card,
+  TableCell, TableRow, Card, alpha, styled,
 } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ForkRightIcon from '@mui/icons-material/ForkRight';
 import { FormattedMessage } from 'react-intl';
 import fileDownload from 'js-file-download'
 import { useSnackbar } from 'notistack';
@@ -14,14 +15,18 @@ import Burger from '@the-wrench-io/react-burger';
 import { Composer, Client } from '../context';
 import { ReleaseComposer } from './ReleaseComposer';
 import { ErrorView } from '../styles';
-import ReleasesTable, { Release } from './ReleasesTable';
-import { AstCommand } from '../client/api';
+import ReleasesTable, { Release, ReleaseBranch } from './ReleasesTable';
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: alpha(theme.palette.explorer.main, .05),
+}));
 
 const ReleasesView: React.FC<{}> = () => {
 
   const { site } = Composer.useComposer();
   const layout = Burger.useTabs();
   const releases = Object.values(site.tags);
+  const branches = Object.values(site.branches);
 
   const formattedReleases: Release[] = releases.map((release) => {
     const { id } = release;
@@ -29,6 +34,12 @@ const ReleasesView: React.FC<{}> = () => {
     const created = release.ast?.created || '';
     const note = release.ast?.description;
     const data = JSON.stringify(release.ast, null, 2);
+    const releaseBranches: ReleaseBranch[] = branches.filter((branch) => branch.ast?.tagId === id).map((branch) => {
+      return {
+        id: branch.id,
+        branch: branch.ast!,
+      }
+    });
     return {
       id,
       body: {
@@ -36,7 +47,8 @@ const ReleasesView: React.FC<{}> = () => {
         note,
         created,
         data,
-      }
+      },
+      branches: releaseBranches
     }
   });
 
@@ -54,7 +66,7 @@ const ReleasesView: React.FC<{}> = () => {
         <Box>
           <Burger.SecondaryButton label={"button.cancel"} onClick={() => layout.actions.handleTabCloseCurrent()} sx={{ marginRight: 1 }} />
           <Burger.SecondaryButton label={"activities.releases.graph"} onClick={() => layout.actions.handleTabAdd({ id: 'graph', label: "Release Graph" })} sx={{ marginRight: 1 }} />
-          <Burger.PrimaryButton label={"releases.button.compare"} onClick={() => layout.actions.handleTabAdd({ id: 'compare', label: "Compare" })} />
+          <Burger.SecondaryButton label={"releases.button.compare"} onClick={() => layout.actions.handleTabAdd({ id: 'compare', label: "Compare" })} />
         </Box>
       </Box>
 
@@ -120,10 +132,19 @@ const ReleaseDelete: React.FC<{ release: Release, onClose: () => void }> = ({ re
   />);
 }
 
+const resolveNewBranchName = (releaseName: string, branches: Client.AstBranch[]): string => {
+  const matches: Client.AstBranch[] = branches.filter((branch) => branch.name.includes(releaseName));
+  if (matches.length === 0) {
+    return releaseName + "_dev";
+  }
+  const branchNo: number = matches.length + 1
+  return releaseName + "_dev_" + branchNo;
+}
 
 
-const Row: React.FC<{ release: Burger.Release }> = ({ release }) => {
-  const { service } = Composer.useComposer();
+const Row: React.FC<{ release: Release }> = ({ release }) => {
+  const { service, actions, site } = Composer.useComposer();
+  const branches = Object.values(site.branches).map((b) => b.ast!);
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [releaseComposer, setReleaseComposer] = React.useState(false);
@@ -145,28 +166,54 @@ const Row: React.FC<{ release: Burger.Release }> = ({ release }) => {
   }
 
   const handleBranch = (releaseName: string, releaseId: string) => {
-    const command: AstCommand = {
+    const branchName = resolveNewBranchName(releaseName, branches);
+    const command: Client.AstCommand = {
       type: 'CREATE_BRANCH',
-      value: releaseName,
+      value: branchName,
       id: releaseId
     }
-    service.withBranch(releaseName + '_dev').create().branch([command]).then((data) => {
-      console.log(data);
-    });
+    service.withBranch(branchName).create().branch([command])
+      .then((data) => {
+        actions.handleLoadSite(data);
+      })
+      .catch((error: Client.StoreError) => {
+        console.error(error)
+      });
+  }
+
+  const handleCheckout = (branch: Client.AstBranch) => {
+    service.withBranch(branch.name).getSite()
+      .then((data) => {
+        actions.handleLoadSite(data);
+      })
+      .catch((error: Client.StoreError) => {
+        console.error(error)
+      });
+  }
+
+  const handleDelete = (branchId: string) => {
+    service.delete().branch(branchId)
+      .then((data) => {
+        actions.handleLoadSite(data);
+      })
+      .catch((error: Client.StoreError) => {
+        console.error(error)
+      });
   }
 
   return (
     <>
       {releaseComposer ? <ReleaseComposer onClose={() => setReleaseComposer(false)} /> : null}
       <TableRow key={release.id} sx={latestSx}>
-        <TableCell align="center" sx={{ width: "20px" }}>{!isLatest && <IconButton onClick={toggleExpand}>{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</IconButton>}</TableCell>
-        <TableCell align="left">{release.body.name}</TableCell>
+        <TableCell align="center" sx={{ width: "10px" }}>{!isLatest && <IconButton onClick={toggleExpand}>{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</IconButton>}</TableCell>
+        <TableCell align="left"><Typography>{release.body.name}</Typography></TableCell>
+        <TableCell align="center" sx={{ width: "10px" }}>{release.branches.length ? <ForkRightIcon /> : <></>}</TableCell>
         <TableCell align="left"><Burger.DateTimeFormatter timestamp={release.body.created} /></TableCell>
         <TableCell align="left">{release.body.note}</TableCell>
         <TableCell align="center">
           {isLatest ?
-            <Burger.SecondaryButton label={'releases.button.release'} onClick={() => setReleaseComposer(true)}></Burger.SecondaryButton> :
-            <Burger.SecondaryButton label={'buttons.download'} onClick={() => onDownload(release.body.data)}></Burger.SecondaryButton>
+            <Burger.PrimaryButton label={'releases.button.release'} onClick={() => setReleaseComposer(true)} /> :
+            <Burger.SecondaryButton label={'buttons.download'} onClick={() => onDownload(release.body.data)} />
           }
         </TableCell>
         <TableCell align="right">
@@ -174,12 +221,35 @@ const Row: React.FC<{ release: Burger.Release }> = ({ release }) => {
           {!isLatest && <IconButton onClick={() => setDialogOpen(true)} sx={{ color: 'error.main' }}><DeleteOutlineOutlinedIcon /> </IconButton>}
         </TableCell>
       </TableRow>
-      {expanded && <TableRow>
-        <TableCell />
-        <TableCell colSpan={5}>
-          <Burger.PrimaryButton label={'releases.button.branch'} onClick={() => handleBranch(release.body.name, release.id)}></Burger.PrimaryButton>
-        </TableCell>
-      </TableRow>}
+      {expanded &&
+        <>
+          {
+            release.branches.length ? release.branches.map((branch) => {
+              return (
+                <StyledTableRow key={branch.id}>
+                  <TableCell />
+                  <TableCell align="left">{branch.branch.name}</TableCell>
+                  <TableCell />
+                  <TableCell align="left"><Burger.DateTimeFormatter timestamp={branch.branch.created} /></TableCell>
+                  <TableCell align="left">Branch created from release: {release.body.name}</TableCell>
+                  <TableCell align="center">
+                    <Burger.SecondaryButton label={'releases.button.checkout'} onClick={() => handleCheckout(branch.branch)}></Burger.SecondaryButton>
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton sx={{ color: 'error.main' }} onClick={() => handleDelete(branch.id)}><DeleteOutlineOutlinedIcon /> </IconButton>
+                  </TableCell>
+                </StyledTableRow>
+              )
+            }) : <></>
+          }
+          <TableRow>
+            <TableCell />
+            <TableCell colSpan={5}>
+              <Burger.PrimaryButton label={'releases.button.branch'} onClick={() => handleBranch(release.body.name, release.id)}></Burger.PrimaryButton>
+            </TableCell>
+          </TableRow>
+        </>
+      }
     </>
   )
 }

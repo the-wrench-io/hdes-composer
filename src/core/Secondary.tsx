@@ -55,7 +55,7 @@ const StyledTabs = styled(Tabs)<TabsProps>(() => ({
 const Secondary: React.FC<{}> = () => {
   const intl = useIntl();
   const activeBranch = Composer.useBranchName();
-  const branchName = activeBranch || "latest";
+  const branchName = activeBranch || "default";
   const getLabel = (id: string) => intl.formatMessage({ id });
 
   const [tab, setTab] = React.useState("tabs.flows")

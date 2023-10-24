@@ -1,6 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import React from "react";
 import { FormattedMessage } from "react-intl";
+import { Client } from "../context";
 
 interface Release {
   id: string;
@@ -10,6 +11,12 @@ interface Release {
     created: string;
     data?: string;
   };
+  branches: ReleaseBranch[];
+}
+
+interface ReleaseBranch {
+  id: string;
+  branch: Client.AstBranch;
 }
 
 interface ReleasesTableProps {
@@ -23,10 +30,11 @@ const latestRelease = {
   id: 'latest',
   body: {
     name: 'latest',
-    note: 'The default branch with the latest changes that can be released',
+    note: 'These are current assets with the latest changes that can be released',
     created: '',
     data: '',
-  }
+  },
+  branches: []
 };
 
 
@@ -73,13 +81,13 @@ const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowCompone
       <Table size="small">
         <TableHead>
           <TableRow sx={{ p: 1 }}>
-            <TableCell sx={{ width: "20px" }}>
-            </TableCell>
+            <TableCell sx={{ width: "10px" }} />
             <TableCell align="left" sx={{ fontWeight: 'bold' }}>
               <TableSortLabel active={sort === 'name'} direction={direction} onClick={() => sortByName()}>
                 <FormattedMessage id="releases.view.tag" />
               </TableSortLabel>
             </TableCell>
+            <TableCell sx={{ width: "10px" }} />
             <TableCell align="left" sx={{ fontWeight: 'bold' }}>
               <TableSortLabel active={sort === 'created'} direction={direction} onClick={() => sortByCreated()}>
                 <FormattedMessage id="releases.view.created" />
@@ -98,5 +106,5 @@ const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowCompone
   )
 }
 
-export type { Release, ReleasesTableProps };
+export type { Release, ReleaseBranch, ReleasesTableProps };
 export default ReleasesTable;

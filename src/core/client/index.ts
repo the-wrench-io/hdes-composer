@@ -7,6 +7,7 @@ import {
   AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
   AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, 
   AstTag, AstTagValue,
+  AstBranch,
   ServiceErrorMsg, ServiceErrorProps, Service, Store, DeleteBuilder,
   
   DebugRequest, DebugResponse, 
@@ -14,7 +15,7 @@ import {
   FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
   Input, Output, CsvRow, VersionEntity, 
   DiffRequest, TagDiff,
-  SummaryItem, AstTagSummary
+  SummaryItem, AstTagSummary, BranchId
 } from "./api";
 
 import { StoreErrorImpl as StoreErrorImplAs, StoreError } from './error';
@@ -30,6 +31,7 @@ declare namespace HdesClient {
     AstFlow, FlowAstCommandMessage, FlowAstCommandRange, AstFlowInputType,
     AstFlowRoot, AstFlowTaskNode, AstFlowRefNode, AstFlowSwitchNode, AstFlowInputNode, AstFlowNode, AstService, 
     AstTag, AstTagValue,
+    AstBranch,
     ServiceErrorMsg, ServiceErrorProps, Service, Store, StoreError, StoreConfig,
     
     DebugRequest, DebugResponse, 
@@ -54,14 +56,18 @@ namespace HdesClient {
       this._store = store;
       if (branchName) {
         this._headers = { "Branch-Name": branchName, "Content-Type": "application/json;charset=UTF-8" };
+        this._branch = branchName;
       } else {
         this._headers = { "Content-Type": "application/json;charset=UTF-8" };
       }
-      this._branch = branchName;
     }
     withBranch(branchName?: string): HdesClient.ServiceImpl {
-      this._branch = branchName;
-      return new ServiceImpl(this._store, branchName);
+      //return new ServiceImpl(this._store, branchName);
+      if (branchName) {
+        this._headers = { "Branch-Name": branchName, "Content-Type": "application/json;charset=UTF-8" };
+        this._branch = branchName;
+      }
+      return this;
     }
     get branch(): string | undefined {
       return this._branch;
@@ -85,8 +91,9 @@ namespace HdesClient {
       const flow = (id: FlowId) => deleteMethod(id);
       const service = (id: ServiceId) => deleteMethod(id);
       const decision = (id: DecisionId) => deleteMethod(id);
+      const branch = (id: BranchId) => deleteMethod(id);
       const tag = (id: TagId) => deleteMethod(id);
-      return { flow, service, decision, tag };
+      return { flow, service, decision, tag, branch };
     }
     update(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Site> {
       return this._store.fetch("/resources", { method: "PUT", body: JSON.stringify({ id, body }), headers: this._headers });
@@ -96,6 +103,8 @@ namespace HdesClient {
       return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({ name, desc, type, body }), headers: this._headers });
     }
     ast(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Entity<any>> {
+      console.log(this._branch)
+      console.log(this._headers)
       return this._store.fetch("/commands", { method: "POST", body: JSON.stringify({ id, body }), headers: this._headers });
     }
     getSite(): Promise<HdesClient.Site> {
