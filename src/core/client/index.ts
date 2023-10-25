@@ -75,6 +75,7 @@ namespace HdesClient {
           this._headers["Branch-Name"] = branchName;
         }
       }
+      this._headers["Content-Type"] = "application/json;charset=UTF-8"
       return this;
       //return new ServiceImpl(this._store, branchName);
     }
