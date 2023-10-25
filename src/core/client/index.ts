@@ -49,25 +49,34 @@ namespace HdesClient {
   
   export class ServiceImpl implements HdesClient.Service {
     private _store: Store;
-    private _headers: HeadersInit | undefined;
     private _branch: string | undefined;
+    private _headers: HeadersInit = {};
 
     constructor(store: HdesClient.Store, branchName?: string) {
       this._store = store;
       if (branchName) {
-        this._headers = { "Branch-Name": branchName, "Content-Type": "application/json;charset=UTF-8" };
-        this._branch = branchName;
-      } else {
-        this._headers = { "Content-Type": "application/json;charset=UTF-8" };
+        if (branchName === "default") {
+          this._branch = undefined;
+          this._headers = {};
+        } else {
+          this._branch = branchName;
+          this._headers["Branch-Name"] = branchName;
+        }
       }
+      this._headers["Content-Type"] = "application/json;charset=UTF-8";
     }
     withBranch(branchName?: string): HdesClient.ServiceImpl {
-      //return new ServiceImpl(this._store, branchName);
       if (branchName) {
-        this._headers = { "Branch-Name": branchName, "Content-Type": "application/json;charset=UTF-8" };
-        this._branch = branchName;
+        if (branchName === "default") {
+          this._branch = undefined;
+          this._headers = {};
+        } else {
+          this._branch = branchName;
+          this._headers["Branch-Name"] = branchName;
+        }
       }
       return this;
+      //return new ServiceImpl(this._store, branchName);
     }
     get branch(): string | undefined {
       return this._branch;
@@ -99,12 +108,9 @@ namespace HdesClient {
       return this._store.fetch("/resources", { method: "PUT", body: JSON.stringify({ id, body }), headers: this._headers });
     }
     createAsset(name: string, desc: string | undefined, type: HdesClient.AstBodyType | "SITE", body?: HdesClient.AstCommand[]): Promise<HdesClient.Site> {
-      console.log(this._headers)
       return this._store.fetch("/resources", { method: "POST", body: JSON.stringify({ name, desc, type, body }), headers: this._headers });
     }
     ast(id: string, body: HdesClient.AstCommand[]): Promise<HdesClient.Entity<any>> {
-      console.log(this._branch)
-      console.log(this._headers)
       return this._store.fetch("/commands", { method: "POST", body: JSON.stringify({ id, body }), headers: this._headers });
     }
     getSite(): Promise<HdesClient.Site> {

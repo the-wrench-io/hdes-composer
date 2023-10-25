@@ -7,6 +7,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ForkRightIcon from '@mui/icons-material/ForkRight';
+import ShortcutIcon from '@mui/icons-material/Shortcut';
 import { FormattedMessage } from 'react-intl';
 import fileDownload from 'js-file-download'
 import { useSnackbar } from 'notistack';
@@ -144,12 +145,14 @@ const resolveNewBranchName = (releaseName: string, branches: Client.AstBranch[])
 
 const Row: React.FC<{ release: Release }> = ({ release }) => {
   const { service, actions, site } = Composer.useComposer();
+  const tabs = Burger.useTabs();
   const branches = Object.values(site.branches).map((b) => b.ast!);
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [releaseComposer, setReleaseComposer] = React.useState(false);
   const isLatest = release.id === 'latest';
-  const latestSx = isLatest ? { backgroundColor: '#F2F2F2' } : {};
+  const isDefault = release.id === 'default';
+  const backgroundColor = isLatest || isDefault ? { backgroundColor: '#F2F2F2' } : {};
 
   const handleDialogClose = () => {
     setDialogOpen(false);
@@ -181,10 +184,12 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
       });
   }
 
-  const handleCheckout = (branch: Client.AstBranch) => {
-    service.withBranch(branch.name).getSite()
+  const handleCheckout = (branchName: string) => {
+    tabs.actions.handleTabCloseAll();
+    service.withBranch(branchName).getSite()
       .then((data) => {
         actions.handleLoadSite(data);
+        tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
@@ -192,33 +197,42 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
   }
 
   const handleDelete = (branchId: string) => {
+    tabs.actions.handleTabCloseAll();
     service.delete().branch(branchId)
       .then((data) => {
         actions.handleLoadSite(data);
+        tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
       });
   }
 
+  const actionButton = () => {
+    if (isLatest) {
+      return <Burger.PrimaryButton label={'releases.button.release'} onClick={() => setReleaseComposer(true)} />
+    } else if (isDefault) {
+      return <Burger.SecondaryButton label={'releases.button.checkout'} onClick={() => handleCheckout("default")} />
+    } else {
+      return <Burger.SecondaryButton sx={{ border: 1 }} label={'buttons.download'} onClick={() => onDownload(release.body.data)} />
+    }
+  }
+
   return (
     <>
       {releaseComposer ? <ReleaseComposer onClose={() => setReleaseComposer(false)} /> : null}
-      <TableRow key={release.id} sx={latestSx}>
-        <TableCell align="center" sx={{ width: "10px" }}>{!isLatest && <IconButton onClick={toggleExpand}>{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</IconButton>}</TableCell>
+      <TableRow key={release.id} sx={backgroundColor}>
+        <TableCell align="center" sx={{ width: "10px" }}>{!isLatest && !isDefault && <IconButton onClick={toggleExpand}>{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</IconButton>}</TableCell>
         <TableCell align="left"><Typography>{release.body.name}</Typography></TableCell>
         <TableCell align="center" sx={{ width: "10px" }}>{release.branches.length ? <ForkRightIcon /> : <></>}</TableCell>
         <TableCell align="left"><Burger.DateTimeFormatter timestamp={release.body.created} /></TableCell>
         <TableCell align="left">{release.body.note}</TableCell>
         <TableCell align="center">
-          {isLatest ?
-            <Burger.PrimaryButton label={'releases.button.release'} onClick={() => setReleaseComposer(true)} /> :
-            <Burger.SecondaryButton label={'buttons.download'} onClick={() => onDownload(release.body.data)} />
-          }
+          {actionButton()}
         </TableCell>
         <TableCell align="right">
           {dialogOpen ? <ReleaseDelete release={release} onClose={handleDialogClose} /> : null}
-          {!isLatest && <IconButton onClick={() => setDialogOpen(true)} sx={{ color: 'error.main' }}><DeleteOutlineOutlinedIcon /> </IconButton>}
+          {!isLatest && !isDefault && <IconButton onClick={() => setDialogOpen(true)} sx={{ color: 'error.main' }}><DeleteOutlineOutlinedIcon /> </IconButton>}
         </TableCell>
       </TableRow>
       {expanded &&
@@ -233,7 +247,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
                   <TableCell align="left"><Burger.DateTimeFormatter timestamp={branch.branch.created} /></TableCell>
                   <TableCell align="left">Branch created from release: {release.body.name}</TableCell>
                   <TableCell align="center">
-                    <Burger.SecondaryButton label={'releases.button.checkout'} onClick={() => handleCheckout(branch.branch)}></Burger.SecondaryButton>
+                    <Burger.SecondaryButton label={'releases.button.checkout'} onClick={() => handleCheckout(branch.branch.name)} />
                   </TableCell>
                   <TableCell align="right">
                     <IconButton sx={{ color: 'error.main' }} onClick={() => handleDelete(branch.id)}><DeleteOutlineOutlinedIcon /> </IconButton>

@@ -1,7 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import React from "react";
 import { FormattedMessage } from "react-intl";
-import { Client } from "../context";
+import { Client, Composer } from "../context";
 
 interface Release {
   id: string;
@@ -37,9 +37,22 @@ const latestRelease = {
   branches: []
 };
 
+const defaultBranch = {
+  id: 'default',
+  body: {
+    name: 'default',
+    note: 'This is the default branch that you can go back to',
+    created: '',
+    data: '',
+  },
+  branches: []
+};
+
 
 const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowComponent: TableRowComponent }) => {
 
+  const activeBranch = Composer.useBranchName();
+  const defaultBranchRow = activeBranch === undefined ? [] : [defaultBranch];
   type sortOptions = 'name' | 'created';
   type sortDirections = 'asc' | 'desc';
   const [sort, setSort] = React.useState<sortOptions>('name');
@@ -53,14 +66,14 @@ const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowCompone
           const nameB = b.body.name;
           return (dir === 'asc') ? (nameA.localeCompare(nameB)) : (nameB.localeCompare(nameA));
         });
-        return [latestRelease, ...sortedByName];
+        return [latestRelease, ...defaultBranchRow, ...sortedByName];
       case 'created':
         const sortedByCreated = [...releases].sort((a, b) => {
           const dateA = new Date(a.body.created);
           const dateB = new Date(b.body.created);
           return (dir === 'asc') ? (dateA.getTime() - dateB.getTime()) : (dateB.getTime() - dateA.getTime());
         });
-        return [latestRelease, ...sortedByCreated];
+        return [latestRelease, ...defaultBranchRow, ...sortedByCreated];
       default:
         return [];
     }
