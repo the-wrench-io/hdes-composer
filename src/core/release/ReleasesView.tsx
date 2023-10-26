@@ -168,6 +168,12 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
     }
   }
 
+  const handleTabs = () => {
+    tabs.actions.handleTabCloseAll();
+    tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });
+    tabs.actions.handleTabAdd({ id: 'releases', label: "Releases" });
+  }
+
   const handleBranch = (releaseName: string, releaseId: string) => {
     const branchName = resolveNewBranchName(releaseName, branches);
     const command: Client.AstCommand = {
@@ -178,6 +184,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
     service.withBranch(branchName).create().branch([command])
       .then((data) => {
         actions.handleLoadSite(data);
+        handleTabs();
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
@@ -185,11 +192,10 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
   }
 
   const handleCheckout = (branchName: string) => {
-    tabs.actions.handleTabCloseAll();
     service.withBranch(branchName).getSite()
       .then((data) => {
         actions.handleLoadSite(data);
-        tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });
+        handleTabs();
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
@@ -197,11 +203,10 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
   }
 
   const handleDelete = (branchId: string) => {
-    tabs.actions.handleTabCloseAll();
     service.delete().branch(branchId)
       .then((data) => {
         actions.handleLoadSite(data);
-        tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });
+        handleTabs();
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
