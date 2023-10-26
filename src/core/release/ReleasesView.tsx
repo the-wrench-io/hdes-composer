@@ -144,6 +144,7 @@ const resolveNewBranchName = (releaseName: string, branches: Client.AstBranch[])
 
 const Row: React.FC<{ release: Release }> = ({ release }) => {
   const { service, actions, site } = Composer.useComposer();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const tabs = Burger.useTabs();
   const branches = Object.values(site.branches).map((b) => b.ast!);
   const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
@@ -180,10 +181,13 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
       value: branchName,
       id: releaseId
     }
+    const key = enqueueSnackbar(<FormattedMessage id="release.branch.creating" values={{ name: branchName }} />, { persist: true });
     service.withBranch(branchName).create().branch([command])
       .then((data) => {
         actions.handleLoadSite(data);
         handleTabs();
+        closeSnackbar(key);
+        enqueueSnackbar(<FormattedMessage id="release.branch.created" values={{ name: branchName }} />);
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
@@ -195,17 +199,21 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
       .then((data) => {
         actions.handleLoadSite(data);
         handleTabs();
+        enqueueSnackbar(<FormattedMessage id="release.branch.checkout" values={{ name: branchName }} />);
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
       });
   }
 
-  const handleDelete = (branchId: string) => {
+  const handleDelete = (branchId: string, branchName: string) => {
+    const key = enqueueSnackbar(<FormattedMessage id="release.branch.deleting" values={{ name: branchName }} />, { persist: true });
     service.delete().branch(branchId)
       .then((data) => {
         actions.handleLoadSite(data);
         handleTabs();
+        closeSnackbar(key);
+        enqueueSnackbar(<FormattedMessage id="release.branch.deleted" values={{ name: branchName }} />);
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
@@ -254,7 +262,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
                     <Burger.SecondaryButton label={'releases.button.checkout'} onClick={() => handleCheckout(branch.branch.name)} />
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton sx={{ color: 'error.main' }} onClick={() => handleDelete(branch.id)}><DeleteOutlineOutlinedIcon /> </IconButton>
+                    <IconButton sx={{ color: 'error.main' }} onClick={() => handleDelete(branch.id, branch.branch.name)}><DeleteOutlineOutlinedIcon /> </IconButton>
                   </TableCell>
                 </StyledTableRow>
               )

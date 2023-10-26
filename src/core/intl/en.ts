@@ -257,6 +257,11 @@ const en = {
   'releases.latest.name': 'latest',
   'releases.latest.note': 'These are current assets with the latest changes that can be released',
 
+  'release.branch.creating': 'Creating new branch: {name}',
+  'release.branch.created': 'Created new branch: {name}',
+  'release.branch.deleting': 'Deleting branch: {name}',
+  'release.branch.deleted': 'Deleted branch: {name}',
+  'release.branch.checkout': 'Checked out to branch: {name}',
 
   'debug.toolbar.options': "Options",
   'debug.toolbar.selectAsset': "Select asset to debug",
