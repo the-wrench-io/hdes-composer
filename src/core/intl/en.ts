@@ -15,6 +15,7 @@ const en = {
   'explorer.tabs.search': 'search',
 
   'explorer.active.branch': 'Active branch: {name}',
+  'explorer.active.branch.default': 'default',
 
   'activities.title': 'Activities',
   'activities.desc': 'Create, view, and navigate site resources',
@@ -32,8 +33,8 @@ const en = {
   'activities.migration.desc': 'Use a JSON file to perform a migration of a site.',
 
   'activities.releases.title': 'Releases',
-  'activities.releases.desc1': 'A Release is a snapshot of all site content at one certain point of time.',
-  'activities.releases.desc2': 'Each Release can be downloaded to be used for production or backup purposes, or can be branched for further editing. This will replace all current assets so make sure any changes are saved.',
+  'activities.releases.desc': 'A Release is a snapshot of all site content at one certain point of time.',
+  'activities.releases.desc.additional': 'Each Release can be downloaded to be used for production or backup purposes, or can be branched for further editing. This will replace all current assets so make sure any changes are saved.',
   'activities.releases.view': 'View all releases',
   'activities.releases.graph': 'Graph',
 
@@ -236,6 +237,7 @@ const en = {
   'releases.composer.assetName': "Release name",
   'releases.composer.assetDesc': "Release description",
   'releases.composer.errorsTitle': "Error while creating release",
+
   'releases.table.title': 'Releases and Branches',
   'releases.table.column.name': 'Name',
   'releases.table.column.message': 'Message',
@@ -250,6 +252,10 @@ const en = {
   'releases.button.branch': 'Create new branch',
   'releases.button.checkout': 'Checkout',
   'releases.button.release': 'Release',
+  'releases.default.name': 'default',
+  'releases.default.note': 'This is the default branch that you can go back to',
+  'releases.latest.name': 'latest',
+  'releases.latest.note': 'These are current assets with the latest changes that can be released',
 
 
   'debug.toolbar.options': "Options",

@@ -1,23 +1,8 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import React from "react";
-import { FormattedMessage } from "react-intl";
-import { Client, Composer } from "../context";
-
-interface Release {
-  id: string;
-  body: {
-    name: string;
-    note?: string;
-    created: string;
-    data?: string;
-  };
-  branches: ReleaseBranch[];
-}
-
-interface ReleaseBranch {
-  id: string;
-  branch: Client.AstBranch;
-}
+import { FormattedMessage, useIntl } from "react-intl";
+import { Composer } from "../context";
+import { Release } from "./release-types";
 
 interface ReleasesTableProps {
   releases: Release[];
@@ -26,37 +11,38 @@ interface ReleasesTableProps {
   }>;
 }
 
-const latestRelease = {
-  id: 'latest',
-  body: {
-    name: 'latest',
-    note: 'These are current assets with the latest changes that can be released',
-    created: '',
-    data: '',
-  },
-  branches: []
-};
-
-const defaultBranch = {
-  id: 'default',
-  body: {
-    name: 'default',
-    note: 'This is the default branch that you can go back to',
-    created: '',
-    data: '',
-  },
-  branches: []
-};
-
-
 const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowComponent: TableRowComponent }) => {
 
   const activeBranch = Composer.useBranchName();
-  const defaultBranchRow = activeBranch === undefined ? [] : [defaultBranch];
+  const intl = useIntl();
   type sortOptions = 'name' | 'created';
   type sortDirections = 'asc' | 'desc';
   const [sort, setSort] = React.useState<sortOptions>('name');
   const [direction, setDirection] = React.useState<sortDirections>('desc');
+
+  const latestRelease = {
+    id: 'latest',
+    body: {
+      name: intl.formatMessage({ id: 'releases.latest.name' }),
+      note: intl.formatMessage({ id: 'releases.latest.note' }),
+      created: '',
+      data: '',
+    },
+    branches: []
+  };
+
+  const defaultBranch = {
+    id: 'default',
+    body: {
+      name: intl.formatMessage({ id: 'releases.default.name' }),
+      note: intl.formatMessage({ id: 'releases.default.note' }),
+      created: '',
+      data: '',
+    },
+    branches: []
+  };
+
+  const defaultBranchRow = activeBranch === undefined ? [] : [defaultBranch];
 
   const sortByParam = (param: sortOptions, dir: sortDirections) => {
     switch (param) {
@@ -119,5 +105,4 @@ const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowCompone
   )
 }
 
-export type { Release, ReleaseBranch, ReleasesTableProps };
 export default ReleasesTable;

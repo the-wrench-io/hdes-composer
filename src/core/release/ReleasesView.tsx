@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Box, Typography, IconButton,
   TableCell, TableRow, Card, alpha, styled,
@@ -7,16 +8,17 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ForkRightIcon from '@mui/icons-material/ForkRight';
-import ShortcutIcon from '@mui/icons-material/Shortcut';
+
 import { FormattedMessage } from 'react-intl';
 import fileDownload from 'js-file-download'
 import { useSnackbar } from 'notistack';
 
-import Burger from '@the-wrench-io/react-burger';
-import { Composer, Client } from '../context';
 import { ReleaseComposer } from './ReleaseComposer';
 import { ErrorView } from '../styles';
-import ReleasesTable, { Release, ReleaseBranch } from './ReleasesTable';
+import ReleasesTable from './ReleasesTable';
+import { Release, ReleaseBranch } from './release-types';
+import { Composer, Client } from '../context';
+import Burger from '@the-wrench-io/react-burger';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.explorer.main, .05),
@@ -59,8 +61,8 @@ const ReleasesView: React.FC<{}> = () => {
         <Box alignSelf="center">
           <Typography variant="h3" sx={{ p: 1, mb: 3, fontWeight: "bold", color: "mainContent.dark" }}>
             <FormattedMessage id="activities.releases.title" />: {releases.length}
-            <Typography variant="body2" sx={{ pt: 1 }}><FormattedMessage id={"activities.releases.desc1"} /></Typography>
-            <Typography variant="body2" sx={{ pt: 1 }}><FormattedMessage id={"activities.releases.desc2"} /></Typography>
+            <Typography variant="body2" sx={{ pt: 1 }}><FormattedMessage id={"activities.releases.desc"} /></Typography>
+            <Typography variant="body2" sx={{ pt: 1 }}><FormattedMessage id={"activities.releases.desc.additional"} /></Typography>
           </Typography>
         </Box>
         <Box flexGrow={1} />
@@ -83,8 +85,6 @@ const ReleasesView: React.FC<{}> = () => {
     </Box>
   );
 }
-
-
 
 const ReleaseDelete: React.FC<{ release: Release, onClose: () => void }> = ({ release, onClose }) => {
   const { service, actions } = Composer.useComposer();
@@ -141,7 +141,6 @@ const resolveNewBranchName = (releaseName: string, branches: Client.AstBranch[])
   const branchNo: number = matches.length + 1
   return releaseName + "_dev_" + branchNo;
 }
-
 
 const Row: React.FC<{ release: Release }> = ({ release }) => {
   const { service, actions, site } = Composer.useComposer();

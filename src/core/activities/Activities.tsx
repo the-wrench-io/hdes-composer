@@ -64,7 +64,7 @@ const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[]
     onView: () => tabs.handleTabAdd({ id: 'releases', label: "Releases" }),
     onTertiary: () => tabs.handleTabAdd({ id: 'graph', label: "Release Graph" }),
     title: "activities.releases.title",
-    desc: "activities.releases.desc1",
+    desc: "activities.releases.desc",
     type: "releases",
     buttonCreate: "buttons.create",
     buttonViewAll: "activities.releases.view",
