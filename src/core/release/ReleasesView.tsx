@@ -208,7 +208,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
 
   const handleDelete = (branchId: string, branchName: string) => {
     const key = enqueueSnackbar(<FormattedMessage id="release.branch.deleting" values={{ name: branchName }} />, { persist: true });
-    service.delete().branch(branchId)
+    service.withBranch("default").delete().branch(branchId)
       .then((data) => {
         actions.handleLoadSite(data);
         handleTabs();
