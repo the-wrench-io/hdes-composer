@@ -14,8 +14,8 @@ import {
   ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
   FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
   Input, Output, CsvRow, VersionEntity, 
-  DiffRequest, TagDiff,
-  SummaryItem, AstTagSummary, BranchId
+  DiffRequest, DiffResponse,
+  SummaryEntity, AstTagSummary, BranchId
 } from "./api";
 
 import { StoreErrorImpl as StoreErrorImplAs, StoreError } from './error';
@@ -38,8 +38,8 @@ declare namespace HdesClient {
     ProgramResult, ServiceResult, DecisionResult, DecisionLog, DecisionLogEntry, 
     FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
     Input, Output, CsvRow, VersionEntity, 
-    DiffRequest, TagDiff,
-    SummaryItem, AstTagSummary
+    DiffRequest, DiffResponse,
+    SummaryEntity, AstTagSummary
   };
 }
 
@@ -129,7 +129,7 @@ namespace HdesClient {
     version(): Promise<HdesClient.VersionEntity> {
       return this._store.fetch("/version", { method: "GET", body: undefined });
     }
-    diff(input: HdesClient.DiffRequest): Promise<HdesClient.TagDiff> {
+    diff(input: HdesClient.DiffRequest): Promise<HdesClient.DiffResponse> {
       return this._store.fetch(`/diff?baseId=${input.baseId}&targetId=${input.targetId}`, { method: "GET", body: undefined });
     }
     summary(tagId: string): Promise<HdesClient.AstTagSummary> {

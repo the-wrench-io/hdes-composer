@@ -320,7 +320,12 @@ export interface DeleteBuilder {
   branch(branchId: BranchId): Promise<Site>;
 }
 
-export interface TagDiff {
+export interface DiffRequest {
+  baseId: string;
+  targetId: string;
+}
+
+export interface DiffResponse {
   baseName: string;
   targetName: string;
   baseId: string;
@@ -329,12 +334,7 @@ export interface TagDiff {
   body: string;
 }
 
-export interface DiffRequest {
-  baseId: string;
-  targetId: string;
-}
-
-export interface SummaryItem {
+export interface SummaryEntity {
   id: string;
   name: string;
   body: string;
@@ -342,9 +342,9 @@ export interface SummaryItem {
 
 export interface AstTagSummary {
   tagName: string;
-  flows: SummaryItem[];
-  services: SummaryItem[];
-  decisions: SummaryItem[];
+  flows: SummaryEntity[];
+  services: SummaryEntity[];
+  decisions: SummaryEntity[];
 }
 
 export interface VersionEntity {
@@ -363,7 +363,7 @@ export interface Service {
   getSite(): Promise<Site>
   copy(id: string, name: string): Promise<Site>
   version(): Promise<VersionEntity>
-  diff(input: DiffRequest): Promise<TagDiff>
+  diff(input: DiffRequest): Promise<DiffResponse>
   summary(tagId: string): Promise<AstTagSummary>
 }
 export interface Store {

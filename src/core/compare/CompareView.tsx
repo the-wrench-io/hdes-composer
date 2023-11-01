@@ -13,7 +13,7 @@ import { OutputFormatType } from "diff2html/lib/types";
 interface CompareDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  diff?: Client.TagDiff;
+  diff?: Client.DiffResponse;
 }
 
 const AssetMapper: React.FC<{ assets?: Client.AstTagSummary }> = ({ assets }) => {
@@ -115,7 +115,7 @@ const CompareView: React.FC = () => {
   const [targetSummary, setTargetSummary] = React.useState<Client.AstTagSummary>();
   const [disabled, setDisabled] = React.useState<boolean>(true);
   const [open, setOpen] = React.useState<boolean>(false);
-  const [diff, setDiff] = React.useState<Client.TagDiff>();
+  const [diff, setDiff] = React.useState<Client.DiffResponse>();
 
   React.useEffect(() => {
     if (base) {

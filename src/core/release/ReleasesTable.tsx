@@ -4,6 +4,9 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Composer } from "../context";
 import { Release } from "./release-types";
 
+type SortOptions = 'name' | 'created';
+type SortDirections = 'asc' | 'desc';
+
 interface ReleasesTableProps {
   releases: Release[];
   tableRowComponent: React.FC<{
@@ -11,14 +14,9 @@ interface ReleasesTableProps {
   }>;
 }
 
-const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowComponent: TableRowComponent }) => {
-
+const useSort = (releases: Release[], sort: SortOptions, direction: SortDirections) => {
   const activeBranch = Composer.useBranchName();
   const intl = useIntl();
-  type sortOptions = 'name' | 'created';
-  type sortDirections = 'asc' | 'desc';
-  const [sort, setSort] = React.useState<sortOptions>('name');
-  const [direction, setDirection] = React.useState<sortDirections>('desc');
 
   const latestRelease = {
     id: 'latest',
@@ -44,36 +42,39 @@ const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowCompone
 
   const defaultBranchRow = activeBranch === undefined ? [] : [defaultBranch];
 
-  const sortByParam = (param: sortOptions, dir: sortDirections) => {
-    switch (param) {
-      case 'name':
-        const sortedByName = [...releases].sort((a, b) => {
-          const nameA = a.body.name;
-          const nameB = b.body.name;
-          return (dir === 'asc') ? (nameA.localeCompare(nameB)) : (nameB.localeCompare(nameA));
-        });
-        return [latestRelease, ...defaultBranchRow, ...sortedByName];
-      case 'created':
-        const sortedByCreated = [...releases].sort((a, b) => {
-          const dateA = new Date(a.body.created);
-          const dateB = new Date(b.body.created);
-          return (dir === 'asc') ? (dateA.getTime() - dateB.getTime()) : (dateB.getTime() - dateA.getTime());
-        });
-        return [latestRelease, ...defaultBranchRow, ...sortedByCreated];
-      default:
-        return [];
-    }
-  };
+  switch (sort) {
+    case 'name':
+      const sortedByName = [...releases].sort((a, b) => {
+        const nameA = a.body.name;
+        const nameB = b.body.name;
+        return (direction === 'asc') ? (nameA.localeCompare(nameB)) : (nameB.localeCompare(nameA));
+      });
+      return [latestRelease, ...defaultBranchRow, ...sortedByName];
+    case 'created':
+      const sortedByCreated = [...releases].sort((a, b) => {
+        const dateA = new Date(a.body.created);
+        const dateB = new Date(b.body.created);
+        return (direction === 'asc') ? (dateA.getTime() - dateB.getTime()) : (dateB.getTime() - dateA.getTime());
+      });
+      return [latestRelease, ...defaultBranchRow, ...sortedByCreated];
+    default:
+      return [];
+  }
+};
+
+const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowComponent: TableRowComponent }) => {
+  const [sort, setSort] = React.useState<SortOptions>('name');
+  const [direction, setDirection] = React.useState<SortDirections>('desc');
 
   const sortByName = () => {
     setSort('name');
-    setDirection((direction === 'asc') ? 'desc' : 'asc');
-  }
+    setDirection(direction === 'asc' ? 'desc' : 'asc');
+  };
 
   const sortByCreated = () => {
     setSort('created');
-    setDirection((direction === 'asc') ? 'desc' : 'asc');
-  }
+    setDirection(direction === 'asc' ? 'desc' : 'asc');
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -82,13 +83,13 @@ const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowCompone
           <TableRow sx={{ p: 1 }}>
             <TableCell sx={{ width: "10px" }} />
             <TableCell align="left" sx={{ fontWeight: 'bold' }}>
-              <TableSortLabel active={sort === 'name'} direction={direction} onClick={() => sortByName()}>
+              <TableSortLabel active={sort === 'name'} direction={direction} onClick={sortByName}>
                 <FormattedMessage id="releases.view.tag" />
               </TableSortLabel>
             </TableCell>
             <TableCell sx={{ width: "10px" }} />
             <TableCell align="left" sx={{ fontWeight: 'bold' }}>
-              <TableSortLabel active={sort === 'created'} direction={direction} onClick={() => sortByCreated()}>
+              <TableSortLabel active={sort === 'created'} direction={direction} onClick={sortByCreated}>
                 <FormattedMessage id="releases.view.created" />
               </TableSortLabel>
             </TableCell>
@@ -98,7 +99,7 @@ const ReleasesTable: React.FC<ReleasesTableProps> = ({ releases, tableRowCompone
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortByParam(sort, direction).map((release, index) => (<TableRowComponent key={index} release={release} />))}
+          {useSort(releases, sort, direction).map((release, index) => (<TableRowComponent key={index} release={release} />))}
         </TableBody>
       </Table>
     </TableContainer>
