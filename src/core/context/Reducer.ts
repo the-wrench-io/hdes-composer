@@ -6,7 +6,8 @@ enum ActionType {
   setDebugUpdate = "setDebugUpdate",
   setSite = "setSite",
   setPageUpdate = "setPageUpdate",
-  setPageUpdateRemove = "setPageUpdateRemove"
+  setPageUpdateRemove = "setPageUpdateRemove",
+  setBranchUpdate = "setBranchUpdate"
 }
 
 interface Action {
@@ -15,6 +16,7 @@ interface Action {
   setPageUpdate?: { page: Client.EntityId, value: Client.AstCommand[] };
   setSite?: { site: Client.Site };
   setDebugUpdate?: Ide.DebugSession;
+  setBranchUpdate?: string;
 }
 
 const ActionBuilder = {
@@ -22,6 +24,7 @@ const ActionBuilder = {
   setPageUpdate: (setPageUpdate: { page: Client.EntityId, value: Client.AstCommand[] }) => ({ type: ActionType.setPageUpdate, setPageUpdate }),
   setSite: (setSite: { site: Client.Site }) => ({ type: ActionType.setSite, setSite }),
   setDebugUpdate: (setDebugUpdate: Ide.DebugSession) => ({ type: ActionType.setDebugUpdate, setDebugUpdate }),
+  setBranchUpdate: (setBranchUpdate?: string) => ({ type: ActionType.setBranchUpdate, setBranchUpdate })
 }
 
 class ReducerDispatch implements Ide.Actions {
@@ -49,6 +52,9 @@ class ReducerDispatch implements Ide.Actions {
     } else {
       return this._service.getSite().then(site => this._sessionDispatch(ActionBuilder.setSite({site})));  
     }
+  }
+  handleBranchUpdate(branchName?: string): void {
+    this._sessionDispatch(ActionBuilder.setBranchUpdate(branchName));
   }
   handleDebugUpdate(debug: Ide.DebugSession): void {
     this._sessionDispatch(ActionBuilder.setDebugUpdate(debug));
@@ -88,6 +94,13 @@ const Reducer = (state: Ide.Session, action: Action): Ide.Session => {
     case ActionType.setPageUpdateRemove: {
       if (action.setPageUpdateRemove) {
         return state.withoutPages(action.setPageUpdateRemove.pages);
+      }
+      console.error("Action data error", action);
+      return state;
+    }
+    case ActionType.setBranchUpdate: {
+      if (action.setBranchUpdate) {
+        return state.withBranch(action.setBranchUpdate);
       }
       console.error("Action data error", action);
       return state;

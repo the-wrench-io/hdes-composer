@@ -71,17 +71,20 @@ class SessionData implements Composer.Session {
   private _pages: Record<Client.EntityId, Composer.PageUpdate>;
   private _cache: SiteCache;
   private _debug: Composer.DebugSessions;
+  private _branchName?: string;
   
   constructor(props: {
     site?: Client.Site;
     pages?: Record<Client.EntityId, Composer.PageUpdate>;
     cache?: SiteCache;
     debug?: Composer.DebugSessions;
+    branchName?: string;
   }) {
     this._site = props.site ? props.site : { name: "", contentType: "OK", tags: {}, flows: {}, decisions: {}, services: {}, branches: {} };
     this._pages = props.pages ? props.pages : {};
     this._cache = props.cache ? props.cache : new SiteCache(this._site);
     this._debug = props.debug ? props.debug : { values: {}};
+    this._branchName = props.branchName ? props.branchName : undefined;
   }
   get site() {
     return this._site;
@@ -91,6 +94,9 @@ class SessionData implements Composer.Session {
   }
   get debug() {
     return this._debug;
+  }
+  get branchName() {
+    return this._branchName;
   }
   getDecision(decisionName: string): undefined | Client.Entity<Client.AstDecision> {
     return this._cache.getDecision(decisionName);
@@ -105,7 +111,7 @@ class SessionData implements Composer.Session {
     return this._cache.getEntity(entityId);
   }
   withSite(site: Client.Site) {
-    return new SessionData({ site: site, pages: this._pages, debug: this._debug });
+    return new SessionData({ site: site, pages: this._pages, debug: this._debug, branchName: this._branchName });
   }
   withDebug(debugSession: Composer.DebugSession) {
     const newDebug: Record<Client.EntityId, Composer.DebugSession> = {};
@@ -114,7 +120,10 @@ class SessionData implements Composer.Session {
       selected: debugSession.selected,
       values: Object.assign({}, this._debug.values, newDebug)
     }
-    return new SessionData({ site: this._site, pages: this._pages, cache: this._cache, debug });
+    return new SessionData({ site: this._site, pages: this._pages, cache: this._cache, debug, branchName: this._branchName });
+  }
+  withBranch(branchName: string): Composer.Session {
+    return new SessionData({ site: this._site, pages: this._pages, cache: this._cache, debug: this._debug, branchName });
   }
   withoutPages(pageIds: Client.EntityId[]): Composer.Session {
     const pages = {};
@@ -124,7 +133,7 @@ class SessionData implements Composer.Session {
       }
       pages[page.origin.id] = page;
     }
-    return new SessionData({ site: this._site, pages, cache: this._cache, debug: this._debug });
+    return new SessionData({ site: this._site, pages, cache: this._cache, debug: this._debug, branchName: this._branchName });
   }
   withPage(page: Client.EntityId): Composer.Session {
     if (this._pages[page]) {
@@ -139,7 +148,7 @@ class SessionData implements Composer.Session {
     }
 
     pages[page] = new ImmutablePageUpdate({ origin, saved: true, value: [] });
-    return new SessionData({ site: this._site, pages, cache: this._cache, debug: this._debug });
+    return new SessionData({ site: this._site, pages, cache: this._cache, debug: this._debug, branchName: this._branchName });
   }
   withPageValue(page: Client.EntityId, value: Client.AstCommand[]): Composer.Session {
     const session = this.withPage(page);
@@ -148,7 +157,7 @@ class SessionData implements Composer.Session {
     const pages = Object.assign({}, session.pages);
     pages[page] = pageUpdate.withValue(value);
 
-    return new SessionData({ site: session.site, pages, cache: this._cache, debug: this._debug });
+    return new SessionData({ site: session.site, pages, cache: this._cache, debug: this._debug, branchName: this._branchName });
   }
 }
 

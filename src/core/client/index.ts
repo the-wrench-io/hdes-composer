@@ -66,18 +66,7 @@ namespace HdesClient {
       this._headers["Content-Type"] = "application/json;charset=UTF-8";
     }
     withBranch(branchName?: string): HdesClient.ServiceImpl {
-      if (branchName) {
-        if (branchName === "default") {
-          this._branch = undefined;
-          this._headers = {};
-        } else {
-          this._branch = branchName;
-          this._headers["Branch-Name"] = branchName;
-        }
-      }
-      this._headers["Content-Type"] = "application/json;charset=UTF-8"
-      return this;
-      //return new ServiceImpl(this._store, branchName);
+      return new ServiceImpl(this._store, branchName);
     }
     get branch(): string | undefined {
       return this._branch;

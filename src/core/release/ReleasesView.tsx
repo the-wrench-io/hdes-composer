@@ -184,6 +184,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
     const key = enqueueSnackbar(<FormattedMessage id="release.branch.creating" values={{ name: branchName }} />, { persist: true });
     service.withBranch(branchName).create().branch([command])
       .then((data) => {
+        actions.handleBranchUpdate(branchName);
         actions.handleLoadSite(data);
         handleTabs();
         closeSnackbar(key);
@@ -197,6 +198,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
   const handleCheckout = (branchName: string) => {
     service.withBranch(branchName).getSite()
       .then((data) => {
+        actions.handleBranchUpdate(branchName);
         actions.handleLoadSite(data);
         handleTabs();
         enqueueSnackbar(<FormattedMessage id="release.branch.checkout" values={{ name: branchName }} />);
@@ -210,6 +212,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
     const key = enqueueSnackbar(<FormattedMessage id="release.branch.deleting" values={{ name: branchName }} />, { persist: true });
     service.withBranch("default").delete().branch(branchId)
       .then((data) => {
+        actions.handleBranchUpdate("default");
         actions.handleLoadSite(data);
         handleTabs();
         closeSnackbar(key);
