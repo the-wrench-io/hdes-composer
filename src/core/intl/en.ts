@@ -226,6 +226,7 @@ const en = {
   'dialog.save.button.confirm': 'Save',
 
   'releases.delete.content': 'Are you sure you want to delete release: {name}',
+  'releases.delete.error.title': 'Error deleting release',
   'releases.composer.createdMessage': 'Created new release {name}',
   'release.delete.title': 'Delete release',
   'release.deleted.message': 'Release {name} deleted',
@@ -258,6 +259,10 @@ const en = {
   'releases.latest.name': 'latest',
   'releases.latest.note': 'These are current assets with the latest changes that can be released',
   'releases.details.title': 'Release assets: {name}',
+
+  'branch.delete.title': 'Delete branch',
+  'branch.delete.content': 'Are you sure you want to delete branch: {name}',
+  'branch.delete.error.title': 'Error deleting branch',
 
   'release.branch.creating': 'Creating new branch: {name}',
   'release.branch.created': 'Created new branch: {name}',

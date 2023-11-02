@@ -25,6 +25,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.explorer.main, .05),
 }));
 
+const resolveNewBranchName = (releaseName: string, branches: Client.AstBranch[]): string => {
+  const matches: Client.AstBranch[] = branches.filter((branch) => branch.name.includes(releaseName));
+  if (matches.length === 0) {
+    return releaseName + "_dev";
+  }
+  const branchNo: number = matches.length + 1
+  return releaseName + "_dev_" + branchNo;
+}
+
+const handleTabs = (actions: Burger.TabsActions) => {
+  actions.handleTabCloseAll();
+  actions.handleTabAdd({ id: 'activities', label: "Activities" });
+  actions.handleTabAdd({ id: 'releases', label: "Releases" });
+}
+
 const ReleasesView: React.FC<{}> = () => {
 
   const { site } = Composer.useComposer();
@@ -87,6 +102,60 @@ const ReleasesView: React.FC<{}> = () => {
   );
 }
 
+const BranchDelete: React.FC<{ branch: ReleaseBranch, onClose: () => void }> = ({ branch, onClose }) => {
+  const { service, actions } = Composer.useComposer();
+  const tabs = Burger.useTabs();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [apply, setApply] = React.useState(false);
+  const [errors, setErrors] = React.useState<Client.StoreError>();
+
+  const id = branch.id;
+  const name = branch.branch.name;
+
+  let editor = (<></>);
+  if (errors) {
+    editor = (<Box>
+      <Typography variant="h4">
+        <FormattedMessage id="branch.delete.error.title" />
+      </Typography>
+      <ErrorView error={errors} />
+    </Box>)
+  } else {
+    editor = (<Typography variant="h4">
+      <FormattedMessage id="branch.delete.content" values={{ name }} />
+    </Typography>)
+  }
+
+
+  return (<Burger.Dialog open={true}
+    onClose={onClose}
+    children={editor}
+    backgroundColor="uiElements.main"
+    title='branch.delete.title'
+    submit={{
+      title: "buttons.delete",
+      disabled: apply,
+      onClick: () => {
+        setErrors(undefined);
+        setApply(true);
+
+        const key = enqueueSnackbar(<FormattedMessage id="release.branch.deleting" values={{ name }} />, { persist: true });
+        service.withBranch("default").delete().branch(id)
+          .then((data) => {
+            actions.handleBranchUpdate("default");
+            actions.handleLoadSite(data);
+            handleTabs(tabs.actions);
+            closeSnackbar(key);
+            enqueueSnackbar(<FormattedMessage id="release.branch.deleted" values={{ name }} />);
+          })
+          .catch((error: Client.StoreError) => {
+            setErrors(error);
+          });
+      }
+    }}
+  />);
+}
+
 const ReleaseDelete: React.FC<{ release: Release, onClose: () => void }> = ({ release, onClose }) => {
   const { service, actions } = Composer.useComposer();
   const { enqueueSnackbar } = useSnackbar();
@@ -134,15 +203,6 @@ const ReleaseDelete: React.FC<{ release: Release, onClose: () => void }> = ({ re
   />);
 }
 
-const resolveNewBranchName = (releaseName: string, branches: Client.AstBranch[]): string => {
-  const matches: Client.AstBranch[] = branches.filter((branch) => branch.name.includes(releaseName));
-  if (matches.length === 0) {
-    return releaseName + "_dev";
-  }
-  const branchNo: number = matches.length + 1
-  return releaseName + "_dev_" + branchNo;
-}
-
 const Row: React.FC<{ release: Release }> = ({ release }) => {
   const { service, actions, site } = Composer.useComposer();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -150,6 +210,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
   const tabs = Burger.useTabs();
   const branches = Object.values(site.branches).map((b) => b.ast!);
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState<boolean>(false);
+  const [deleteBranchDialogOpen, setDeleteBranchDialogOpen] = React.useState<boolean>(false);
   const [detailsDialogOpen, setDetailsDialogOpen] = React.useState<boolean>(false);
   const [details, setDetails] = React.useState<Client.AstTagSummary>();
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -174,13 +235,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
     }
   }
 
-  const handleTabs = () => {
-    tabs.actions.handleTabCloseAll();
-    tabs.actions.handleTabAdd({ id: 'activities', label: "Activities" });
-    tabs.actions.handleTabAdd({ id: 'releases', label: "Releases" });
-  }
-
-  const handleBranch = (releaseName: string, releaseId: string) => {
+  const handleCreateBranch = (releaseName: string, releaseId: string) => {
     const branchName = resolveNewBranchName(releaseName, branches);
     const command: Client.AstCommand = {
       type: 'CREATE_BRANCH',
@@ -192,7 +247,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
       .then((data) => {
         actions.handleBranchUpdate(branchName);
         actions.handleLoadSite(data);
-        handleTabs();
+        handleTabs(tabs.actions);
         closeSnackbar(key);
         enqueueSnackbar(<FormattedMessage id="release.branch.created" values={{ name: branchName }} />);
       })
@@ -206,23 +261,8 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
       .then((data) => {
         actions.handleBranchUpdate(branchName);
         actions.handleLoadSite(data);
-        handleTabs();
+        handleTabs(tabs.actions);
         enqueueSnackbar(<FormattedMessage id="release.branch.checkout" values={{ name: branchName }} />);
-      })
-      .catch((error: Client.StoreError) => {
-        console.error(error)
-      });
-  }
-
-  const handleDelete = (branchId: string, branchName: string) => {
-    const key = enqueueSnackbar(<FormattedMessage id="release.branch.deleting" values={{ name: branchName }} />, { persist: true });
-    service.withBranch("default").delete().branch(branchId)
-      .then((data) => {
-        actions.handleBranchUpdate("default");
-        actions.handleLoadSite(data);
-        handleTabs();
-        closeSnackbar(key);
-        enqueueSnackbar(<FormattedMessage id="release.branch.deleted" values={{ name: branchName }} />);
       })
       .catch((error: Client.StoreError) => {
         console.error(error)
@@ -271,7 +311,8 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
                     <Burger.SecondaryButton label={'releases.button.checkout'} onClick={() => handleCheckout(branch.branch.name)} />
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton sx={{ color: 'error.main' }} onClick={() => handleDelete(branch.id, branch.branch.name)}><DeleteOutlineOutlinedIcon /> </IconButton>
+                    <IconButton sx={{ color: 'error.main' }} onClick={() => setDeleteBranchDialogOpen(true)}><DeleteOutlineOutlinedIcon /> </IconButton>
+                    {deleteBranchDialogOpen ? <BranchDelete branch={branch} onClose={() => setDeleteBranchDialogOpen(false)} /> : null}
                   </TableCell>
                 </StyledTableRow>
               )
@@ -280,7 +321,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
           <TableRow>
             <TableCell />
             <TableCell colSpan={5}>
-              <Burger.PrimaryButton label={'releases.button.branch'} onClick={() => handleBranch(release.body.name, release.id)} />
+              <Burger.PrimaryButton label={'releases.button.branch'} onClick={() => handleCreateBranch(release.body.name, release.id)} />
               <Burger.SecondaryButton label={'releases.button.details'} onClick={() => setDetailsDialogOpen(true)} />
               {detailsDialogOpen &&
                 <Burger.Dialog
