@@ -252,10 +252,12 @@ const en = {
   'releases.button.branch': 'Create new branch',
   'releases.button.checkout': 'Checkout',
   'releases.button.release': 'Release',
+  'releases.button.details': 'View release assets',
   'releases.default.name': 'default',
   'releases.default.note': 'This is the default branch that you can go back to',
   'releases.latest.name': 'latest',
   'releases.latest.note': 'These are current assets with the latest changes that can be released',
+  'releases.details.title': 'Release assets: {name}',
 
   'release.branch.creating': 'Creating new branch: {name}',
   'release.branch.created': 'Created new branch: {name}',

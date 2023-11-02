@@ -170,4 +170,4 @@ const CompareView: React.FC = () => {
   );
 }
 
-export { CompareView };
+export { CompareView, AssetMapper };

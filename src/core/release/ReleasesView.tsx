@@ -9,7 +9,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ForkRightIcon from '@mui/icons-material/ForkRight';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import fileDownload from 'js-file-download'
 import { useSnackbar } from 'notistack';
 
@@ -19,6 +19,7 @@ import ReleasesTable from './ReleasesTable';
 import { Release, ReleaseBranch } from './release-types';
 import { Composer, Client } from '../context';
 import Burger from '@the-wrench-io/react-burger';
+import { AssetMapper } from '../compare/CompareView';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.explorer.main, .05),
@@ -145,18 +146,23 @@ const resolveNewBranchName = (releaseName: string, branches: Client.AstBranch[])
 const Row: React.FC<{ release: Release }> = ({ release }) => {
   const { service, actions, site } = Composer.useComposer();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const intl = useIntl();
   const tabs = Burger.useTabs();
   const branches = Object.values(site.branches).map((b) => b.ast!);
-  const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState<boolean>(false);
+  const [detailsDialogOpen, setDetailsDialogOpen] = React.useState<boolean>(false);
+  const [details, setDetails] = React.useState<Client.AstTagSummary>();
   const [expanded, setExpanded] = React.useState<boolean>(false);
   const [releaseComposer, setReleaseComposer] = React.useState(false);
   const isLatest = release.id === 'latest';
   const isDefault = release.id === 'default';
   const backgroundColor = isLatest || isDefault ? { backgroundColor: '#F2F2F2' } : {};
 
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-  }
+  React.useEffect(() => {
+    if (detailsDialogOpen) {
+      service.summary(release.id).then(setDetails);
+    }
+  }, [detailsDialogOpen])
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -246,8 +252,8 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
           {actionButton()}
         </TableCell>
         <TableCell align="right">
-          {dialogOpen ? <ReleaseDelete release={release} onClose={handleDialogClose} /> : null}
-          {!isLatest && !isDefault && <IconButton onClick={() => setDialogOpen(true)} sx={{ color: 'error.main' }}><DeleteOutlineOutlinedIcon /> </IconButton>}
+          {deleteDialogOpen ? <ReleaseDelete release={release} onClose={() => setDeleteDialogOpen(false)} /> : null}
+          {!isLatest && !isDefault && <IconButton onClick={() => setDeleteDialogOpen(true)} sx={{ color: 'error.main' }}><DeleteOutlineOutlinedIcon /> </IconButton>}
         </TableCell>
       </TableRow>
       {expanded &&
@@ -274,7 +280,17 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
           <TableRow>
             <TableCell />
             <TableCell colSpan={5}>
-              <Burger.PrimaryButton label={'releases.button.branch'} onClick={() => handleBranch(release.body.name, release.id)}></Burger.PrimaryButton>
+              <Burger.PrimaryButton label={'releases.button.branch'} onClick={() => handleBranch(release.body.name, release.id)} />
+              <Burger.SecondaryButton label={'releases.button.details'} onClick={() => setDetailsDialogOpen(true)} />
+              {detailsDialogOpen &&
+                <Burger.Dialog
+                  onClose={() => setDetailsDialogOpen(false)}
+                  backgroundColor='uiElements.main'
+                  title={intl.formatMessage({ id: 'releases.details.title' }, { name: release.body.name })}
+                  open={detailsDialogOpen}
+                >
+                  <AssetMapper assets={details} />
+                </Burger.Dialog>}
             </TableCell>
           </TableRow>
         </>
