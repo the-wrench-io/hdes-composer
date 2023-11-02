@@ -63,7 +63,7 @@ const ReleaseSelect: React.FC<{ release: string, setRelease: (release: string) =
   return (
     <Burger.Select label={label}
       selected={release}
-      onChange={(value) => setRelease(value)}
+      onChange={setRelease}
       items={releases.map((release) => ({
         id: release.id,
         value: <ListItemText primary={release.ast?.name} />
@@ -119,26 +119,20 @@ const CompareView: React.FC = () => {
 
   React.useEffect(() => {
     if (base) {
-      service.summary(base).then((summary) => {
-        setBaseSummary(summary);
-      });
+      service.summary(base).then(setBaseSummary);
     }
   }, [base]);
 
   React.useEffect(() => {
     if (target) {
-      service.summary(target).then((summary) => {
-        setTargetSummary(summary);
-      });
+      service.summary(target).then(setTargetSummary);
     }
   }, [target]);
 
   React.useEffect(() => {
     if (base && target) {
       setDisabled(false);
-      service.diff({ baseId: base, targetId: target }).then((diff) => {
-        setDiff(diff);
-      });
+      service.diff({ baseId: base, targetId: target }).then(setDiff);
     } else {
       setDisabled(true);
     }
