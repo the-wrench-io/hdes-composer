@@ -16,11 +16,11 @@ import { useSnackbar } from 'notistack';
 import { ReleaseComposer } from './ReleaseComposer';
 import { ErrorView } from '../styles';
 import ReleasesTable from './ReleasesTable';
-import { Release, ReleaseBranch } from './release-types';
+import type { Release } from './release-types';
+import { ReleaseBranch } from './release-types';
 import { Composer, Client } from '../context';
 import Burger from '@the-wrench-io/react-burger';
 import { AssetMapper } from '../compare/CompareView';
-
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.explorer.main, .05),
 }));
@@ -102,27 +102,33 @@ const ReleasesView: React.FC<{}> = () => {
   );
 }
 
-const BranchDelete: React.FC<{ branch: ReleaseBranch, onClose: () => void }> = ({ branch, onClose }) => {
+const DeleteDialog: React.FC<{ asset?: ReleaseBranch | Release, onClose: () => void, }> = ({ asset, onClose }) => {
   const { service, actions } = Composer.useComposer();
   const tabs = Burger.useTabs();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [apply, setApply] = React.useState(false);
   const [errors, setErrors] = React.useState<Client.StoreError>();
 
-  const id = branch.id;
-  const name = branch.branch.name;
+  if (asset === undefined) {
+    return <></>;
+  }
+
+  const isBranch = (asset as ReleaseBranch).branch !== undefined;
+  const prefix = isBranch ? "branch" : "release";
+  const id = asset?.id;
+  const name = isBranch ? (asset as ReleaseBranch).branch.name : (asset as Release).body.name;
 
   let editor = (<></>);
   if (errors) {
     editor = (<Box>
       <Typography variant="h4">
-        <FormattedMessage id="branch.delete.error.title" />
+        <FormattedMessage id={prefix + ".delete.error.title"} />
       </Typography>
       <ErrorView error={errors} />
     </Box>)
   } else {
     editor = (<Typography variant="h4">
-      <FormattedMessage id="branch.delete.content" values={{ name }} />
+      <FormattedMessage id={prefix + ".delete.content"} values={{ name }} />
     </Typography>)
   }
 
@@ -131,7 +137,7 @@ const BranchDelete: React.FC<{ branch: ReleaseBranch, onClose: () => void }> = (
     onClose={onClose}
     children={editor}
     backgroundColor="uiElements.main"
-    title='branch.delete.title'
+    title={prefix + '.delete.title'}
     submit={{
       title: "buttons.delete",
       disabled: apply,
@@ -139,18 +145,30 @@ const BranchDelete: React.FC<{ branch: ReleaseBranch, onClose: () => void }> = (
         setErrors(undefined);
         setApply(true);
 
-        const key = enqueueSnackbar(<FormattedMessage id="release.branch.deleting" values={{ name }} />, { persist: true });
-        service.withBranch("default").delete().branch(id)
-          .then((data) => {
-            actions.handleBranchUpdate("default");
-            actions.handleLoadSite(data);
-            handleTabs(tabs.actions);
-            closeSnackbar(key);
-            enqueueSnackbar(<FormattedMessage id="release.branch.deleted" values={{ name }} />);
-          })
-          .catch((error: Client.StoreError) => {
-            setErrors(error);
-          });
+        if (isBranch) {
+          const key = enqueueSnackbar(<FormattedMessage id="release.branch.deleting" values={{ name }} />, { persist: true });
+          service.withBranch("default").delete().branch(id)
+            .then((data) => {
+              actions.handleBranchUpdate("default");
+              actions.handleLoadSite(data);
+              handleTabs(tabs.actions);
+              closeSnackbar(key);
+              enqueueSnackbar(<FormattedMessage id="release.branch.deleted" values={{ name }} />);
+            })
+            .catch((error: Client.StoreError) => {
+              setErrors(error);
+            })
+        } else {
+          service.delete().tag(id)
+            .then(data => {
+              enqueueSnackbar(<FormattedMessage id="release.deleted.message" values={{ name }} />);
+              actions.handleLoadSite(data);
+              onClose();
+            })
+            .catch((error: Client.StoreError) => {
+              setErrors(error);
+            });
+        }
       }
     }}
   />);
@@ -209,8 +227,9 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
   const intl = useIntl();
   const tabs = Burger.useTabs();
   const branches = Object.values(site.branches).map((b) => b.ast!);
-  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState<boolean>(false);
-  const [deleteBranchDialogOpen, setDeleteBranchDialogOpen] = React.useState<boolean>(false);
+  const [assetToDelete, setAssetToDelete] = React.useState<ReleaseBranch | Release>();
+  //const [deleteDialogOpen, setDeleteDialogOpen] = React.useState<boolean>(false);
+  //const [deleteBranchDialogOpen, setDeleteBranchDialogOpen] = React.useState<boolean>(false);
   const [detailsDialogOpen, setDetailsDialogOpen] = React.useState<boolean>(false);
   const [details, setDetails] = React.useState<Client.AstTagSummary>();
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -281,6 +300,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
 
   return (
     <>
+      <DeleteDialog asset={assetToDelete} onClose={() => setAssetToDelete(undefined)} />
       {releaseComposer ? <ReleaseComposer onClose={() => setReleaseComposer(false)} /> : null}
       <TableRow key={release.id} sx={backgroundColor}>
         <TableCell align="center" sx={{ width: "10px" }}>{!isLatest && !isDefault && <IconButton onClick={toggleExpand}>{expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</IconButton>}</TableCell>
@@ -292,8 +312,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
           {actionButton()}
         </TableCell>
         <TableCell align="right">
-          {deleteDialogOpen ? <ReleaseDelete release={release} onClose={() => setDeleteDialogOpen(false)} /> : null}
-          {!isLatest && !isDefault && <IconButton onClick={() => setDeleteDialogOpen(true)} sx={{ color: 'error.main' }}><DeleteOutlineOutlinedIcon /> </IconButton>}
+          {!isLatest && !isDefault && <IconButton onClick={() => setAssetToDelete(release)} sx={{ color: 'error.main' }}><DeleteOutlineOutlinedIcon /> </IconButton>}
         </TableCell>
       </TableRow>
       {expanded &&
@@ -311,8 +330,7 @@ const Row: React.FC<{ release: Release }> = ({ release }) => {
                     <Burger.SecondaryButton label={'releases.button.checkout'} onClick={() => handleCheckout(branch.branch.name)} />
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton sx={{ color: 'error.main' }} onClick={() => setDeleteBranchDialogOpen(true)}><DeleteOutlineOutlinedIcon /> </IconButton>
-                    {deleteBranchDialogOpen ? <BranchDelete branch={branch} onClose={() => setDeleteBranchDialogOpen(false)} /> : null}
+                    <IconButton sx={{ color: 'error.main' }} onClick={() => setAssetToDelete(branch)}><DeleteOutlineOutlinedIcon /> </IconButton>
                   </TableCell>
                 </StyledTableRow>
               )
