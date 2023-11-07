@@ -15,7 +15,7 @@ import {
   FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
   Input, Output, CsvRow, VersionEntity, 
   DiffRequest, DiffResponse,
-  SummaryEntity, AstTagSummary, BranchId
+  AstTagSummaryEntity, AstTagSummary, BranchId
 } from "./api";
 
 import { StoreErrorImpl as StoreErrorImplAs, StoreError } from './error';
@@ -39,7 +39,7 @@ declare namespace HdesClient {
     FlowProgramStepPointerType, FlowProgramStepRefType, FlowExecutionStatus, FlowResult, FlowResultLog, FlowResultErrorLog,
     Input, Output, CsvRow, VersionEntity, 
     DiffRequest, DiffResponse,
-    SummaryEntity, AstTagSummary
+    AstTagSummaryEntity, AstTagSummary
   };
 }
 
