@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 
 import Burger from '@the-wrench-io/react-burger';
 
-import {FlowComposer} from '../flow';
-import {DecisionComposer} from '../decision';
-import {ServiceComposer} from '../service';
+import { FlowComposer } from '../flow';
+import { DecisionComposer } from '../decision';
+import { ServiceComposer } from '../service';
 
 import ReleaseComposer from '../release';
 import MigrationComposer from '../migration';
@@ -18,7 +18,7 @@ import composerVersion from '../version';
 import { Composer } from '../context';
 
 interface ActivityType {
-  type: "releases" | "decisions" | "flows" | "services" | "migration" | "templates" | "debug";
+  type: "releases" | "decisions" | "flows" | "services" | "migration" | "templates" | "debug" | "compare";
   composer?: (handleClose: () => void) => React.ReactChild;
   onCreate?: () => void;
 }
@@ -71,6 +71,15 @@ const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[]
     buttonTertiary: "activities.releases.graph"
   },
   {
+    onCreate: () => tabs.handleTabAdd({ id: 'compare', label: "Compare" }),
+    onView: undefined,
+    title: "activities.compare.title",
+    desc: "activities.compare.desc",
+    type: "compare",
+    buttonCreate: "activities.compare.view",
+    buttonViewAll: undefined,
+  },
+  {
     composer: (handleClose) => <TemplateComposer onClose={handleClose} />,
     onView: () => tabs.handleTabAdd({ id: 'templates', label: "Templates" }),
     title: "activities.templates.title",
@@ -94,14 +103,14 @@ const createCards: (tabs: Burger.TabsActions) => (ActivityData & ActivityType)[]
 const Activities: React.FC<{}> = () => {
   const { actions } = Burger.useTabs();
   const [open, setOpen] = React.useState<number>();
-  const [coreVersion, setCoreVersion] = React.useState<{version: string, built: string}>();
+  const [coreVersion, setCoreVersion] = React.useState<{ version: string, built: string }>();
   const handleClose = () => setOpen(undefined);
   const cards = React.useMemo(() => createCards(actions), [actions]);
   const { service } = Composer.useComposer();
 
   let composer: undefined | React.ReactChild = undefined;
   let openComposer = open !== undefined ? cards[open].composer : undefined;
-  if(openComposer) {
+  if (openComposer) {
     composer = openComposer(handleClose);
   }
 
@@ -109,10 +118,10 @@ const Activities: React.FC<{}> = () => {
     service.version().then((version) => {
       console.log("hdes core version", version, "hdes composer version", composerVersion);
       setCoreVersion(version)
-    }); 
+    });
 
   }, [service, setCoreVersion]);
-  
+
   return (
     <>
       <Typography variant="h3" fontWeight="bold" sx={{ p: 1, m: 1 }}>
@@ -124,18 +133,18 @@ const Activities: React.FC<{}> = () => {
       <Box sx={{ margin: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
         {composer}
         {cards.map((card, index) => (<ActivityItem key={index} data={card} onCreate={() => {
-          if(card.composer) {
-             setOpen(index);
-          } else if(card.onCreate) {
+          if (card.composer) {
+            setOpen(index);
+          } else if (card.onCreate) {
             card.onCreate();
           }
         }} />))}
       </Box>
       <Typography variant="caption" sx={{ pt: 1 }} display={'flex'} flexDirection={'column'} alignItems={'center'}>
-          <FormattedMessage id={"activities.version.composer"} values={{ version: composerVersion.tag, date: composerVersion.built}}/>
-          <Typography variant="caption" sx={{ pt: 1 }} >
-            <FormattedMessage id={"activities.version.core"} values={{ version: coreVersion?.version, date: coreVersion?.built}}/>
-          </Typography>
+        <FormattedMessage id={"activities.version.composer"} values={{ version: composerVersion.tag, date: composerVersion.built }} />
+        <Typography variant="caption" sx={{ pt: 1 }} >
+          <FormattedMessage id={"activities.version.core"} values={{ version: coreVersion?.version, date: coreVersion?.built }} />
+        </Typography>
       </Typography>
     </>
   );

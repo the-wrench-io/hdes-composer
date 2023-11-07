@@ -14,6 +14,9 @@ const en = {
   'explorer.tabs.decisions': 'decisions',
   'explorer.tabs.search': 'search',
 
+  'explorer.active.branch': 'Active branch: {name}',
+  'explorer.active.branch.default': 'default',
+
   'activities.title': 'Activities',
   'activities.desc': 'Create, view, and navigate site resources',
 
@@ -30,9 +33,14 @@ const en = {
   'activities.migration.desc': 'Use a JSON file to perform a migration of a site.',
 
   'activities.releases.title': 'Releases',
-  'activities.releases.desc': 'A Release is a snapshot of all site content at one certain point of time. Use this for testing, prouduction, or backup purposes.',
+  'activities.releases.desc': 'A Release is a snapshot of all site content at one certain point of time.',
+  'activities.releases.desc.additional': 'Each Release can be downloaded to be used for production or backup purposes, or can be branched for further editing. This will replace all current assets so make sure any changes are saved.',
   'activities.releases.view': 'View all releases',
   'activities.releases.graph': 'Graph',
+
+  'activities.compare.title': 'Compare',
+  'activities.compare.desc': 'Compare two releases to see what has changed between them.',
+  'activities.compare.view': 'Compare',
 
   'activities.templates.title': 'Templates',
   'activities.templates.desc': 'Use templates to customise and standardise a page default Markdown content and/or structure. Templates can be applied to new pages upon creation. Not implemented yet!',
@@ -217,18 +225,21 @@ const en = {
   'dialog.save.button.cancel': 'Cancel',
   'dialog.save.button.confirm': 'Save',
 
-  'releases.delete.content': 'Are you sure you want to delete release: {name}',
-  'releases.composer.createdMessage': 'Created new release {name}',
+  'release.delete.content': 'Are you sure you want to delete release: {name}',
+  'release.delete.error.title': 'Error deleting release',
   'release.delete.title': 'Delete release',
   'release.deleted.message': 'Release {name} deleted',
-  'releases.view.note': 'Release notes',
-  'releases.view.tag': 'Release version name',
-  'releases.view.created': 'Date and time',
-  'releases.view.download': 'JSON download',
+  'releases.composer.createdMessage': 'Created new release {name}',
+  'releases.view.note': 'Notes',
+  'releases.view.tag': 'Name',
+  'releases.view.created': 'Created',
+  'releases.view.action': 'Action',
   'releases.composer.title': "Create new release",
   'releases.composer.assetName': "Release name",
   'releases.composer.assetDesc': "Release description",
   'releases.composer.errorsTitle': "Error while creating release",
+
+  'releases.table.title': 'Releases and Branches',
   'releases.table.column.name': 'Name',
   'releases.table.column.message': 'Message',
   'releases.table.column.created': 'Created',
@@ -238,7 +249,26 @@ const en = {
   'releases.add.input.name': 'Name',
   'releases.add.input.msg': 'Comment',
   'releases.add.button.create': 'Create Release',
+  'releases.button.compare': 'Compare',
+  'releases.button.branch': 'Create new branch',
+  'releases.button.checkout': 'Checkout',
+  'releases.button.release': 'Release',
+  'releases.button.details': 'View release assets',
+  'releases.default.name': 'default',
+  'releases.default.note': 'This is the default branch that you can go back to',
+  'releases.latest.name': 'latest',
+  'releases.latest.note': 'These are current assets with the latest changes that can be released',
+  'releases.details.title': 'Release assets: {name}',
 
+  'branch.delete.title': 'Delete branch',
+  'branch.delete.content': 'Are you sure you want to delete branch: {name}',
+  'branch.delete.error.title': 'Error deleting branch',
+
+  'release.branch.creating': 'Creating new branch: {name}',
+  'release.branch.created': 'Created new branch: {name}',
+  'release.branch.deleting': 'Deleting branch: {name}',
+  'release.branch.deleted': 'Deleted branch: {name}',
+  'release.branch.checkout': 'Checked out to branch: {name}',
 
   'debug.toolbar.options': "Options",
   'debug.toolbar.selectAsset': "Select asset to debug",
@@ -296,6 +326,12 @@ const en = {
   'debug.csv.download.options': "Export options",
   'debug.csv.download.wrap': "Wrap cells containing delimiters with quotes",
 
+  'compare.tip': 'Select releases to compare below. Base is the starting point of the comparison, and target is the release that will be compared to the base.',
+  'compare.base': 'Select base release',
+  'compare.target': 'Select target release',
+  'compare.dialog.title': 'Comparing releases {base} and {target}',
+  'compare.dialog.line': 'Inline',
+  'compare.dialog.side': 'Side-by-side',
 
 };
 

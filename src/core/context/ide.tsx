@@ -49,6 +49,7 @@ declare namespace Composer {
     site: HdesClient.Site,
     pages: Record<HdesClient.EntityId, PageUpdate>;
     debug: DebugSessions;
+    branchName?: string;
 
     getDecision(decisionName: string): undefined | HdesClient.Entity<HdesClient.AstDecision>;
     getFlow(flowName: string): undefined | HdesClient.Entity<HdesClient.AstFlow>;
@@ -59,7 +60,7 @@ declare namespace Composer {
     withPage(page: HdesClient.EntityId): Session;
     withPageValue(page: HdesClient.EntityId, value: HdesClient.AstCommand[]): Session;
     withoutPages(pages: HdesClient.EntityId[]): Session;
-
+    withBranch(branchName?: string): Session;
     withSite(site: HdesClient.Site): Session;
   }
 
@@ -69,6 +70,7 @@ declare namespace Composer {
     handleDebugUpdate(debug: DebugSession): void;
     handlePageUpdate(page: HdesClient.EntityId, value: HdesClient.AstCommand[]): void;
     handlePageUpdateRemove(pages: HdesClient.EntityId[]): void;
+    handleBranchUpdate(branchName?: string): void;
   }
 
   interface ContextType {
@@ -112,6 +114,11 @@ namespace Composer {
   export const useSite = () => {
     const result: ContextType = React.useContext(ComposerContext);
     return result.session.site;
+  }
+
+  export const useBranchName = () => {
+    const result: ContextType = React.useContext(ComposerContext);
+    return result.session.branchName;
   }
 
   export const useSession = () => {
@@ -177,11 +184,18 @@ namespace Composer {
   }
 
 
-  export const Provider: React.FC<{ children: React.ReactNode, service: HdesClient.Service }> = ({ children, service }) => {
+  export const Provider: React.FC<{ children: React.ReactNode, service: HdesClient.Service }> = ({ children, service: init }) => {
     const [session, dispatch] = React.useReducer(Reducer, sessionData);
+    const [service, setService] = React.useState<HdesClient.Service>(init);
+    const branchName = session.branchName;
+
+    React.useEffect(() => {
+      setService(prev => prev.withBranch(branchName));
+    }, [branchName]);
+
     const actions = React.useMemo(() => {
       console.log("init ide dispatch");
-      return new ReducerDispatch(dispatch, service)
+      return new ReducerDispatch(dispatch, service);
     }, [dispatch, service]);
 
     React.useLayoutEffect(() => {

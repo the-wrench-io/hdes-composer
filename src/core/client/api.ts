@@ -4,7 +4,8 @@ export type EntityId = string;
 export type FlowId = string;
 export type ServiceId = string;
 export type DecisionId = string;
-export type AstBodyType = "FLOW" | "FLOW_TASK" | "DT" | "TAG";
+export type BranchId = string;
+export type AstBodyType = "FLOW" | "FLOW_TASK" | "DT" | "TAG" | "BRANCH";
 export type Direction = "IN" | "OUT";
 export type ValueType = "TIME" | "DATE" | "DATE_TIME" | "INSTANT" | "PERIOD" | "DURATION" |
   "STRING" | "INTEGER" | "LONG" | "BOOLEAN" | "PERCENT" | "OBJECT" | "ARRAY" | "DECIMAL" | 
@@ -26,7 +27,10 @@ export type AstCommandValue = (
   "SET_HEADER_SCRIPT" | "SET_HEADER_DIRECTION" | "SET_HEADER_EXPRESSION" | "SET_HIT_POLICY" | "SET_CELL_VALUE" |
   "DELETE_CELL" | "DELETE_HEADER" | "DELETE_ROW" |
   "ADD_LOG" | "ADD_HEADER_IN" | "ADD_HEADER_OUT" | "ADD_ROW" |
-  "SET_VALUE_SET"
+  "SET_VALUE_SET" |
+
+  // BRANCH related
+  "CREATE_BRANCH" | "SET_BRANCH_NAME" | "SET_BRANCH_TAG" | "SET_BRANCH_CREATED"
 );
 export interface CommandsAndChanges {
   commands: AstCommand[];
@@ -94,6 +98,7 @@ export interface Site {
   flows: Record<FlowId, Entity<AstFlow>>;
   services: Record<ServiceId, Entity<AstService>>;
   decisions: Record<DecisionId, Entity<AstDecision>>;
+  branches: Record<BranchId, Entity<AstBranch>>;
 }
 
 export interface Entity<A extends AstBody> {
@@ -205,7 +210,13 @@ export interface AstTagValue {
   hash: string;
   bodyType: AstBodyType;
   commands: AstCommand[];
-} 
+}
+
+export interface AstBranch extends AstBody {
+  name: string;
+  created: string;
+  tagId: string;
+}
 
 export interface ServiceErrorMsg {
   id: string;
@@ -298,6 +309,7 @@ export interface CreateBuilder {
   flow(name: string): Promise<Site>;
   service(name: string): Promise<Site>;
   decision(name: string): Promise<Site>;
+  branch(body: AstCommand[]): Promise<Site>;
 }
 
 export interface DeleteBuilder {
@@ -305,6 +317,34 @@ export interface DeleteBuilder {
   flow(flowId: FlowId): Promise<Site>;
   service(serviceId: ServiceId): Promise<Site>;
   decision(decisionId: DecisionId): Promise<Site>;
+  branch(branchId: BranchId): Promise<Site>;
+}
+
+export interface DiffRequest {
+  baseId: string;
+  targetId: string;
+}
+
+export interface DiffResponse {
+  baseName: string;
+  targetName: string;
+  baseId: string;
+  targetId: string;
+  created: string;
+  body: string;
+}
+
+export interface AstTagSummaryEntity {
+  id: string;
+  name: string;
+  body: string;
+}
+
+export interface AstTagSummary {
+  tagName: string;
+  flows: AstTagSummaryEntity[];
+  services: AstTagSummaryEntity[];
+  decisions: AstTagSummaryEntity[];
 }
 
 export interface VersionEntity {
@@ -313,6 +353,8 @@ export interface VersionEntity {
 }
 
 export interface Service {
+  withBranch(branchName?: string): Service;
+  branch: string | undefined;
   delete(): DeleteBuilder;
   create(): CreateBuilder;
   update(id: string, body: AstCommand[]): Promise<Site>;
@@ -321,6 +363,8 @@ export interface Service {
   getSite(): Promise<Site>
   copy(id: string, name: string): Promise<Site>
   version(): Promise<VersionEntity>
+  diff(input: DiffRequest): Promise<DiffResponse>
+  summary(tagId: string): Promise<AstTagSummary>
 }
 export interface Store {
   fetch<T>(path: string, init?: RequestInit): Promise<T>;

@@ -10,6 +10,7 @@
   "dependencies": {
     "@the-wrench-io/react-burger": "^1.0.41",
     "codemirror": "^5.40.0",
+    "diff2html": "^3.4.44",
     "js-file-download": "^0.4.4",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",

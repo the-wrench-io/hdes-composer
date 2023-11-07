@@ -13,6 +13,7 @@ import { DebugView } from './debug';
 import { ReleasesView } from './release';
 
 import { Client } from './context';
+import { CompareView } from './compare';
 
 
 
@@ -55,6 +56,8 @@ const Main: React.FC<{}> = () => {
       return (<Box sx={root}>templates</Box>);
     } else if (active.id === 'debug') {
       return (<Box sx={root}><DebugView /></Box>);
+    } else if (active.id === 'compare') {
+      return (<Box sx={root}><CompareView /></Box>);
     }
     if (entity) {
       console.log(entity);
