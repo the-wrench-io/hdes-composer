@@ -334,7 +334,7 @@ export interface DiffResponse {
   body: string;
 }
 
-export interface SummaryEntity {
+export interface AstTagSummaryEntity {
   id: string;
   name: string;
   body: string;
@@ -342,9 +342,9 @@ export interface SummaryEntity {
 
 export interface AstTagSummary {
   tagName: string;
-  flows: SummaryEntity[];
-  services: SummaryEntity[];
-  decisions: SummaryEntity[];
+  flows: AstTagSummaryEntity[];
+  services: AstTagSummaryEntity[];
+  decisions: AstTagSummaryEntity[];
 }
 
 export interface VersionEntity {
