@@ -144,7 +144,13 @@ class ModelVisitor {
     }  
     
     const {parent} = props;
-    const assocs = entity.associations.filter(assoc => assoc.owner);
+    const allAssocs = entity.associations.filter(assoc => assoc.owner);
+
+    // in case multiple refs are defined, but only one is used at a time, filter it out
+    const refName: string = parent.body?.step?.children?.service?.inputs?.refName?.value;
+    const usedAssoc = allAssocs.filter(assoc => assoc.ref === refName);
+    
+    const assocs = refName ? usedAssoc : allAssocs;
     
     let index = 0
     let evenX = 0
