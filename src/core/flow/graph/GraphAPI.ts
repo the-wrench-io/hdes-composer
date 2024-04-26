@@ -130,7 +130,7 @@ class ModelVisitor {
       this.visitThen(step.then, { parent: node, index: props.index });
     } else if (group === "service") {
       if(ref) {
-        //this.visitServiceAssoc(ref, { parent: node, index: props.index });
+        this.visitServiceAssoc(ref, { parent: node, index: props.index });
       }
       this.visitThen(step.then, { parent: node, index: props.index });
     }
@@ -170,6 +170,8 @@ class ModelVisitor {
       parents.push(parent.id);
       const group: ModelType = caseInTask.refType === "FLOW" ? "flow" : 'decisionTable';
       const id = caseInTask.ref + "/" + parent.id  + "/" + (caseInTask.id ? caseInTask.id : caseInTask.ref);
+      const offsetX = assocs.length === 1 ? (150 + id.length) : 100;
+      const offsetY = assocs.length === 1 ? 0 : 50;
       const node: Vis.Node = {
         id: id,
         parents: parents,
@@ -178,7 +180,7 @@ class ModelVisitor {
         group: group,
         color: this.visitColor(group),
         shape: this.visitShape(group),
-        x: caseX, y: parent.y,
+        x: caseX + offsetX, y: parent.y + offsetY,
         body: { ref },
         widthConstraint: this._constraints.width
       }
@@ -199,15 +201,7 @@ class ModelVisitor {
         this._nodes.push(...nested.nodes)
         this._visited.push(...nested.visited);
         
-        //this.visitStep(flow., { parent: node });
       }
-      /*
-      this.visitThen(caseInTask.then, {
-        parent: props.parent,
-        index: props.index ? props.index : 0 + caseX
-      });
-      */
-      
     }
   }
   
