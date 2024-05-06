@@ -92,6 +92,9 @@ const en = {
   'flows.autocomplete.task.snackbar.created': "Created new {type}: {name}",
   'flows.autocomplete.task.snackbar.creating': "Creating new {type}: {name}",
 
+  'flows.graph.show': 'Show flow graph',
+  'flows.graph.hide': 'Hide flow graph',
+  
 
   'services.edit.title': "Edit service",
   'services.copyas.title': "Copy service as",
