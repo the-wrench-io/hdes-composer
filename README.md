@@ -1,3 +1,7 @@
+# This repository has been deprecated and is no longer maintained.
+Codebase has been moved and is now maintained in https://github.com/digiexpress-io/digiexpress-parent
+
+
 # git config
 git update-index --assume-unchanged tsconfig.json
 git update-index --no-assume-unchanged tsconfig.json
